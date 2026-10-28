@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Abel", system-ui, sans-serif;
+  --color-login: #326f7a;
+  --color-campo: #5ba8b0;
+  --color-oscuro: #0f2a30;
+  --color-sidebar: #4a9da8;
+  --color-fondo: #dff0f3;
+  --color-tarjeta: #cfeff3;
+  --color-circulo: #a9e0ea;
+  --color-navy: #1f3a8a;
+}
+
+body { @apply font-sans text-oscuro; }
