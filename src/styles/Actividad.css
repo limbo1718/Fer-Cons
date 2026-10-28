@@ -1,0 +1,61 @@
+/* ============================================
+   ESTILOS DE ACTIVIDAD - FER-CONS
+   ============================================ */
+
+.seccion-actividad-principal {
+  padding: 1.5rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .seccion-actividad-principal {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+.titulo-seccion-actividad {
+  margin-bottom: 0.75rem;
+  font-size: 1.5rem;
+  color: rgba(15, 42, 48, 0.6);
+  margin-top: 0;
+}
+
+.contenedor-lista-actividad {
+  border-radius: 1rem;
+  border: 1px solid rgba(15, 42, 48, 0.3);
+  background-color: rgba(223, 240, 243, 0.6);
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .contenedor-lista-actividad {
+    background-color: #ffffff;
+  }
+}
+
+.etiqueta-dia-actividad {
+  margin-top: 1rem;
+  text-transform: uppercase;
+  color: var(--color-oscuro);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.boton-volver-movil {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .boton-volver-movil {
+    display: none;
+  }
+}

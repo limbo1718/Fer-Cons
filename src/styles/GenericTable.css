@@ -1,0 +1,35 @@
+.contenedor-tabla-generica {
+  margin-left: 1rem;
+  margin-right: 1rem;
+  margin-top: 2rem;
+  overflow-x: auto;
+  border-radius: 1rem;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .contenedor-tabla-generica {
+    margin-left: 3rem;
+    margin-right: 3rem;
+  }
+}
+
+.tabla-generica {
+  width: 100%;
+  min-width: 800px;
+  text-align: center;
+  border-collapse: collapse;
+}
+
+.cabecera-fila-generica {
+  border-bottom: 1px solid rgba(15, 42, 48, 0.2);
+}
+
+.celda-cabecera-generica {
+  padding: 1rem;
+  font-size: 1.125rem;
+  font-weight: 400;
+  color: var(--color-oscuro);
+}
