@@ -1,6 +1,11 @@
-import { IconUser, IconLock } from '@tabler/icons-react';
-
-export default function InputField({ type = "text", placeholder, registro, error, icon: Icon }) {
+export default function InputField({
+  type = "text",
+  placeholder,
+  registro,
+  error,
+  icon: Icon,
+  ...props
+}) {
   return (
     <div className="grupo-input">
       <div className="contenedor-input-interno">
@@ -10,6 +15,7 @@ export default function InputField({ type = "text", placeholder, registro, error
           placeholder={placeholder}
           className="input-personalizado"
           {...registro}
+          {...props}
         />
       </div>
       {error && <p role="alert" className="mensaje-error-input">{error.message}</p>}

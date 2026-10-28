@@ -4,7 +4,7 @@ import {
   IconBuildingWarehouse, IconFileDescription, IconUserCheck, IconUserX,
 } from '@tabler/icons-react'
 
-export const usuarioDemo = { legajo: '45974444', password: '1234', nombre: 'Alejandro Carrizo', rol: 'Administrador' }
+export const usuarioDemo = { legajo: '45974444', correo: 'alejandro@fercons.com', password: '1234', nombre: 'Alejandro Carrizo', rol: 'Administrador' }
 
 export const empleados = [
   { id: 1, legajo: '0214', nombre: 'Daniel Pérez Ruiz', telefono: '+54 387 320-3022', rol: 'Vendedor', sucursal: 'Casa Central', activo: true },

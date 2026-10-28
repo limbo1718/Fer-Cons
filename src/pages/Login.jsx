@@ -16,21 +16,33 @@ export default function Login() {
   if (user) return <Navigate to="/" replace />;
 
   const onSubmit = ({ usuario, password }) => {
-    if (usuario !== usuarioDemo.legajo || password !== usuarioDemo.password) {
-      return Swal.fire({ 
-        icon: 'error', 
-        title: 'Datos incorrectos', 
-        text: 'Revisá tu legajo o correo y tu contraseña.', 
-        confirmButtonColor: '#326f7a' 
+    const valor = usuario.trim();
+
+    // Legajo (exacto) o correo (sin distinguir mayúsculas)
+    const usuarioValido =
+      valor === usuarioDemo.legajo ||
+      valor.toLowerCase() === usuarioDemo.correo.toLowerCase();
+
+    if (!usuarioValido || password !== usuarioDemo.password) {
+      return Swal.fire({
+        icon: 'error',
+        title: 'Datos incorrectos',
+        text: 'Revisá tu legajo o correo y tu contraseña.',
+        confirmButtonColor: '#326f7a',
       });
     }
-    login({ nombre: usuarioDemo.nombre, legajo: usuarioDemo.legajo, rol: usuarioDemo.rol });
+
+    login({
+      nombre: usuarioDemo.nombre,
+      legajo: usuarioDemo.legajo,
+      correo: usuarioDemo.correo,
+      rol: usuarioDemo.rol,
+    });
     navigate('/');
   };
 
   return (
     <main className="contenedor-login">
-      {/* Círculos decorativos de fondo */}
       <div className="circulo circulo-1" />
       <div className="circulo circulo-2" />
       <div className="circulo circulo-3" />
@@ -55,9 +67,9 @@ export default function Login() {
         <InputField
           type="password"
           placeholder="Contraseña"
-          registro={register('password', { 
-            required: 'Ingresá tu contraseña', 
-            minLength: { value: 4, message: 'Mínimo 4 caracteres' } 
+          registro={register('password', {
+            required: 'Ingresá tu contraseña',
+            minLength: { value: 4, message: 'Mínimo 4 caracteres' },
           })}
           error={errors.password}
           icon={IconLock}
@@ -72,7 +84,7 @@ export default function Login() {
         </Link>
 
         <p className="texto-demo">
-          Demo: legajo {usuarioDemo.legajo} · contraseña {usuarioDemo.password}
+          Demo: legajo {usuarioDemo.legajo} · correo {usuarioDemo.correo} · contraseña {usuarioDemo.password}
         </p>
       </form>
     </main>

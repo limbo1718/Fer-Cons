@@ -8,112 +8,127 @@ import { usuarioDemo, empleados } from '../data/mock';
 import '../styles/CambiarContrasena.css';
 
 export default function CambiarContrasena() {
-  const [legajo, setLegajo] = useState('');
+  const [usuario, setUsuario] = useState('');
   const [nuevaContra, setNuevaContra] = useState('');
   const [confirContra, setConfirContra] = useState('');
   const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const mostrarAlerta = (icon, title, text) =>
+    Swal.fire({ icon, title, text, confirmButtonColor: '#326f7a' });
 
-        // 1. Validar campos vacíos
-        if (!legajo.trim() || !nuevaContra.trim() || !confirContra.trim()) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Campos incompletos',
-            text: 'Por favor, complete todos los campos.',
-            confirmButtonColor: '#326f7a',
-        });
-        return;
-        }
+  // Coincide por legajo (exacto) o por correo (sin distinguir mayúsculas)
+  const coincide = (cuenta, valor) =>
+    String(cuenta.legajo) === valor ||
+    (cuenta.correo && cuenta.correo.toLowerCase() === valor.toLowerCase());
 
-        // 2. Validar coincidencia de contraseñas
-        if (nuevaContra !== confirContra) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error de validación',
-            text: 'Las nuevas contraseñas no coinciden.',
-            confirmButtonColor: '#326f7a',
-        });
-        return;
-        }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        // 3. Validar existencia del usuario/legajo localmente
-        const esAdminDemo = usuarioDemo.legajo === legajo.trim();
-        const empleadoEncontrado = empleados.find((emp) => emp.legajo === legajo.trim());
+    const usuarioLimpio = usuario.trim();
 
-        if (!esAdminDemo && !empleadoEncontrado) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Usuario no encontrado',
-            text: 'El número de legajo ingresado no existe en el sistema.',
-            confirmButtonColor: '#326f7a',
-        });
-        return;
-        }
+    // 1. Campos vacíos
+    if (!usuarioLimpio || !nuevaContra.trim() || !confirContra.trim()) {
+      mostrarAlerta('warning', 'Campos incompletos', 'Por favor, complete todos los campos.');
+      return;
+    }
 
-        // 4. Si todo es correcto, actualizar con éxito
-        Swal.fire({
-        icon: 'success',
-        title: '¡Éxito!',
-        text: 'La contraseña se actualizó correctamente.',
-        confirmButtonText: 'Ir al Login',
-        confirmButtonColor: '#326f7a',
-        }).then(() => {
-        navigate('/login');
-        });
-    };
+    // 2. Existencia del usuario (legajo o correo)
+    const esAdminDemo = coincide(usuarioDemo, usuarioLimpio);
+    const empleadoEncontrado = empleados.find((emp) => coincide(emp, usuarioLimpio));
 
-    return (
-        <main className="contenedor-login">
-        {/* Círculos decorativos de fondo idénticos al Login */}
-        <div className="circulo circulo-1" />
-        <div className="circulo circulo-2" />
-        <div className="circulo circulo-3" />
-        <div className="circulo circulo-4" />
+    if (!esAdminDemo && !empleadoEncontrado) {
+      mostrarAlerta(
+        'error',
+        'Usuario no encontrado',
+        'El legajo o correo ingresado no existe en el sistema.'
+      );
+      return;
+    }
 
-        <form onSubmit={handleSubmit} noValidate className="formulario-tarjeta-login">
-            <div className="encabezado-logo">
-            <span className="caja-icono-logo">
-                <IconSettings size={34} stroke={1.75} />
-            </span>
-            Fer-Cons
-            </div>
+    // 3. Longitud mínima de la contraseña
+    if (nuevaContra.length < 4) {
+      mostrarAlerta(
+        'warning',
+        'Contraseña muy corta',
+        'La nueva contraseña debe tener al menos 4 caracteres.'
+      );
+      return;
+    }
 
-            <h2 className="titulo-recuperar">Recuperar Contraseña</h2>
+    // 4. Coincidencia de contraseñas
+    if (nuevaContra !== confirContra) {
+      mostrarAlerta('error', 'Error de validación', 'Las nuevas contraseñas no coinciden.');
+      return;
+    }
 
-            <InputField
-            type="text"
-            placeholder="Ingrese su legajo"
-            value={legajo}
-            onChange={(e) => setLegajo(e.target.value)}
-            icon={IconUser}
-            />
+    // 5. Éxito
+    Swal.fire({
+      icon: 'success',
+      title: '¡Éxito!',
+      text: 'La contraseña se actualizó correctamente.',
+      confirmButtonText: 'Ir al Login',
+      confirmButtonColor: '#326f7a',
+    }).then(() => {
+      navigate('/login');
+    });
+  };
 
-            <InputField
-            type="password"
-            placeholder="Ingrese la nueva contraseña"
-            value={nuevaContra}
-            onChange={(e) => setNuevaContra(e.target.value)}
-            icon={IconLock}
-            />
+  return (
+    <main className="contenedor-login">
+      <div className="circulo circulo-1" />
+      <div className="circulo circulo-2" />
+      <div className="circulo circulo-3" />
+      <div className="circulo circulo-4" />
 
-            <InputField
-            type="password"
-            placeholder="Repita la nueva contraseña"
-            value={confirContra}
-            onChange={(e) => setConfirContra(e.target.value)}
-            icon={IconKey}
-            />
+      <form onSubmit={handleSubmit} noValidate className="formulario-tarjeta-login">
+        <div className="encabezado-logo">
+          <span className="caja-icono-logo">
+            <IconSettings size={34} stroke={1.75} />
+          </span>
+          Fer-Cons
+        </div>
 
-            <div className="contenedor-boton">
-            <ButtonSubmit text="Actualizar Contraseña" />
-            </div>
+        <h2 className="titulo-recuperar">Recuperar Contraseña</h2>
 
-            <Link to="/login" className="enlace-olvido">
-            Volver al inicio de sesión
-            </Link>
-        </form>
-        </main>
-    );
+        <InputField
+          type="text"
+          name="usuario"
+          placeholder="Legajo o correo electrónico"
+          value={usuario}
+          onChange={(e) => setUsuario(e.target.value)}
+          icon={IconUser}
+        />
+
+        <InputField
+          type="password"
+          name="nuevaContra"
+          placeholder="Ingrese la nueva contraseña"
+          value={nuevaContra}
+          onChange={(e) => setNuevaContra(e.target.value)}
+          icon={IconLock}
+        />
+
+        <InputField
+          type="password"
+          name="confirContra"
+          placeholder="Repita la nueva contraseña"
+          value={confirContra}
+          onChange={(e) => setConfirContra(e.target.value)}
+          icon={IconKey}
+        />
+
+        <div className="contenedor-boton">
+          <ButtonSubmit text="Actualizar Contraseña" />
+        </div>
+
+        <Link to="/login" className="enlace-olvido">
+          Volver al inicio de sesión
+        </Link>
+
+        <p className="texto-demo">
+          Demo: legajo {usuarioDemo.legajo} · correo {usuarioDemo.correo} · contraseña {usuarioDemo.password}
+        </p>
+      </form>
+    </main>
+  );
 }
