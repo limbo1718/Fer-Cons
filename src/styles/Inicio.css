@@ -1,73 +1,73 @@
 /* ============================================
-   ESTILOS DE INICIO / DASHBOARD - FER-CONS
-   ============================================ */
+ESTILOS DE INICIO / DASHBOARD - FER-CONS
+============================================ */
 
 .grilla-modulos {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  padding: 1.5rem;
-  box-sizing: border-box;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
-  .grilla-modulos {
-    gap: 2rem;
-    padding: 3rem;
-    padding-bottom: 1.5rem;
-  }
+    .grilla-modulos {
+        gap: 2rem;
+        padding: 3rem;
+        padding-bottom: 1.5rem;
+    }
 }
 
 @media (min-width: 1280px) {
-  .grilla-modulos {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+    .grilla-modulos {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
 }
 
 .seccion-actividad {
-  margin-left: 1.5rem;
-  margin-right: 1.5rem;
-  border-radius: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.6);
-  padding: 1.25rem;
-  box-sizing: border-box;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    border-radius: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 1.25rem;
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
-  .seccion-actividad {
-    margin-left: 3rem;
-    margin-right: 3rem;
-  }
+    .seccion-actividad {
+        margin-left: 3rem;
+        margin-right: 3rem;
+}
 }
 
 .cabecera-actividad {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(15, 42, 48, 0.2);
-  padding-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(15, 42, 48, 0.2);
+    padding-bottom: 0.5rem;
 }
 
 .titulo-actividad {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--color-oscuro);
-  margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-oscuro);
+    margin: 0;
 }
 
 .icono-actividad-recent {
-  color: var(--color-sidebar);
+    color: var(--color-sidebar);
 }
 
 .enlace-ver-todo {
-  color: var(--color-sidebar);
-  text-decoration: none;
-  font-weight: 500;
+    color: var(--color-sidebar);
+    text-decoration: none;
+    font-weight: 500;
 }
 
 .enlace-ver-todo:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }

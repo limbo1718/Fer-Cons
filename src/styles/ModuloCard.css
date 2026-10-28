@@ -1,72 +1,72 @@
 /* ============================================
-   ESTILOS DE MODULO CARD - FER-CONS
-   ============================================ */
+ESTILOS DE MODULO CARD - FER-CONS
+============================================ */
 
 .tarjeta-modulo-boton {
-  display: flex;
-  height: 10rem; /* h-40 */
-  align-items: center;
-  gap: 0.75rem;
-  border-radius: 1.5rem;
-  border: 1px solid rgba(15, 42, 48, 0.5);
-  background-color: var(--color-tarjeta);
-  padding: 1rem;
-  text-align: left;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  cursor: pointer;
-  box-sizing: border-box;
+    display: flex;
+    height: 10rem; /* h-40 */
+    align-items: center;
+    gap: 0.75rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(15, 42, 48, 0.5);
+    background-color: var(--color-tarjeta);
+    padding: 1rem;
+    text-align: left;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
-  .tarjeta-modulo-boton {
-    height: 11rem; /* md:h-44 */
-    gap: 1rem;
-    padding: 1.25rem;
-  }
+    .tarjeta-modulo-boton {
+        height: 11rem; /* md:h-44 */
+        gap: 1rem;
+        padding: 1.25rem;
+    }
 }
 
 .tarjeta-modulo-boton:hover {
-  transform: translateY(-0.125rem);
-  background-color: rgba(169, 224, 234, 0.6);
+    transform: translateY(-0.125rem);
+    background-color: rgba(169, 224, 234, 0.6);
 }
 
 .tarjeta-modulo-boton:focus-visible {
-  outline: 2px solid var(--color-oscuro);
+    outline: 2px solid var(--color-oscuro);
 }
 
 .caja-icono-modulo {
-  display: grid;
-  width: 3.5rem; /* size-14 */
-  height: 3.5rem;
-  flex-shrink: 0;
-  place-items: center;
-  border-radius: 9999px;
-  background-color: var(--color-circulo);
-  color: var(--color-navy);
+    display: grid;
+    width: 3.5rem; /* size-14 */
+    height: 3.5rem;
+    flex-shrink: 0;
+    place-items: center;
+    border-radius: 9999px;
+    background-color: var(--color-circulo);
+    color: var(--color-navy);
 }
 
 @media (min-width: 768px) {
-  .caja-icono-modulo {
-    width: 4rem; /* md:size-16 */
-    height: 4rem;
-  }
+    .caja-icono-modulo {
+        width: 4rem; /* md:size-16 */
+        height: 4rem;
+    }
 }
 
 .texto-nombre-modulo {
-  display: block;
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--color-oscuro);
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-oscuro);
 }
 
 @media (min-width: 768px) {
-  .texto-nombre-modulo {
-    font-size: 1.25rem;
-  }
+    .texto-nombre-modulo {
+        font-size: 1.25rem;
+    }
 }
 
 .texto-detalle-modulo {
-  display: block;
-  font-size: 0.875rem;
-  color: var(--color-oscuro);
+    display: block;
+    font-size: 0.875rem;
+    color: var(--color-oscuro);
 }

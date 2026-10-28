@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconUser, IconLock, IconSettings } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -67,9 +67,10 @@ export default function Login() {
           <ButtonSubmit text="Ingresar" disabled={isSubmitting} />
         </div>
 
-        <a href="#" className="enlace-olvido">
+        <Link to="/cambiar-contrasena" className="enlace-olvido">
           ¿Olvidaste tu contraseña?
-        </a>
+        </Link>
+
         <p className="texto-demo">
           Demo: legajo {usuarioDemo.legajo} · contraseña {usuarioDemo.password}
         </p>

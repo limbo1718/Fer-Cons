@@ -1,16 +1,16 @@
 /* ============================================
-   ESTILOS DE EMPLEADOS - FER-CONS
-   ============================================ */
+ESTILOS DE EMPLEADOS - FER-CONS
+============================================ */
 
 .contenedor-tabla-empleados {
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-top: 2rem;
-  overflow-x: auto;
-  border-radius: 1rem;
-  background-color: #ffffff;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-  box-sizing: border-box;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 2rem;
+    overflow-x: auto;
+    border-radius: 1rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
@@ -21,107 +21,107 @@
 }
 
 .tabla-empleados {
-  width: 100%;
-  min-width: 800px;
-  text-align: center;
-  border-collapse: collapse;
+    width: 100%;
+    min-width: 800px;
+    text-align: center;
+    border-collapse: collapse;
 }
 
 .cabecera-fila-empleados {
-  border-bottom: 1px solid rgba(15, 42, 48, 0.2);
+    border-bottom: 1px solid rgba(15, 42, 48, 0.2);
 }
 
 .celda-cabecera-empleados {
-  padding: 1rem;
-  font-size: 1.125rem;
-  font-weight: 400;
-  color: var(--color-oscuro);
+    padding: 1rem;
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--color-oscuro);
 }
 
 .contenido-telefono-th {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
 }
 
 .fila-empleado {
-  border-bottom: 1px solid rgba(15, 42, 48, 0.1);
+    border-bottom: 1px solid rgba(15, 42, 48, 0.1);
 }
 
 .fila-empleado:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 .celda-tabla-legajo {
-  padding: 1rem;
-  color: rgba(15, 42, 48, 0.7);
+    padding: 1rem;
+    color: rgba(15, 42, 48, 0.7);
 }
 
 .celda-tabla-info {
-  padding: 1rem;
+    padding: 1rem;
 }
 
 .info-empleado-flex {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 }
 
 .avatar-iniciales {
-  display: grid;
-  width: 2.5rem;
-  height: 2.5rem;
-  place-items: center;
-  border-radius: 0.5rem;
-  background-color: var(--color-sidebar);
-  font-size: 0.875rem;
-  color: #ffffff;
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 0.5rem;
+    background-color: var(--color-sidebar);
+    font-size: 0.875rem;
+    color: #ffffff;
 }
 
 .celda-tabla-texto {
-  padding: 1rem;
-  color: var(--color-oscuro);
+    padding: 1rem;
+    color: var(--color-oscuro);
 }
 
 .celda-tabla-gris {
-  padding: 1rem;
-  color: rgba(15, 42, 48, 0.7);
+    padding: 1rem;
+    color: rgba(15, 42, 48, 0.7);
 }
 
 .etiqueta-estado {
-  border-radius: 9999px;
-  padding: 0.25rem 0.75rem;
-  font-size: 0.875rem;
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
 }
 
 .estado-activo {
-  background-color: #bbf7d0;
-  color: #166534;
+    background-color: #bbf7d0;
+    color: #166534;
 }
 
 .estado-inactivo {
-  background-color: #fecaca;
-  color: #991b1b;
+    background-color: #fecaca;
+    color: #991b1b;
 }
 
 .boton-justificacion {
-  width: 100%;
-  border-radius: 0.5rem;
-  background-color: var(--color-tarjeta);
-  padding: 0.5rem 1rem;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+    width: 100%;
+    border-radius: 0.5rem;
+    background-color: var(--color-tarjeta);
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
 .boton-justificacion:hover {
-  background-color: var(--color-circulo);
+    background-color: var(--color-circulo);
 }
 
 .contenido-boton-justificacion {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  color: var(--color-oscuro);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--color-oscuro);
 }
