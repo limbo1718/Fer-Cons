@@ -25,12 +25,31 @@ export default function MenuDesplegable() {
   const { user, logout } = useAuth();
 
   const toggleCategoria = (catId) => {
-    setCategoriaAbierta(prev => ({ ...prev, [catId]: !prev[catId] }));
+    setCategoriaAbierta(prev => ({ ...prev, [catId]: !prev[catId] }))
   };
 
   // Cierra el menú al hacer clic en una opción (UX: reduce choque visual)
   const cerrarMenu = () => {
     setAbierto(false);
+  };
+
+  // Manejador para confirmar el cierre de sesión con SweetAlert2
+  const handleLogoutClick = () => {
+    cerrarMenu();
+    Swal.fire({
+      title: '¿Cerrar sesión?',
+      text: '¿Estás seguro de que deseas salir del sistema?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#4a9da8',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        logout();
+      }
+    });
   };
 
   // Manejador de clics en los módulos (Alerta SweetAlert2 + Cierre de menú)
@@ -138,7 +157,7 @@ export default function MenuDesplegable() {
           })}
         </nav>
 
-        <button onClick={logout} className="item-base-sidebar layout-boton-logout">
+        <button onClick={handleLogoutClick} className="item-base-sidebar layout-boton-logout">
           <IconLogout size={28} />
           {abierto && <span>Cerrar sesión</span>}
         </button>
@@ -152,7 +171,7 @@ export default function MenuDesplegable() {
       <nav className="layout-nav-movil">
         <NavLink to="/actividad" className={inferior}>Actividad</NavLink>
         <NavLink to="/" end className={inferior}>Inicio</NavLink>
-        <button onClick={logout} className="item-inferior-base item-inferior-inactivo">Perfil</button>
+        <button onClick={handleLogoutClick} className="item-inferior-base item-inferior-inactivo">Perfil</button>
       </nav>
     </div>
   );
