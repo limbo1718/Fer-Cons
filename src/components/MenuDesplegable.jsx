@@ -28,9 +28,18 @@ export default function MenuDesplegable() {
     setCategoriaAbierta(prev => ({ ...prev, [catId]: !prev[catId] }));
   };
 
-  // H1 & Umbral de Doherty: Respuesta e interacción instantánea (<100 ms)
+  // Cierra el menú al hacer clic en una opción (UX: reduce choque visual)
+  const cerrarMenu = () => {
+    setAbierto(false);
+  };
+
+  // Manejador de clics en los módulos (Alerta SweetAlert2 + Cierre de menú)
   const handleModuloClick = (e, modulo) => {
-    if (!modulo.path) {
+    // Definimos las rutas operativas actuales (ej. Inicio, Empleados o las que ya tengas lista)
+    // Si la ruta del módulo no existe o está pendiente de desarrollo:
+    const modulosEnDesarrollo = ['/ventas', '/pedidos', '/presupuestos', '/stock', '/proveedores', '/facturacion', '/caja', '/perfil', '/actividad'];
+
+    if (!modulo.path || modulosEnDesarrollo.includes(modulo.path)) {
       e.preventDefault();
       Swal.fire({
         icon: 'info',
@@ -41,11 +50,14 @@ export default function MenuDesplegable() {
         timerProgressBar: true
       });
     }
+
+    // Cerramos el menú lateral automáticamente para limpiar la vista
+    cerrarMenu();
   };
 
   return (
     <div className="layout-contenedor">
-      {/* Escritorio: menú lateral deplegable por categorías */}
+      {/* Escritorio: menú lateral desplegable por categorías */}
       <aside className={`layout-aside ${abierto ? 'layout-aside-ancho-abierto' : 'layout-aside-ancho-cerrado'}`}>
         <div className="layout-header-sidebar">
           <button
