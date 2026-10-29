@@ -1,5 +1,5 @@
 /* ============================================
-ESTILOS DE LAYOUT - FER-CONS
+ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
 =========================================== */
 
 .layout-contenedor {
@@ -16,6 +16,11 @@ ESTILOS DE LAYOUT - FER-CONS
     background-color: var(--color-sidebar);
     padding: 1rem;
     transition: width 0.3s ease;
+    height: 100vh;
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    overflow: hidden; /* Evita que todo el aside scrollee y asegura estructura fija */
 }
 
 @media (min-width: 768px) {
@@ -36,6 +41,7 @@ ESTILOS DE LAYOUT - FER-CONS
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-shrink: 0; /* Impide que el header se deforme */
 }
 
 .layout-boton-toggle {
@@ -64,42 +70,104 @@ ESTILOS DE LAYOUT - FER-CONS
     color: var(--color-sidebar);
 }
 
+/* Contenedor de enlaces con scroll interno independiente */
 .layout-nav-links {
-    margin-top: 3rem;
+    flex: 1; /* Ocupa el espacio flexible entre el header y el botón inferior */
+    overflow-y: auto; /* Scroll exclusivo para las listas si se abren todas */
+    margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.5rem;
+    padding-right: 0.25rem;
+}
+
+/* Scrollbar sutil y estético para el menú lateral */
+.layout-nav-links::-webkit-scrollbar {
+    width: 4px;
+}
+.layout-nav-links::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.25);
+    border-radius: 4px;
+}
+
+/* Estilos de Categorías y Submenús */
+.menu-categoria-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.menu-categoria-boton {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.75rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    border-radius: 0.5rem;
+    transition: color 0.2s ease;
+}
+
+.menu-categoria-boton:hover {
+    color: #ffffff;
+}
+
+.categoria-titulo-icono {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.menu-submodulos {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding-left: 0.5rem;
 }
 
 .item-base-sidebar {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.85rem;
     border-radius: 0.75rem;
-    padding: 0.75rem 1rem;
+    padding: 0.65rem 0.85rem;
     color: #ffffff;
-    font-size: 1.125rem;
+    font-size: 1rem;
     text-decoration: none;
+    transition: background-color 0.15s ease;
 }
 
 .item-lateral-activo {
     background-color: rgba(255, 255, 255, 0.3);
+    font-weight: 600;
 }
 
 .item-lateral-inactivo:hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Botón de Cerrar Sesión fijo y separado al pie */
 .layout-boton-logout {
-    margin-top: auto;
+    flex-shrink: 0; /* Evita que el botón se comprima */
+    margin-top: 0.75rem;
     border: none;
     background: transparent;
     cursor: pointer;
     text-align: left;
+    border-top: 1px solid rgba(255, 255, 255, 0.15); /* Línea divisoria elegante */
+    padding-top: 1rem;
 }
 
 .layout-boton-logout:hover {
     background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
 }
 
 /* Contenido Principal */

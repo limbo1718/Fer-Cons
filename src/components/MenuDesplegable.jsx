@@ -1,26 +1,34 @@
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import {
-  IconAdjustments, IconSettings, IconLogout,
+  IconAdjustments, IconSettings, IconLogout, IconChevronDown, IconChevronUp
 } from '@tabler/icons-react';
 import Swal from 'sweetalert2';
 import { useAuth } from '../context/AuthContext.jsx';
-import { menuModules } from '../data/menuConfig.js';
+import { menuCategories } from '../data/menuConfig.js';
 import '../styles/MenuDesplegable.css';
 
 const lateral = ({ isActive }) => `item-base-sidebar ${isActive ? 'item-lateral-activo' : 'item-lateral-inactivo'}`;
 const inferior = ({ isActive }) => `item-inferior-base ${isActive ? 'item-inferior-activo' : 'item-inferior-inactivo'}`;
 
-export default function Layout() {
+export default function MenuDesplegable() {
   const [abierto, setAbierto] = useState(false);
+  
+  // Estado inicial en false para que todas las categorías comiencen cerradas por defecto
+  const [categoriaAbierta, setCategoriaAbierta] = useState({
+    comercial: false,
+    inventario: false,
+    administracion: false,
+    sistema: false
+  });
+
   const { user, logout } = useAuth();
 
-  // Filtrar los módulos dinámicamente según el rol del usuario (Administrador ve todo)
-  const modulosVisibles = menuModules.filter(item => 
-    user && item.roles.includes(user.rol)
-  );
+  const toggleCategoria = (catId) => {
+    setCategoriaAbierta(prev => ({ ...prev, [catId]: !prev[catId] }));
+  };
 
-  // Manejador para los módulos que aún no tienen ruta y deben mostrar el SweetAlert2
+  // H1 & Umbral de Doherty: Respuesta e interacción instantánea (<100 ms)
   const handleModuloClick = (e, modulo) => {
     if (!modulo.path) {
       e.preventDefault();
@@ -28,14 +36,16 @@ export default function Layout() {
         icon: 'info',
         title: modulo.name,
         text: 'Este módulo todavía está en desarrollo.',
-        confirmButtonColor: '#4a9da8'
+        confirmButtonColor: '#4a9da8',
+        timer: 2000,
+        timerProgressBar: true
       });
     }
   };
 
   return (
     <div className="layout-contenedor">
-      {/* Escritorio: menú lateral desplegable */}
+      {/* Escritorio: menú lateral deplegable por categorías */}
       <aside className={`layout-aside ${abierto ? 'layout-aside-ancho-abierto' : 'layout-aside-ancho-cerrado'}`}>
         <div className="layout-header-sidebar">
           <button
@@ -49,19 +59,69 @@ export default function Layout() {
         </div>
 
         <nav className="layout-nav-links">
-          {modulosVisibles.map((modulo) => {
-            const IconComponent = modulo.icono;
+          {menuCategories.map((cat) => {
+            // Filtrar módulos autorizados según el rol del usuario
+            const modulosAutorizados = cat.modules.filter(m => user && m.roles.includes(user.rol));
+            if (modulosAutorizados.length === 0) return null;
+
+            const CatIcon = cat.icono;
+            const isDesplegada = categoriaAbierta[cat.id];
+
+            // Si es la categoría principal o el menú está colapsado
+            if (cat.id === 'principal' || !abierto) {
+              return modulosAutorizados.map(modulo => {
+                const IconComponent = modulo.icono;
+                return (
+                  <NavLink
+                    key={modulo.name}
+                    to={modulo.path || '#'}
+                    end={modulo.path === '/'}
+                    className={lateral}
+                    title={!abierto ? modulo.name : ''}
+                    onClick={(e) => handleModuloClick(e, modulo)}
+                  >
+                    <IconComponent size={24} />
+                    {abierto && <span>{modulo.name}</span>}
+                  </NavLink>
+                );
+              });
+            }
+
             return (
-              <NavLink
-                key={modulo.name}
-                to={modulo.path || '#'}
-                end={modulo.path === '/'}
-                className={lateral}
-                onClick={(e) => handleModuloClick(e, modulo)}
-              >
-                <IconComponent size={28} />
-                {abierto && <span>{modulo.name}</span>}
-              </NavLink>
+              <div key={cat.id} className="menu-categoria-grupo">
+                {/* Cabecera desplegable de la Categoría */}
+                <button 
+                  className="menu-categoria-boton"
+                  onClick={() => toggleCategoria(cat.id)}
+                >
+                  <div className="categoria-titulo-icono">
+                    <CatIcon size={20} />
+                    <span>{cat.title}</span>
+                  </div>
+                  {isDesplegada ? <IconChevronUp size={18} /> : <IconChevronDown size={18} />}
+                </button>
+
+                {/* Submódulos pertenecientes a la Categoría */}
+                {isDesplegada && (
+                  <div className="menu-submodulos">
+                    {modulosAutorizados.map(modulo => {
+                      const IconComponent = modulo.icono;
+                      return (
+                        <NavLink
+                          key={modulo.name}
+                          to={modulo.path || '#'}
+                          end={modulo.path === '/'}
+                          className={lateral}
+                          onClick={(e) => handleModuloClick(e, modulo)}
+                        >
+                          <IconComponent size={22} />
+                          <span>{modulo.name}</span>
+                        </NavLink>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
         </nav>
