@@ -1,16 +1,17 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useAuth } from './context/AuthContext.jsx'
-import Layout from './components/Layout.jsx'
+// 1. Importación actualizada con el nombre real del componente
+import MenuDesplegable from './components/MenuDesplegable.jsx' 
 import Login from './pages/Login.jsx'
 import CambiarContrasena from './pages/CambiarContrasena.jsx'
 import Inicio from './pages/Inicio.jsx'
 import Actividad from './pages/Actividad.jsx'
 import Empleados from './pages/Empleados.jsx'
 
-
 function RutaProtegida() {
   const { user } = useAuth()
-  return user ? <Layout /> : <Navigate to="/login" replace />
+  // 2. Renderizado con la etiqueta <MenuDesplegable />
+  return user ? <MenuDesplegable /> : <Navigate to="/login" replace />
 }
 
 export default function App() {

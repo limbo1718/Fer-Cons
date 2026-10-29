@@ -6,7 +6,7 @@ import {
 import Swal from 'sweetalert2';
 import { useAuth } from '../context/AuthContext.jsx';
 import { menuModules } from '../data/menuConfig.js';
-import '../styles/Layout.css';
+import '../styles/MenuDesplegable.css';
 
 const lateral = ({ isActive }) => `item-base-sidebar ${isActive ? 'item-lateral-activo' : 'item-lateral-inactivo'}`;
 const inferior = ({ isActive }) => `item-inferior-base ${isActive ? 'item-inferior-activo' : 'item-inferior-inactivo'}`;
