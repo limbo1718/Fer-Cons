@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconUser, IconLock, IconSettings, IconKey } from '@tabler/icons-react';
 import InputField from '../components/common/InputField';
+import InputPassword from '../components/common/InputPassword';
 import ButtonSubmit from '../components/common/ButtonSubmit';
 import { usuarioDemo, empleados } from '../data/mock';
 import '../styles/CambiarContrasena.css';
@@ -99,8 +100,7 @@ export default function CambiarContrasena() {
           icon={IconUser}
         />
 
-        <InputField
-          type="password"
+        <InputPassword
           name="nuevaContra"
           placeholder="Ingrese la nueva contraseña"
           value={nuevaContra}
@@ -108,8 +108,7 @@ export default function CambiarContrasena() {
           icon={IconLock}
         />
 
-        <InputField
-          type="password"
+        <InputPassword
           name="confirContra"
           placeholder="Repita la nueva contraseña"
           value={confirContra}

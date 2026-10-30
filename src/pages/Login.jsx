@@ -5,6 +5,7 @@ import { IconUser, IconLock, IconSettings } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { usuarioDemo } from '../data/mock.js';
 import InputField from '../components/common/InputField';
+import InputPassword from '../components/common/InputPassword';
 import ButtonSubmit from '../components/common/ButtonSubmit';
 import '../styles/Login.css';
 
@@ -64,8 +65,7 @@ export default function Login() {
           icon={IconUser}
         />
 
-        <InputField
-          type="password"
+        <InputPassword
           placeholder="Contraseña"
           registro={register('password', {
             required: 'Ingresá tu contraseña',

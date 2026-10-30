@@ -91,7 +91,7 @@ ESTILOS DE CAMBIAR CONTRASEÑA - FER-CONS
     text-align: center;
     font-size: 1.45rem;
     font-weight: 600;
-    color: #ffffffde;
+    color: #ffffffd0;
 }
 
 /* Inputs y Componentes Personalizados */
@@ -121,6 +121,32 @@ ESTILOS DE CAMBIAR CONTRASEÑA - FER-CONS
     color: #ffffff;
     border: none;
     box-sizing: border-box;
+}
+
+/* Padding derecho adicional para los inputs de contraseña */
+.input-password-ojo {
+    padding-right: 3.5rem;
+}
+
+/* Botón para alternar la visibilidad de la contraseña */
+.boton-toggle-password {
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    padding: 0.25rem;
+    opacity: 0.8;
+    transition: opacity 0.2s ease;
+}
+
+.boton-toggle-password:hover {
+    opacity: 1;
 }
 
 .input-personalizado::placeholder {
