@@ -3,9 +3,9 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
 =========================================== */
 
 .layout-contenedor {
-    display: flex;
-    min-height: 100vh;
-    background-color: var(--color-fondo);
+        display: flex;
+        min-height: 100vh;
+        background-color: var(--color-fondo);
 }
 
 /* Sidebar de Escritorio */
@@ -20,7 +20,8 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     box-sizing: border-box;
     position: sticky;
     top: 0;
-    overflow: hidden; /* Evita que todo el aside scrollee y asegura estructura fija */
+    overflow-x: hidden; /* Evita desbordamiento horizontal y cortes bruscos */
+    overflow-y: hidden; 
 }
 
 @media (min-width: 768px) {
@@ -42,6 +43,7 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     align-items: center;
     gap: 0.5rem;
     flex-shrink: 0; /* Impide que el header se deforme */
+    overflow: hidden;
 }
 
 .layout-boton-toggle {
@@ -68,12 +70,16 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-sidebar);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Contenedor de enlaces con scroll interno independiente */
 .layout-nav-links {
     flex: 1; /* Ocupa el espacio flexible entre el header y el botón inferior */
     overflow-y: auto; /* Scroll exclusivo para las listas si se abren todas */
+    overflow-x: hidden;
     margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
@@ -96,6 +102,7 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     flex-direction: column;
     gap: 0.25rem;
     margin-bottom: 0.25rem;
+    flex-shrink: 0; /* Evita que el grupo de categoría se comprima */
 }
 
 .menu-categoria-boton {
@@ -113,6 +120,11 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     cursor: pointer;
     border-radius: 0.5rem;
     transition: color 0.2s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+    flex-shrink: 0; /* Evita que el botón de categoría se comprima */
 }
 
 .menu-categoria-boton:hover {
@@ -123,6 +135,9 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .menu-submodulos {
@@ -130,6 +145,7 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     flex-direction: column;
     gap: 0.35rem;
     padding-left: 0.5rem;
+    flex-shrink: 0; /* Evita que los submódulos se compriman */
 }
 
 .item-base-sidebar {
@@ -142,6 +158,10 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     font-size: 1rem;
     text-decoration: none;
     transition: background-color 0.15s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 0; /* IMPIDE que los ítems e "Inicio" se achiquen verticalmente */
 }
 
 .item-lateral-activo {
@@ -163,6 +183,9 @@ ESTILOS DE LAYOUT Y MENÚ DESPLEGABLE - FER-CONS
     text-align: left;
     border-top: 1px solid rgba(255, 255, 255, 0.15); /* Línea divisoria elegante */
     padding-top: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .layout-boton-logout:hover {
