@@ -1,0 +1,45 @@
+.filter-tabs-container {
+    display: flex;
+    justify-content: center; /* Centra los botones de filtro */
+    gap: 0.75rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.25rem;
+    box-sizing: border-box;
+    width: auto;
+}
+
+@media (min-width: 768px) {
+    .filter-tabs-container {
+        margin-left: 3rem;
+        margin-right: 3rem;
+        justify-content: center; /* Se mantiene centrado en escritorio */
+    }
+}
+
+.filter-tab-btn {
+    background-color: #ffffff;
+    border: 1px solid rgba(15, 42, 48, 0.2);
+    color: var(--color-oscuro, #0f2a30);
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.filter-tab-btn:hover {
+    border-color: var(--color-sidebar, #0f2a30);
+    background-color: rgba(15, 42, 48, 0.02);
+}
+
+.filter-tab-active {
+    background-color: var(--color-sidebar, #0f2a30);
+    color: #ffffff;
+    border-color: transparent;
+}

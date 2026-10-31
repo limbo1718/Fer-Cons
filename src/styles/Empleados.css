@@ -14,10 +14,10 @@ ESTILOS DE EMPLEADOS - FER-CONS
 }
 
 @media (min-width: 768px) {
-  .contenedor-tabla-empleados {
-    margin-left: 3rem;
-    margin-right: 3rem;
-  }
+    .contenedor-tabla-empleados {
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
 }
 
 .tabla-empleados {

@@ -13,6 +13,10 @@ export const empleados = [
   { id: 4, legajo: '0217', nombre: 'Giménez Valeria', telefono: '+54 387 412-9988', rol: 'Encargado de Stock', sucursal: 'Depósito Norte', activo: true },
   { id: 5, legajo: '0218', nombre: 'Rojas Carrizo Lucas', telefono: '+54 387 655-4433', rol: 'Repositor', sucursal: 'Sucursal Sur', activo: true },
   { id: 6, legajo: '0219', nombre: 'Benítez Sofía', telefono: '+54 387 221-1199', rol: 'Cajero', sucursal: 'Sucursal Sur', activo: false },
+  { id: 7, legajo: '0220', nombre: 'Gómez Martín', telefono: '+54 387 499-1234', rol: 'Administrador', sucursal: 'Casa Central', activo: true },
+  { id: 8, legajo: '0221', nombre: 'Torres Lucía', telefono: '+54 387 611-5678', rol: 'Supervisor', sucursal: 'Sucursal Sur', activo: true },
+  { id: 9, legajo: '0222', nombre: 'Navarro Carlos', telefono: '+54 387 733-9876', rol: 'Repositor', sucursal: 'Depósito Norte', activo: false },
+  { id: 10, legajo: '0223', nombre: 'Morales Yamila', telefono: '+54 387 522-4321', rol: 'Vendedor', sucursal: 'Sucursal Sur', activo: true }
 ];
 
 export const modulos = [

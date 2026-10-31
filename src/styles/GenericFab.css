@@ -1,0 +1,32 @@
+/* ============================================
+ESTILOS DEL BOTÓN FLOTANTE (FAB) - FER-CONS
+============================================ */
+
+.fab-agregar {
+    position: fixed;
+    bottom: 2.5rem;
+    right: 2.5rem;
+    width: 3.75rem;
+    height: 3.75rem;
+    border-radius: 50%;
+    background-color: #0d9488;
+    color: #ffffff;
+    border: none;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(13, 148, 136, 0.35);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 950;
+}
+
+.fab-agregar:hover {
+    transform: scale(1.08);
+    background-color: #0f766e;
+    box-shadow: 0 8px 20px rgba(13, 148, 136, 0.45);
+}
+
+.fab-agregar:active {
+    transform: scale(0.95);
+    background-color: #115e59;
+}
