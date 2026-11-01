@@ -49,7 +49,7 @@ export default function MenuDesplegable() {
   };
 
   const handleModuloClick = (e, modulo) => {
-    const modulosEnDesarrollo = ['/ventas', '/pedidos', '/presupuestos', '/stock', '/proveedores', '/facturacion', '/caja', '/perfil'];
+    const modulosEnDesarrollo = ['/ventas', '/pedidos', '/presupuestos', '/stock', '/facturacion', '/caja', '/perfil'];
 
     if (!modulo.path || modulosEnDesarrollo.includes(modulo.path)) {
       e.preventDefault();

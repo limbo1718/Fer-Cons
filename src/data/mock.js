@@ -19,10 +19,23 @@ export const empleados = [
   { id: 10, legajo: '0223', nombre: 'Morales Yamila', telefono: '+54 387 522-4321', rol: 'Vendedor', sucursal: 'Sucursal Sur', activo: true }
 ];
 
+export const proveedores = [
+  { id: 1, codigo: '001', nombreFantasia: 'Ceramica Norte', razonSocial: 'Ceramica Norte S.A', cuit: '30-7623345-7', telefono: '+54 387 435-3422', email: 'contacto@ceramicanorte.com', sucursal: 'Casa Central', activo: true },
+  { id: 2, codigo: '002', nombreFantasia: 'Hierros del NOA', razonSocial: 'Hierros del NOA S.R.L', cuit: '30-7346345-7', telefono: '+54 387 345-3422', email: 'ventas@hierrosdelnoa.com.ar', sucursal: 'Casa Central', activo: false },
+  { id: 3, codigo: '003', nombreFantasia: 'Cementos Salta', razonSocial: 'Cementos Salta S.A', cuit: '30-734575-9', telefono: '+54 388 465-7457', email: 'info@cementossalta.com', sucursal: 'Casa Central', activo: true },
+  { id: 4, codigo: '004', nombreFantasia: 'Distribuidora Cuyo', razonSocial: 'Distribuidora Cuyo S.R.L', cuit: '30-6812345-8', telefono: '+54 387 421-8899', email: 'pedidos@distribuidoracuyo.com', sucursal: 'Sucursal Sur', activo: true },
+  { id: 5, codigo: '005', nombreFantasia: 'Pinturas del Norte', razonSocial: 'Pinturas del Norte S.A', cuit: '30-7112233-4', telefono: '+54 387 498-1122', email: 'administracion@pinturasdelnorte.com', sucursal: 'Depósito Norte', activo: false },
+  { id: 6, codigo: '006', nombreFantasia: 'Bulonera Salta', razonSocial: 'Bulonera Salta S.R.L', cuit: '30-7145678-9', telefono: '+54 387 423-5566', email: 'ventas@bulonerasalta.com.ar', sucursal: 'Sucursal Sur', activo: true },
+  { id: 7, codigo: '007', nombreFantasia: 'Sanitarios del Valle', razonSocial: 'Sanitarios del Valle S.A', cuit: '30-7234112-3', telefono: '+54 388 471-9988', email: 'info@sanitariosdelvalle.com', sucursal: 'Casa Central', activo: true },
+  { id: 8, codigo: '008', nombreFantasia: 'Electricidad Andina', razonSocial: 'Electricidad Andina S.R.L', cuit: '30-6987412-5', telefono: '+54 387 409-3322', email: 'contacto@electricidadandina.com.ar', sucursal: 'Depósito Norte', activo: false },
+  { id: 9, codigo: '009', nombreFantasia: 'Maderas del Norte', razonSocial: 'Maderas del Norte S.A', cuit: '30-7055441-2', telefono: '+54 387 455-7890', email: 'pedidos@maderasdelnorte.com', sucursal: 'Sucursal Sur', activo: true },
+  { id: 10, codigo: '010', nombreFantasia: 'Ferretería Industrial Güemes', razonSocial: 'Ferretería Güemes S.R.L', cuit: '30-7412389-1', telefono: '+54 388 488-2233', email: 'administracion@ferreteria-guemes.com.ar', sucursal: 'Casa Central', activo: true }
+];
+
 export const modulos = [
   { nombre: 'Empleados', detalle: 'Gestionar usuarios y permisos', icono: IconUsers, ruta: '/empleados' },
   { nombre: 'Pedidos', detalle: 'Gestión y seguimiento', icono: IconBox },
-  { nombre: 'Proveedores', detalle: 'Crear y gestionar', icono: IconTruck },
+  { nombre: 'Proveedores', detalle: 'Gestionar información y estado de proveedores', icono: IconTruck },
   { nombre: 'Ventas', detalle: 'Seguimiento de ventas', icono: IconShoppingCart },
   { nombre: 'Facturación', detalle: 'Seguimiento de facturas', icono: IconFileText },
   { nombre: 'Caja', detalle: 'Seguimiento de caja', icono: IconCash },

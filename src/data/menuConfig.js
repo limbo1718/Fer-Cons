@@ -41,7 +41,7 @@ export const menuCategories = [
     icono: IconPackage,
     modules: [
       { name: 'Stock', path: '/stock', detalle: 'Controlar stock y depósitos', icono: IconBuildingWarehouse, roles: ['Administrador', 'Empleado'] },
-      { name: 'Proveedores', path: '/proveedores', detalle: 'Crear y gestionar', icono: IconTruck, roles: ['Administrador'] }
+      { name: 'Proveedores', path: '/proveedores', detalle: 'Gestionar información y estado de proveedores', icono: IconTruck, roles: ['Administrador'] }
     ]
   },
   {

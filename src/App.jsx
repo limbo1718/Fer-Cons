@@ -7,6 +7,8 @@ import CambiarContrasena from './pages/CambiarContrasena.jsx'
 import Inicio from './pages/Inicio.jsx'
 import Actividad from './pages/Actividad.jsx'
 import Empleados from './pages/Empleados.jsx'
+import Proveedores from './pages/Proveedores.jsx';
+
 
 function RutaProtegida() {
   const { user } = useAuth()
@@ -23,6 +25,7 @@ export default function App() {
         <Route index element={<Inicio />} />
         <Route path="actividad" element={<Actividad />} />
         <Route path="empleados" element={<Empleados />} />
+        <Route path="/proveedores" element={<Proveedores />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
