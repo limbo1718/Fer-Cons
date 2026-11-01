@@ -8,8 +8,10 @@ import FilterTabs from '../components/common/FilterTabs.jsx';
 import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
+import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
+import { usePagination } from '../hooks/usePagination.js';
 import { proveedores as datos } from '../data/mock.js';
-import '../styles/Empleados.css'; // Mantenemos la consistencia de estilos compartidos
+import '../styles/Proveedores.css';
 
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
@@ -92,7 +94,7 @@ export default function Proveedores() {
         { id: 'sucursal', label: 'Por sucursal' }
     ];
 
-    // Lógica de filtrado por pestañas, sucursal seleccionada y barra de búsqueda
+    // 1. Lógica de filtrado por pestañas, sucursal seleccionada y barra de búsqueda
     const proveedoresFiltrados = proveedores.filter((p) => {
         let cumpleTab = true;
         if (tabActiva === 'activos') {
@@ -115,6 +117,13 @@ export default function Proveedores() {
 
         return cumpleTab && cumpleBusqueda;
     });
+
+    // 2. Aplicamos el hook de paginación progresiva (bloques de 10)
+    const { datosVisibles, tieneMas, cargarMas } = usePagination(
+        proveedoresFiltrados, 
+        10, 
+        [busqueda, tabActiva, sucursalSeleccionada]
+    );
 
     // Definición de columnas de la tabla de proveedores
     const columnas = [
@@ -162,10 +171,10 @@ export default function Proveedores() {
             />
         )}
         
-        {/* Tabla Genérica con datos filtrados */}
+        {/* Tabla Genérica con datos filtrados (ahora usando datosVisibles) */}
         <GenericTable
             columnas={columnas}
-            datos={proveedoresFiltrados}
+            datos={datosVisibles}
             renderFila={(p) => (
             <tr key={p.id} className="fila-empleado">
                 <td className="celda-tabla-legajo">N.° {p.codigo}</td>
@@ -201,6 +210,14 @@ export default function Proveedores() {
             </tr>
             )}
         />
+
+        {/* Botón "Ver más" condicional */}
+        {tieneMas && (
+            <LoadMoreButton 
+                onClick={cargarMas} 
+                text="Ver más proveedores" 
+            />
+        )}
 
         {/* Botón flotante genérico para abrir el modal */}
         <GenericFab 

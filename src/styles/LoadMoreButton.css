@@ -1,0 +1,30 @@
+.contenedor-cargar-mas {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.boton-cargar-mas {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    background-color: rgba(20, 184, 166, 0.08);
+    color: #0f2a30;
+    font-weight: 500;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.boton-cargar-mas:hover {
+    background-color: rgba(20, 184, 166, 0.15);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.boton-cargar-mas:active {
+    transform: scale(0.98);
+}

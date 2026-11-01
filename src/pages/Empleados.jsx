@@ -6,8 +6,10 @@ import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
 import FilterTabs from '../components/common/FilterTabs.jsx';
 import FilterSelect from '../components/common/FilterSelect.jsx';
-import GenericModalForm from '../components/common/GenericModalForm.jsx'; // <--- Componente modal genérico
+import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
+import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
+import { usePagination } from '../hooks/usePagination.js';
 import { empleados as datos } from '../data/mock.js';
 import '../styles/Empleados.css';
 
@@ -18,7 +20,7 @@ export default function Empleados() {
   const [busqueda, setBusqueda] = useState('');
   const [tabActiva, setTabActiva] = useState('todos');
   const [rolSeleccionado, setRolSeleccionado] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); // Estado para abrir/cerrar el modal genérico
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const activos = empleados.filter((e) => e.activo).length;
   const inactivos = empleados.filter((e) => !e.activo).length;
@@ -99,7 +101,7 @@ export default function Empleados() {
     { id: 'rol', label: 'Por rol' }
   ];
 
-  // Lógica de filtrado por pestañas, rol seleccionado y barra de búsqueda
+  // 1. Lógica de filtrado por pestañas, rol seleccionado y barra de búsqueda
   const empleadosFiltrados = empleados.filter((e) => {
     let cumpleTab = true;
     if (tabActiva === 'activos') {
@@ -119,6 +121,14 @@ export default function Empleados() {
 
     return cumpleTab && cumpleBusqueda;
   });
+
+  // 2. Aplicamos el hook de paginación progresiva (bloques de 10)
+  // Se le pasan las dependencias para que el límite vuelva a 10 al buscar o cambiar filtros
+  const { datosVisibles, tieneMas, cargarMas } = usePagination(
+    empleadosFiltrados, 
+    10, 
+    [busqueda, tabActiva, rolSeleccionado]
+  );
 
   // Definición de columnas de la tabla
   const columnas = [
@@ -165,10 +175,10 @@ export default function Empleados() {
         />
       )}
       
-      {/* Tabla Genérica con datos filtrados */}
+      {/* Tabla Genérica con datos filtrados (ahora usando datosVisibles) */}
       <GenericTable
         columnas={columnas}
-        datos={empleadosFiltrados}
+        datos={datosVisibles}
         renderFila={(e) => (
           <tr key={e.id} className="fila-empleado">
             <td className="celda-tabla-legajo">N.° {e.legajo}</td>
@@ -201,6 +211,14 @@ export default function Empleados() {
           </tr>
         )}
       />
+
+      {/* Botón "Ver más" condicional */}
+      {tieneMas && (
+        <LoadMoreButton 
+          onClick={cargarMas} 
+          text="Ver más empleados" 
+        />
+      )}
 
       {/* Botón flotante genérico para abrir el modal */}
       <GenericFab 
