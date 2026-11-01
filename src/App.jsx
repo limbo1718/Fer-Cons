@@ -1,19 +1,17 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from './context/AuthContext.jsx'
-// 1. Importación actualizada con el nombre real del componente
-import MenuDesplegable from './components/MenuDesplegable.jsx' 
-import Login from './pages/Login.jsx'
-import CambiarContrasena from './pages/CambiarContrasena.jsx'
-import Inicio from './pages/Inicio.jsx'
-import Actividad from './pages/Actividad.jsx'
-import Empleados from './pages/Empleados.jsx'
+import { Routes, Route, Navigate } from 'react-router-dom';
+import { useAuth } from './context/AuthContext.jsx';
+import MenuDesplegable from './components/MenuDesplegable.jsx';
+import Login from './pages/Login.jsx';
+import CambiarContrasena from './pages/CambiarContrasena.jsx';
+import Inicio from './pages/Inicio.jsx';
+import Actividad from './pages/Actividad.jsx';
+import Empleados from './pages/Empleados.jsx';
 import Proveedores from './pages/Proveedores.jsx';
-
+import Perfil from './pages/Perfil.jsx';
 
 function RutaProtegida() {
-  const { user } = useAuth()
-  // 2. Renderizado con la etiqueta <MenuDesplegable />
-  return user ? <MenuDesplegable /> : <Navigate to="/login" replace />
+  const { user } = useAuth();
+  return user ? <MenuDesplegable /> : <Navigate to="/login" replace />;
 }
 
 export default function App() {
@@ -25,9 +23,10 @@ export default function App() {
         <Route index element={<Inicio />} />
         <Route path="actividad" element={<Actividad />} />
         <Route path="empleados" element={<Empleados />} />
-        <Route path="/proveedores" element={<Proveedores />} />
+        <Route path="proveedores" element={<Proveedores />} />
+        <Route path="perfil" element={<Perfil />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
-  )
+  );
 }

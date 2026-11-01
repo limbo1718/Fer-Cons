@@ -1,0 +1,237 @@
+.seccion-perfil-principal {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Tarjeta superior de cabecera */
+.tarjeta-perfil-cabecera {
+    background-color: #ffffff;
+    border-radius: 1.25rem;
+    padding: 1.75rem 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    border: 1px solid rgba(13, 148, 136, 0.15);
+    box-shadow: 0 4px 12px -2px rgba(13, 148, 136, 0.05);
+    flex-wrap: wrap;
+}
+
+.avatar-perfil-contenedor {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0d9488 0%, #115e59 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
+    flex-shrink: 0;
+}
+
+.info-perfil-cabecera {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 1;
+    min-width: 200px;
+}
+
+.nombre-perfil {
+    margin: 0;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0f2a30;
+}
+
+.rol-perfil-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #0d9488;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Badge de Estado Activo/Inactivo */
+.estado-perfil-contenedor {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.label-estado {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #0f2a30;
+}
+
+.badge-estado-perfil {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.badge-estado-perfil.activo {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: #047857;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.badge-estado-perfil.inactivo {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #b91c1c;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.punto-estado {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: currentColor;
+}
+
+/* Grilla de dos columnas para los inputs/campos */
+.grid-datos-perfil {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+}
+
+.campo-perfil-item {
+    background-color: #ffffff;
+    border: 1px solid rgba(13, 148, 136, 0.18);
+    border-radius: 0.9rem;
+    padding: 0.85rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.campo-perfil-item:hover {
+    border-color: rgba(13, 148, 136, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.icono-campo-perfil {
+    color: #0d9488;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-campo-perfil {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    width: 100%;
+}
+
+.info-campo-perfil label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgba(15, 42, 48, 0.55);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.info-campo-perfil p {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f2a30;
+}
+
+/* Inputs editables para el Administrador */
+.input-perfil-editable {
+    width: 100%;
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    border-radius: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #0f2a30;
+    background-color: rgba(20, 184, 166, 0.04);
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-perfil-editable:focus {
+    border-color: #0d9488;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+}
+
+/* Botón Guardar Cambios */
+.contenedor-boton-guardar-perfil {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.boton-guardar-perfil {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #0d9488;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(13, 148, 136, 0.25);
+    transition: all 0.2s ease;
+}
+
+.boton-guardar-perfil:hover {
+    background-color: #115e59;
+    transform: translateY(-1px);
+}
+
+/* Banner de aviso para Empleados (sin permisos de edición) */
+.aviso-lectura-perfil {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    background-color: rgba(15, 42, 48, 0.05);
+    color: rgba(15, 42, 48, 0.7);
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Responsive para pantallas móviles */
+@media (max-width: 640px) {
+    .grid-datos-perfil {
+        grid-template-columns: 1fr;
+    }
+
+    .tarjeta-perfil-cabecera {
+        flex-direction: column;
+        text-align: center;
+        padding: 1.5rem;
+    }
+
+    .info-perfil-cabecera {
+        align-items: center;
+    }
+
+    .estado-perfil-contenedor {
+        margin-top: 0.5rem;
+    }
+}

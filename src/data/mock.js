@@ -4,7 +4,17 @@ import {
   IconBuildingWarehouse, IconFileDescription, IconUserCheck, IconUserX,
 } from '@tabler/icons-react'
 
-export const usuarioDemo = { legajo: '45974444', correo: 'alejandro@fercons.com', password: '1234', nombre: 'Alejandro Carrizo', rol: 'Administrador' }
+export const usuarioDemo = { 
+  legajo: '45974444', 
+  correo: 'alejandro@fercons.com', 
+  password: '1234', 
+  nombre: 'Alejandro Carrizo', 
+  rol: 'Administrador',
+  dni: '45.974.444',
+  telefono: '+54 387 412-9988',
+  fechaAsociacion: '14/02/2025',
+  activo: true
+};
 
 export const empleados = [
   { id: 1, legajo: '0214', nombre: 'Daniel Pérez Ruiz', telefono: '+54 387 320-3022', rol: 'Vendedor', sucursal: 'Casa Central', activo: true },
