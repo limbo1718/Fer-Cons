@@ -125,3 +125,36 @@ ESTILOS DE PROVEEDORES - FER-CONS
     gap: 0.5rem;
     color: var(--color-oscuro);
 }
+
+/* Botones de acciones por fila (editar / activar-desactivar) */
+.acciones-fila {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.boton-accion-icono {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--color-tarjeta);
+    color: var(--color-oscuro);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.boton-accion-icono:hover {
+    background-color: var(--color-circulo);
+}
+
+.accion-desactivar {
+    color: #991b1b;
+}
+
+.accion-activar {
+    color: #166534;
+}
