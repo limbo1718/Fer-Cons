@@ -39,6 +39,15 @@ export default function Login() {
       correo: usuarioDemo.correo,
       rol: usuarioDemo.rol,
     });
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Bienvenido!',
+      text: `Ingreso exitoso, bienvenido ${usuarioDemo.nombre}`,
+      timer: 1800,
+      showConfirmButton: false,
+    });
+
     navigate('/');
   };
 
