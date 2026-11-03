@@ -1,52 +1,61 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconUser, IconLock, IconSettings, IconKey } from '@tabler/icons-react';
 import InputField from '../components/common/InputField';
 import InputPassword from '../components/common/InputPassword';
 import ButtonSubmit from '../components/common/ButtonSubmit';
-import { usuarioDemo, empleados } from '../data/mock';
 import '../styles/CambiarContrasena.css';
 
 export default function CambiarContrasena() {
   const [usuario, setUsuario] = useState('');
   const [nuevaContra, setNuevaContra] = useState('');
   const [confirContra, setConfirContra] = useState('');
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+
+  // Consumo de la API de FakeStore
+  const getUsers = async () => {
+    try {
+      const response = await fetch('https://fakestoreapi.com/users');
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error al cargar usuarios:', error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
 
   const mostrarAlerta = (icon, title, text) =>
     Swal.fire({ icon, title, text, confirmButtonColor: '#326f7a' });
 
-  // Coincide por legajo (exacto) o por correo (sin distinguir mayúsculas)
-  const coincide = (cuenta, valor) =>
-    String(cuenta.legajo) === valor ||
-    (cuenta.correo && cuenta.correo.toLowerCase() === valor.toLowerCase());
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const usuarioLimpio = usuario.trim();
 
-    // 1. Campos vacíos
+    // 1. Verificar si los datos se cargaron
+    if (users.length === 0) {
+      mostrarAlerta('info', 'Espera un momento', 'Los datos se están cargando...');
+      return;
+    }
+
+    // 2. Campos vacíos
     if (!usuarioLimpio || !nuevaContra.trim() || !confirContra.trim()) {
       mostrarAlerta('warning', 'Campos incompletos', 'Por favor, complete todos los campos.');
       return;
     }
 
-    // 2. Existencia del usuario (legajo o correo)
-    const esAdminDemo = coincide(usuarioDemo, usuarioLimpio);
-    const empleadoEncontrado = empleados.find((emp) => coincide(emp, usuarioLimpio));
-
-    if (!esAdminDemo && !empleadoEncontrado) {
-      mostrarAlerta(
-        'error',
-        'Usuario no encontrado',
-        'El legajo o correo ingresado no existe en el sistema.'
-      );
+    // 3. Coincidencia de contraseñas
+    if (nuevaContra !== confirContra) {
+      mostrarAlerta('error', 'Error de validación', 'Las nuevas contraseñas no coinciden.');
       return;
     }
 
-    // 3. Longitud mínima de la contraseña
+    // 4. Longitud mínima
     if (nuevaContra.length < 4) {
       mostrarAlerta(
         'warning',
@@ -56,22 +65,49 @@ export default function CambiarContrasena() {
       return;
     }
 
-    // 4. Coincidencia de contraseñas
-    if (nuevaContra !== confirContra) {
-      mostrarAlerta('error', 'Error de validación', 'Las nuevas contraseñas no coinciden.');
+    // 5. Existencia de usuario (por username o correo)
+    const usuarioEncontrado = users.find(
+      (use) => use.username === usuarioLimpio || use.email === usuarioLimpio
+    );
+
+    if (!usuarioEncontrado) {
+      mostrarAlerta(
+        'error',
+        'Usuario no encontrado',
+        'El nombre de usuario o correo ingresado no existe.'
+      );
       return;
     }
 
-    // 5. Éxito
-    Swal.fire({
-      icon: 'success',
-      title: '¡Éxito!',
-      text: 'La contraseña se actualizó correctamente.',
-      confirmButtonText: 'Ir al Login',
-      confirmButtonColor: '#326f7a',
-    }).then(() => {
-      navigate('/login');
-    });
+    // 6. Petición PUT a la API
+    try {
+      const response = await fetch(
+        `https://fakestoreapi.com/users/${usuarioEncontrado.id}`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            password: nuevaContra,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('El servicio del backend no funciona.');
+      }
+
+      Swal.fire({
+        icon: 'success',
+        title: '¡Éxito!',
+        text: 'La contraseña se actualizó correctamente.',
+        confirmButtonText: 'Ir al Login',
+        confirmButtonColor: '#326f7a',
+      }).then(() => {
+        navigate('/login');
+      });
+    } catch (error) {
+      mostrarAlerta('warning', 'Servicio no disponible', 'No se pudo conectar con el servidor.');
+    }
   };
 
   return (
@@ -94,7 +130,7 @@ export default function CambiarContrasena() {
         <InputField
           type="text"
           name="usuario"
-          placeholder="Legajo o correo electrónico"
+          placeholder="Usuario o correo electrónico"
           value={usuario}
           onChange={(e) => setUsuario(e.target.value)}
           icon={IconUser}
@@ -124,9 +160,11 @@ export default function CambiarContrasena() {
           Volver al inicio de sesión
         </Link>
 
-        <p className="texto-demo">
-          Demo: legajo {usuarioDemo.legajo} · correo {usuarioDemo.correo} · contraseña {usuarioDemo.password}
-        </p>
+        {users.length > 0 && (
+          <p className="texto-demo">
+            Demo API: usuario <strong>{users[0].username}</strong> · correo <strong>{users[0].email}</strong>
+          </p>
+        )}
       </form>
     </main>
   );

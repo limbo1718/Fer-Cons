@@ -1,9 +1,9 @@
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { Navigate, useNavigate, Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconUser, IconLock, IconSettings } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
-import { usuarioDemo } from '../data/mock.js';
 import InputField from '../components/common/InputField';
 import InputPassword from '../components/common/InputPassword';
 import ButtonSubmit from '../components/common/ButtonSubmit';
@@ -14,31 +14,61 @@ export default function Login() {
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
+  const [users, setUsers] = useState([]);
+
+  // Consumo de la API de FakeStore
+  const getUsers = async () => {
+    try {
+      const response = await fetch('https://fakestoreapi.com/users');
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error al cargar usuarios:', error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers();
+  }, []);
+
   if (user) return <Navigate to="/" replace />;
 
   const onSubmit = ({ usuario, password }) => {
-    const valor = usuario.trim();
+    const valorIngresado = usuario.trim();
 
-    // Legajo (exacto) o correo (sin distinguir mayúsculas)
-    const usuarioValido =
-      valor === usuarioDemo.legajo ||
-      valor.toLowerCase() === usuarioDemo.correo.toLowerCase();
+    // Validación sobre la lista de usuarios proveniente de la API
+    const usuarioEncontrado = users.find(
+      (use) =>
+        (use.username === valorIngresado || use.email === valorIngresado) &&
+        use.password === password
+    );
 
-    if (!usuarioValido || password !== usuarioDemo.password) {
+    if (!usuarioEncontrado) {
       return Swal.fire({
         icon: 'error',
         title: 'Datos incorrectos',
-        text: 'Revisá tu legajo o correo y tu contraseña.',
+        text: 'Revisá tu usuario o correo y tu contraseña.',
         confirmButtonColor: '#326f7a',
       });
     }
 
+    // Inicio de sesión exitoso con los datos retornados por la API
     login({
-      nombre: usuarioDemo.nombre,
-      legajo: usuarioDemo.legajo,
-      correo: usuarioDemo.correo,
-      rol: usuarioDemo.rol,
+      nombre: `${usuarioEncontrado.name.firstname} ${usuarioEncontrado.name.lastname}`,
+      legajo: String(usuarioEncontrado.id),
+      correo: usuarioEncontrado.email,
+      username: usuarioEncontrado.username,
+      rol: 'Administrador',
     });
+
+    Swal.fire({
+      icon: 'success',
+      title: '¡Bienvenido!',
+      text: `Ingreso exitoso, bienvenido ${usuarioEncontrado.username}`,
+      timer: 1800,
+      showConfirmButton: false,
+    });
+
     navigate('/');
   };
 
@@ -59,8 +89,8 @@ export default function Login() {
 
         <InputField
           type="text"
-          placeholder="Legajo o correo electrónico"
-          registro={register('usuario', { required: 'Ingresá tu legajo o correo' })}
+          placeholder="Usuario o correo electrónico"
+          registro={register('usuario', { required: 'Ingresá tu usuario o correo' })}
           error={errors.usuario}
           icon={IconUser}
         />
@@ -83,9 +113,11 @@ export default function Login() {
           ¿Olvidaste tu contraseña?
         </Link>
 
-        <p className="texto-demo">
-          Demo: legajo {usuarioDemo.legajo} · correo {usuarioDemo.correo} · contraseña {usuarioDemo.password}
-        </p>
+        {users.length > 0 && (
+          <p className="texto-demo">
+            Demo API: usuario <strong>{users[0].username}</strong> · correo <strong>{users[0].email}</strong> · contraseña <strong>{users[0].password}</strong>
+          </p>
+        )}
       </form>
     </main>
   );
