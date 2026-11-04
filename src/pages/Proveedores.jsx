@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconPhone, IconPencil, IconPlus } from '@tabler/icons-react';
+import { IconPhone, IconPencil, IconEdit, IconPower } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
@@ -21,6 +21,7 @@ export default function Proveedores() {
     const [tabActiva, setTabActiva] = useState('todos');
     const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [proveedorEditando, setProveedorEditando] = useState(null); // null = modo "nuevo"
 
     const activos = proveedores.filter((p) => p.activo).length;
     const inactivos = proveedores.filter((p) => !p.activo).length;
@@ -31,6 +32,28 @@ export default function Proveedores() {
     // Cálculo del siguiente código autogenerado
     const ultimoCodigo = proveedores.length > 0 ? proveedores[proveedores.length - 1].codigo : '003';
     const siguienteCodigo = String(Number(ultimoCodigo) + 1).padStart(3, '0');
+
+    // Valores con los que se abre el modal: datos del proveedor (editar) o código nuevo (agregar)
+    const valoresIniciales = useMemo(() => {
+        if (!proveedorEditando) return { codigo: siguienteCodigo };
+        const { codigo, nombreFantasia, razonSocial, cuit, telefono, email, sucursal } = proveedorEditando;
+        return { codigo, nombreFantasia, razonSocial, cuit, telefono, email: email || '', sucursal };
+    }, [proveedorEditando, siguienteCodigo]);
+
+    const abrirNuevo = () => {
+        setProveedorEditando(null);
+        setIsModalOpen(true);
+    };
+
+    const abrirEdicion = (p) => {
+        setProveedorEditando(p);
+        setIsModalOpen(true);
+    };
+
+    const cerrarModal = () => {
+        setIsModalOpen(false);
+        setProveedorEditando(null);
+    };
 
     // Configuración de los campos obligatorios para el formulario genérico de proveedores
     const camposProveedor = [
@@ -63,7 +86,44 @@ export default function Proveedores() {
         if (value) Swal.fire({ icon: 'success', title: 'Información guardada', timer: 1500, showConfirmButton: false });
     };
 
+    const cambiarEstado = async (p) => {
+        const desactivar = p.activo;
+        const { isConfirmed } = await Swal.fire({
+            icon: 'question',
+            title: desactivar ? '¿Desactivar proveedor?' : '¿Activar proveedor?',
+            text: `${p.nombreFantasia} pasará a estar ${desactivar ? 'inactivo' : 'activo'}.`,
+            showCancelButton: true,
+            confirmButtonText: desactivar ? 'Desactivar' : 'Activar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0d9488',
+        });
+        if (!isConfirmed) return;
+        setProveedores((prev) => prev.map((prov) => (prov.id === p.id ? { ...prov, activo: !prov.activo } : prov)));
+    };
+
     const handleGuardarProveedor = (data) => {
+        // Modo edición: actualiza el proveedor existente en lugar de agregar uno nuevo
+        if (proveedorEditando) {
+            const actualizado = {
+                ...proveedorEditando,
+                nombreFantasia: data.nombreFantasia,
+                razonSocial: data.razonSocial,
+                cuit: data.cuit,
+                telefono: data.telefono,
+                email: data.email,
+                sucursal: data.sucursal,
+            };
+            setProveedores((prev) => prev.map((prov) => (prov.id === actualizado.id ? actualizado : prov)));
+            Swal.fire({
+                icon: 'success',
+                title: '¡Proveedor actualizado!',
+                text: `Los datos de ${actualizado.nombreFantasia} se guardaron correctamente.`,
+                timer: 1800,
+                showConfirmButton: false
+            });
+            return;
+        }
+
         const nuevoProveedor = {
         id: Date.now(),
         codigo: data.codigo,
@@ -134,7 +194,8 @@ export default function Proveedores() {
         'Email',
         'Sucursal', 
         'Estado', 
-        'Acción'
+        'Detalle',
+        'Acciones'
     ];
 
     return (
@@ -207,6 +268,28 @@ export default function Proveedores() {
                     <span className="celda-tabla-gris">-</span>
                 )}
                 </td>
+                <td className="celda-tabla-info">
+                <span className="acciones-fila">
+                    <button
+                    type="button"
+                    className="boton-accion-icono"
+                    onClick={() => abrirEdicion(p)}
+                    title="Editar proveedor"
+                    aria-label={`Editar ${p.nombreFantasia}`}
+                    >
+                    <IconEdit size={18} />
+                    </button>
+                    <button
+                    type="button"
+                    className={`boton-accion-icono ${p.activo ? 'accion-desactivar' : 'accion-activar'}`}
+                    onClick={() => cambiarEstado(p)}
+                    title={p.activo ? 'Desactivar proveedor' : 'Activar proveedor'}
+                    aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombreFantasia}`}
+                    >
+                    <IconPower size={18} />
+                    </button>
+                </span>
+                </td>
             </tr>
             )}
         />
@@ -221,20 +304,20 @@ export default function Proveedores() {
 
         {/* Botón flotante genérico para abrir el modal */}
         <GenericFab 
-            onClick={() => setIsModalOpen(true)} 
+            onClick={abrirNuevo} 
             title="Agregar nuevo proveedor" 
         />
 
         {/* Instancia del Modal Genérico para Proveedores */}
         <GenericModalForm
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
-            title="Nuevo proveedor"
-            subtitle="¡Rellena los campos para añadir a tu nuevo proveedor!"
+            onClose={cerrarModal}
+            title={proveedorEditando ? 'Editar proveedor' : 'Nuevo proveedor'}
+            subtitle={proveedorEditando ? 'Modificá los datos del proveedor y guardá los cambios.' : '¡Rellena los campos para añadir a tu nuevo proveedor!'}
             fields={camposProveedor}
-            initialValues={{ codigo: siguienteCodigo }}
+            initialValues={valoresIniciales}
             onSubmit={handleGuardarProveedor}
-            submitText="Guardar proveedor"
+            submitText={proveedorEditando ? 'Guardar cambios' : 'Guardar proveedor'}
         />
         </>
     );

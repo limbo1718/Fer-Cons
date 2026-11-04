@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconPhone, IconPencil, IconPlus } from '@tabler/icons-react';
+import { IconPhone, IconPencil, IconEdit, IconPower } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
@@ -15,12 +15,19 @@ import '../styles/Empleados.css';
 
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
+// Separa "Daniel Pérez Ruiz" en nombre ("Daniel") y apellido ("Pérez Ruiz") para precargar el formulario
+const separarNombre = (completo = '') => {
+  const [primero = '', ...resto] = completo.trim().split(' ');
+  return { nombre: primero, apellido: resto.join(' ') };
+};
+
 export default function Empleados() {
   const [empleados, setEmpleados] = useState(datos);
   const [busqueda, setBusqueda] = useState('');
   const [tabActiva, setTabActiva] = useState('todos');
   const [rolSeleccionado, setRolSeleccionado] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [empleadoEditando, setEmpleadoEditando] = useState(null); // null = modo "nuevo"
 
   const activos = empleados.filter((e) => e.activo).length;
   const inactivos = empleados.filter((e) => !e.activo).length;
@@ -31,6 +38,39 @@ export default function Empleados() {
   // Cálculo del siguiente legajo autogenerado para el formulario de prueba
   const ultimoLegajo = empleados.length > 0 ? empleados[empleados.length - 1].legajo : '0218';
   const siguienteLegajo = String(Number(ultimoLegajo) + 1).padStart(4, '0');
+
+  // Valores con los que se abre el modal: datos del empleado (editar) o legajo nuevo (agregar)
+  const valoresIniciales = useMemo(() => {
+    if (!empleadoEditando) return { legajo: siguienteLegajo };
+    const { nombre, apellido } = empleadoEditando.apellido
+      ? { nombre: empleadoEditando.nombrePila, apellido: empleadoEditando.apellido }
+      : separarNombre(empleadoEditando.nombre);
+    return {
+      legajo: empleadoEditando.legajo,
+      dni: empleadoEditando.dni || '',
+      nombre,
+      apellido,
+      telefono: empleadoEditando.telefono,
+      email: empleadoEditando.email || '',
+      rol: empleadoEditando.rol,
+      sucursal: empleadoEditando.sucursal,
+    };
+  }, [empleadoEditando, siguienteLegajo]);
+
+  const abrirNuevo = () => {
+    setEmpleadoEditando(null);
+    setIsModalOpen(true);
+  };
+
+  const abrirEdicion = (e) => {
+    setEmpleadoEditando(e);
+    setIsModalOpen(true);
+  };
+
+  const cerrarModal = () => {
+    setIsModalOpen(false);
+    setEmpleadoEditando(null);
+  };
 
   // Configuración de los campos obligatorios para el formulario genérico de empleados
   const camposEmpleado = [
@@ -70,11 +110,52 @@ export default function Empleados() {
     if (value) Swal.fire({ icon: 'success', title: 'Justificación guardada', timer: 1500, showConfirmButton: false });
   };
 
+  const cambiarEstado = async (e) => {
+    const desactivar = e.activo;
+    const { isConfirmed } = await Swal.fire({
+      icon: 'question',
+      title: desactivar ? '¿Desactivar empleado?' : '¿Activar empleado?',
+      text: `${e.nombre} pasará a estar ${desactivar ? 'inactivo' : 'activo'}.`,
+      showCancelButton: true,
+      confirmButtonText: desactivar ? 'Desactivar' : 'Activar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#4a9da8',
+    });
+    if (!isConfirmed) return;
+    setEmpleados((prev) => prev.map((emp) => (emp.id === e.id ? { ...emp, activo: !emp.activo } : emp)));
+  };
+
   const handleGuardarEmpleado = (data) => {
+    // Modo edición: actualiza el empleado existente en lugar de agregar uno nuevo
+    if (empleadoEditando) {
+      const actualizado = {
+        ...empleadoEditando,
+        nombre: `${data.nombre} ${data.apellido}`,
+        nombrePila: data.nombre,
+        apellido: data.apellido,
+        telefono: data.telefono,
+        email: data.email,
+        dni: data.dni,
+        rol: data.rol,
+        sucursal: data.sucursal,
+      };
+      setEmpleados((prev) => prev.map((emp) => (emp.id === actualizado.id ? actualizado : emp)));
+      Swal.fire({
+        icon: 'success',
+        title: '¡Empleado actualizado!',
+        text: `Los datos de ${actualizado.nombre} se guardaron correctamente.`,
+        timer: 1800,
+        showConfirmButton: false,
+      });
+      return;
+    }
+
     const nuevoEmpleado = {
       id: Date.now(),
       legajo: data.legajo,
       nombre: `${data.nombre} ${data.apellido}`,
+      nombrePila: data.nombre,
+      apellido: data.apellido,
       telefono: data.telefono,
       email: data.email,
       dni: data.dni,
@@ -138,7 +219,8 @@ export default function Empleados() {
     'Rol', 
     'Sucursal', 
     'Estado', 
-    'Justificación'
+    'Justificación',
+    'Acciones'
   ];
 
   return (
@@ -208,6 +290,28 @@ export default function Empleados() {
                 <span className="celda-tabla-gris">-</span>
               )}
             </td>
+            <td className="celda-tabla-info">
+              <span className="acciones-fila">
+                <button
+                  type="button"
+                  className="boton-accion-icono"
+                  onClick={() => abrirEdicion(e)}
+                  title="Editar empleado"
+                  aria-label={`Editar ${e.nombre}`}
+                >
+                  <IconEdit size={18} />
+                </button>
+                <button
+                  type="button"
+                  className={`boton-accion-icono ${e.activo ? 'accion-desactivar' : 'accion-activar'}`}
+                  onClick={() => cambiarEstado(e)}
+                  title={e.activo ? 'Desactivar empleado' : 'Activar empleado'}
+                  aria-label={`${e.activo ? 'Desactivar' : 'Activar'} ${e.nombre}`}
+                >
+                  <IconPower size={18} />
+                </button>
+              </span>
+            </td>
           </tr>
         )}
       />
@@ -222,20 +326,20 @@ export default function Empleados() {
 
       {/* Botón flotante genérico para abrir el modal */}
       <GenericFab 
-        onClick={() => setIsModalOpen(true)} 
+        onClick={abrirNuevo} 
         title="Agregar nuevo empleado" 
       />
 
       {/* Instancia del Modal Genérico para Empleados */}
       <GenericModalForm
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Nuevo empleado"
-        subtitle="¡Rellena los campos para añadir a tu nuevo empleado!"
+        onClose={cerrarModal}
+        title={empleadoEditando ? 'Editar empleado' : 'Nuevo empleado'}
+        subtitle={empleadoEditando ? 'Modificá los datos del empleado y guardá los cambios.' : '¡Rellena los campos para añadir a tu nuevo empleado!'}
         fields={camposEmpleado}
-        initialValues={{ legajo: siguienteLegajo }}
+        initialValues={valoresIniciales}
         onSubmit={handleGuardarEmpleado}
-        submitText="Guardar empleado"
+        submitText={empleadoEditando ? 'Guardar cambios' : 'Guardar empleado'}
       />
     </>
   );
