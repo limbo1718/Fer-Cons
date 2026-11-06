@@ -31,7 +31,7 @@ export const menuCategories = [
     icono: IconShoppingBag,
     modules: [
       { name: 'Ventas', path: '/ventas', detalle: 'Seguimiento de ventas', icono: IconShoppingCart, roles: ['Administrador', 'Empleado'] },
-      { name: 'Pedidos', path: '/pedidos', detalle: 'Gestión y seguimiento', icono: IconBox, roles: ['Administrador', 'Empleado'] },
+      { name: 'Pedidos', path: '/pedidos', detalle: 'Gestión y seguimiento de pedidos a proveedores', icono: IconBox, roles: ['Administrador', 'Empleado'] },
       { name: 'Presupuestos', path: '/presupuestos', detalle: 'Crear y consultar', icono: IconFileDescription, roles: ['Administrador', 'Empleado'] }
     ]
   },

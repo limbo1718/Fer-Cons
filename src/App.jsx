@@ -7,6 +7,7 @@ import Inicio from './pages/Inicio.jsx';
 import Actividad from './pages/Actividad.jsx';
 import Empleados from './pages/Empleados.jsx';
 import Proveedores from './pages/Proveedores.jsx';
+import Pedidos from './pages/Pedidos.jsx';
 import Perfil from './pages/Perfil.jsx';
 
 function RutaProtegida() {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="actividad" element={<Actividad />} />
         <Route path="empleados" element={<Empleados />} />
         <Route path="proveedores" element={<Proveedores />} />
+        <Route path="pedidos" element={<Pedidos />} />
         <Route path="perfil" element={<Perfil />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

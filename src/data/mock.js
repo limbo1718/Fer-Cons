@@ -82,6 +82,53 @@ export const proveedores = [
   { id: 35, codigo: '035', nombreFantasia: 'Distribuidora General Ferretera', razonSocial: 'Distri Ferretera S.R.L', cuit: '30-7099221-5', telefono: '+54 387 422-1144', email: 'contacto@distriferretera.com.ar', sucursal: 'Casa Central', activo: true }
 ];
 
+export const pedidos = [
+  {
+    id: 1,
+    numeroPedido: '570',
+    numeroProveedor: '003',
+    proveedor: 'Aridos Norte S.A',
+    telefono: '+54 388 754-7777',
+    destino: 'Casa Central',
+    estado: 'En espera', // 'En espera' o 'Entregado'
+    fecha: '2026-11-05',
+    detalles: [
+      { producto: 'Cemento en bolsa x 25k marca Holcim', precioUnidad: 15000, cantidad: 50 },
+      { producto: 'Cal viva en bolsa x 25k marca Andina', precioUnidad: 12000, cantidad: 30 },
+      { producto: 'Cal apagada en bolsa x 30k marca Cacique', precioUnidad: 12000, cantidad: 30 },
+      { producto: 'Arena en bolsa x25k marca Fara', precioUnidad: 6000, cantidad: 50 }
+    ]
+  },
+  {
+    id: 2,
+    numeroPedido: '569',
+    numeroProveedor: '007',
+    proveedor: 'HierroNor',
+    telefono: '+54 388 385-2932',
+    destino: 'Casa Central',
+    estado: 'Entregado',
+    fecha: '2026-11-04',
+    detalles: [
+      { producto: 'Hierro retorcido 8mm x12m', precioUnidad: 8500, cantidad: 100 },
+      { producto: 'Hierro retorcido 10mm x12m', precioUnidad: 13200, cantidad: 80 }
+    ]
+  },
+  {
+    id: 3,
+    numeroPedido: '568',
+    numeroProveedor: '002',
+    proveedor: 'Bulonera City',
+    telefono: '+54 388 235-5632',
+    destino: 'Sucursal - Zona Norte',
+    estado: 'Entregado',
+    fecha: '2026-11-02',
+    detalles: [
+      { producto: 'Tornillos autorroscantes x 100u', precioUnidad: 4500, cantidad: 20 },
+      { producto: 'Tarugos del 8 x 50u', precioUnidad: 2500, cantidad: 40 }
+    ]
+  }
+];
+
 export const modulos = [
   { nombre: 'Empleados', detalle: 'Gestionar usuarios y permisos', icono: IconUsers, ruta: '/empleados' },
   { nombre: 'Pedidos', detalle: 'Gestión y seguimiento', icono: IconBox },
