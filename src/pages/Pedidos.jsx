@@ -6,8 +6,9 @@ import SearchBar from '../components/common/SearchBar.jsx';
 import FilterTabs from '../components/common/FilterTabs.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
+import OrderEditModal from '../components/common/OrderEditModal.jsx';
 import { usePagination } from '../hooks/usePagination.js';
-import { pedidos as datosPedidos } from '../data/mock.js';
+import { pedidos as datosPedidos, productos as catalogoGeneralProductos } from '../data/mock.js';
 import '../styles/Pedidos.css';
 
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
@@ -20,6 +21,9 @@ export default function Pedidos() {
     
     // Estado para el modal de detalle del pedido
     const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+
+    // Estado para el modal reutilizable de edición (OrderEditModal)
+    const [pedidoEditando, setPedidoEditando] = useState(null);
 
     // Contadores para pestañas
     const totalPedidos = pedidos.length;
@@ -55,10 +59,10 @@ export default function Pedidos() {
         return cumpleTab && cumpleBusqueda;
     });
 
-    // Paginación progresiva
+    // Paginación progresiva configurada de 10 en 10
     const { datosVisibles, tieneMas, cargarMas } = usePagination(
         pedidosFiltrados, 
-        5, 
+        10, 
         [busqueda, tabActiva, fechaFiltro]
     );
 
@@ -70,14 +74,35 @@ export default function Pedidos() {
         setPedidoSeleccionado(null);
     };
 
-    // Función para manejar la edición / modificación de un pedido
+    // Función para manejar la apertura del modal de edición con validación de estado
     const abrirEdicionPedido = (p) => {
+        if (p.estado === 'Entregado') {
+            Swal.fire({
+                icon: 'warning',
+                title: 'No se puede modificar',
+                text: `El pedido N.º ${p.numeroPedido} ya figura como "Entregado" y no admite modificaciones.`,
+                confirmButtonColor: '#0d9488',
+                confirmButtonText: 'Entendido'
+            });
+            return;
+        }
+
+        // Abre el componente reutilizable OrderEditModal
+        setPedidoEditando(p);
+    };
+
+    // Función para actualizar el pedido modificado en el estado global
+    const handleGuardarPedidoEditado = (pedidoActualizado) => {
+        setPedidos((prev) =>
+            prev.map((item) => (item.id === pedidoActualizado.id ? pedidoActualizado : item))
+        );
+
         Swal.fire({
-            title: `Modificar pedido N.º ${p.numeroPedido}`,
-            text: `Aquí podrás actualizar los datos del pedido para ${p.proveedor}.`,
-            icon: 'info',
-            confirmButtonColor: '#0d9488',
-            confirmButtonText: 'Entendido'
+            icon: 'success',
+            title: '¡Pedido actualizado!',
+            text: `Los cambios en el pedido N.º ${pedidoActualizado.numeroPedido} se guardaron correctamente.`,
+            timer: 1800,
+            showConfirmButton: false
         });
     };
 
@@ -148,72 +173,85 @@ export default function Pedidos() {
             {/* Listado de Tarjetas de Pedidos */}
             <div className="lista-tarjetas-pedidos">
                 {datosVisibles.length > 0 ? (
-                    datosVisibles.map((p) => (
-                        <div key={p.id} className="tarjeta-pedido">
-                            <div className="tarjeta-pedido-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                <div className="tarjeta-proveedor-info">
-                                    <span className="avatar-iniciales-pedido">{iniciales(p.proveedor)}</span>
-                                    <div>
-                                        <strong>Proveedor: {p.proveedor}</strong>
-                                        <div className="sub-texto-pedido">N.º Proveedor: {p.numeroProveedor}</div>
-                                        <div className="sub-texto-pedido">Pedido N.º: {p.numeroPedido}</div>
+                    datosVisibles.map((p) => {
+                        const esEntregado = p.estado === 'Entregado';
+                        return (
+                            <div key={p.id} className="tarjeta-pedido">
+                                <div className="tarjeta-pedido-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                    <div className="tarjeta-proveedor-info">
+                                        <span className="avatar-iniciales-pedido">{iniciales(p.proveedor)}</span>
+                                        <div>
+                                            <strong>Proveedor: {p.proveedor}</strong>
+                                            <div className="sub-texto-pedido">N.º Proveedor: {p.numeroProveedor}</div>
+                                            <div className="sub-texto-pedido">Pedido N.º: {p.numeroPedido}</div>
+                                        </div>
                                     </div>
-                                </div>
-                                {/* Fecha visible a simple vista en la tarjeta */}
-                                <div className="fecha-tarjeta-pedido" style={{ fontSize: '0.8rem', fontWeight: '600', color: '#0f766e', background: '#f0fdfa', padding: '0.3rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #ccfbf1', whiteSpace: 'nowrap' }}>
+                                    {/* Fecha visible a simple vista en la tarjeta */}
+                                    <div className="fecha-tarjeta-pedido" style={{ fontSize: '0.8rem', fontWeight: '600', color: '#0f766e', background: '#f0fdfa', padding: '0.3rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #ccfbf1', whiteSpace: 'nowrap' }}>
                                         {p.fecha}
-                                </div>
-                            </div>
-
-                            <div className="tarjeta-pedido-body">
-                                <div className="info-bloque">
-                                    <span className="label-tel">TELÉFONO PROVEEDOR</span>
-                                    <div className="telefono-flex">
-                                        <IconPhone size={16} /> {p.telefono}
                                     </div>
                                 </div>
-                                <div className="info-bloque text-right">
-                                    <span className="label-tel">Destino</span>
-                                    <div className="destino-texto">{p.destino}</div>
-                                </div>
-                            </div>
 
-                            <div className="tarjeta-pedido-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                    <span className={`etiqueta-estado-pedido ${p.estado === 'Entregado' ? 'estado-entregado' : 'estado-espera'}`}>
-                                        <span className="punto-estado"></span> {p.estado}
+                                <div className="tarjeta-pedido-body">
+                                    <div className="info-bloque">
+                                        <span className="label-tel">TELÉFONO PROVEEDOR</span>
+                                        <div className="telefono-flex">
+                                            <IconPhone size={16} /> {p.telefono}
+                                        </div>
+                                    </div>
+                                    <div className="info-bloque text-right">
+                                        <span className="label-tel">Destino</span>
+                                        <div className="destino-texto">{p.destino}</div>
+                                    </div>
+                                </div>
+
+                                <div className="tarjeta-pedido-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                        <span className={`etiqueta-estado-pedido ${esEntregado ? 'estado-entregado' : 'estado-espera'}`}>
+                                            <span className="punto-estado"></span> {p.estado}
+                                        </span>
+                                        <button className="boton-detalle-pedido" onClick={() => abrirDetalle(p)}>
+                                            <IconEye size={16} /> Detalle
+                                        </button>
+                                    </div>
+
+                                    {/* Acciones de fila (Modificar con validación y Cambiar Estado) */}
+                                    <span className="acciones-fila" style={{ display: 'flex', gap: '0.4rem' }}>
+                                        <button
+                                            type="button"
+                                            className={`boton-accion-icono ${esEntregado ? 'accion-deshabilitada' : ''}`}
+                                            onClick={() => abrirEdicionPedido(p)}
+                                            title={esEntregado ? 'No se puede modificar un pedido entregado' : 'Modificar pedido'}
+                                            aria-label={`Modificar pedido ${p.numeroPedido}`}
+                                            style={{ 
+                                                background: '#f1f5f9', 
+                                                border: '1px solid #cbd5e1', 
+                                                borderRadius: '0.4rem', 
+                                                padding: '0.4rem', 
+                                                cursor: esEntregado ? 'not-allowed' : 'pointer', 
+                                                display: 'grid', 
+                                                placeItems: 'center', 
+                                                color: '#0f2a30',
+                                                opacity: esEntregado ? 0.4 : 1 
+                                            }}
+                                        >
+                                            <IconEdit size={16} />
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="boton-accion-icono"
+                                            onClick={() => cambiarEstadoPedido(p)}
+                                            title={esEntregado ? 'Marcar en espera' : 'Marcar entregado'}
+                                            aria-label="Cambiar estado del pedido"
+                                            style={{ background: esEntregado ? '#fee2e2' : '#bbf7d0', border: 'none', borderRadius: '0.4rem', padding: '0.4rem', cursor: 'pointer', display: 'grid', placeItems: 'center', color: esEntregado ? '#991b1b' : '#166534' }}
+                                        >
+                                            <IconPower size={16} />
+                                        </button>
                                     </span>
-                                    <button className="boton-detalle-pedido" onClick={() => abrirDetalle(p)}>
-                                        <IconEye size={16} /> Detalle
-                                    </button>
                                 </div>
-
-                                {/* Acciones de fila (Modificar y Cambiar Estado) */}
-                                <span className="acciones-fila" style={{ display: 'flex', gap: '0.4rem' }}>
-                                    <button
-                                        type="button"
-                                        className="boton-accion-icono"
-                                        onClick={() => abrirEdicionPedido(p)}
-                                        title="Modificar pedido"
-                                        aria-label={`Modificar pedido ${p.numeroPedido}`}
-                                        style={{ background: '#f1f5f9', border: '1px solid #cbd5e1', borderRadius: '0.4rem', padding: '0.4rem', cursor: 'pointer', display: 'grid', placeItems: 'center', color: '#0f2a30' }}
-                                    >
-                                        <IconEdit size={16} />
-                                    </button>
-                                    <button
-                                        type="button"
-                                        className="boton-accion-icono"
-                                        onClick={() => cambiarEstadoPedido(p)}
-                                        title={p.estado === 'Entregado' ? 'Marcar en espera' : 'Marcar entregado'}
-                                        aria-label="Cambiar estado del pedido"
-                                        style={{ background: p.estado === 'Entregado' ? '#fee2e2' : '#bbf7d0', border: 'none', borderRadius: '0.4rem', padding: '0.4rem', cursor: 'pointer', display: 'grid', placeItems: 'center', color: p.estado === 'Entregado' ? '#991b1b' : '#166534' }}
-                                    >
-                                        <IconPower size={16} />
-                                    </button>
-                                </span>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 ) : (
                     <p className="sin-resultados">No se encontraron pedidos registrados.</p>
                 )}
@@ -245,7 +283,7 @@ export default function Pedidos() {
                         <div className="modal-proveedor-header">
                             <h3>Proveedor</h3>
                             <div className="proveedor-caja-seleccionada">
-                                    {pedidoSeleccionado.proveedor}
+                                {pedidoSeleccionado.proveedor}
                             </div>
                         </div>
 
@@ -257,6 +295,7 @@ export default function Pedidos() {
                                     </div>
                                     <div className="producto-item-info">
                                         <strong>{item.producto}</strong>
+                                        {item.codigo && <div style={{ fontSize: '0.75rem', color: '#555' }}>Código: {item.codigo}</div>}
                                         <div>Precio unidad: ${item.precioUnidad.toLocaleString()}</div>
                                         <div>Cantidad: {item.cantidad} bultos</div>
                                     </div>
@@ -273,6 +312,15 @@ export default function Pedidos() {
                     </div>
                 </div>
             )}
+
+            {/* Modal Reutilizable de Edición de Pedidos (OrderEditModal) */}
+            <OrderEditModal
+                isOpen={!!pedidoEditando}
+                onClose={() => setPedidoEditando(null)}
+                order={pedidoEditando}
+                catalog={catalogoGeneralProductos}
+                onSave={handleGuardarPedidoEditado}
+            />
         </div>
     );
 }
