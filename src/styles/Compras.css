@@ -1,8 +1,8 @@
 /* ============================================
-   ESTILOS DE PEDIDOS - FER-CONS
-   ============================================ */
+ESTILOS DE COMPRAS - FER-CONS
+============================================ */
 
-.contenedor-pedidos-page {
+.contenedor-compras-page {
     padding-bottom: 5rem;
 }
 
@@ -45,7 +45,7 @@
     border-color: #0d9488;
 }
 
-/* Lista de Tarjetas */
+/* Lista de Tarjetas de Compras */
 .lista-tarjetas-pedidos {
     display: flex;
     flex-direction: column;
@@ -207,12 +207,33 @@
     display: grid;
     place-items: center;
     color: #0f2a30;
-    transition: background-color 0.2s, border-color 0.2s;
+    transition: background-color 0.2s, border-color 0.2s, transform 0.1s ease;
 }
 
 .boton-accion-icono:hover {
     background-color: #e2e8f0;
     border-color: #94a3b8;
+    transform: scale(1.05);
+}
+
+/* Estado Entregado -> Botón de acción rápido en fondo rojo para pasar a En espera */
+.accion-desactivar {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+    border: none !important;
+}
+.accion-desactivar:hover {
+    background-color: #fecaca !important;
+}
+
+/* Estado En espera -> Botón de acción rápido en fondo verde para pasar a Entregado */
+.accion-activar {
+    background-color: #bbf7d0 !important;
+    color: #166534 !important;
+    border: none !important;
+}
+.accion-activar:hover {
+    background-color: #a7f3d0 !important;
 }
 
 .sin-resultados {

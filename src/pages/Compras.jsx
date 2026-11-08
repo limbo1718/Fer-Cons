@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
 import { IconPhone, IconBox, IconEye, IconEdit, IconPower } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
@@ -7,112 +7,136 @@ import FilterTabs from '../components/common/FilterTabs.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import OrderEditModal from '../components/common/OrderEditModal.jsx';
+import OrderCreateModal from '../components/common/OrderCreateModal.jsx';
 import { usePagination } from '../hooks/usePagination.js';
-import { pedidos as datosPedidos, productos as catalogoGeneralProductos } from '../data/mock.js';
-import '../styles/Pedidos.css';
+import { pedidos as datosCompras, productos as catalogoGeneralProductos } from '../data/mock.js';
+import '../styles/Compras.css';
 
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
-export default function Pedidos() {
-    const [pedidos, setPedidos] = useState(datosPedidos);
+export default function Compras() {
+    const [compras, setCompras] = useState(datosCompras);
     const [busqueda, setBusqueda] = useState('');
     const [tabActiva, setTabActiva] = useState('todos');
     const [fechaFiltro, setFechaFiltro] = useState('');
     
-    // Estado para el modal de detalle del pedido
-    const [pedidoSeleccionado, setPedidoSeleccionado] = useState(null);
+    // Estado para el modal de detalle de la compra
+    const [compraSeleccionada, setCompraSeleccionada] = useState(null);
 
     // Estado para el modal reutilizable de edición (OrderEditModal)
-    const [pedidoEditando, setPedidoEditando] = useState(null);
+    const [compraEditando, setCompraEditando] = useState(null);
+
+    // Estado para el modal de creación de nueva compra (OrderCreateModal)
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
     // Contadores para pestañas
-    const totalPedidos = pedidos.length;
-    const entregadosCount = pedidos.filter((p) => p.estado === 'Entregado').length;
-    const enEsperaCount = pedidos.filter((p) => p.estado === 'En espera').length;
+    const totalCompras = compras.length;
+    const entregadosCount = compras.filter((c) => c.estado === 'Entregado').length;
+    const enEsperaCount = compras.filter((c) => c.estado === 'En espera').length;
+
+    // Cálculo dinámico del siguiente número de compra/pedido
+    const siguienteNumeroCompra = useMemo(() => {
+        if (compras.length === 0) return '571';
+        const ultimoNum = parseInt(compras[0].numeroPedido, 10);
+        return isNaN(ultimoNum) ? '571' : String(ultimoNum + 1);
+    }, [compras]);
 
     // Configuración de Pestañas
     const tabs = [
-        { id: 'todos', label: 'Todos', count: totalPedidos },
+        { id: 'todos', label: 'Todos', count: totalCompras },
         { id: 'entregados', label: 'Entregados', count: entregadosCount },
         { id: 'en_espera', label: 'En espera', count: enEsperaCount },
         { id: 'por_fecha', label: 'Por fecha' }
     ];
 
     // Lógica de Filtrado
-    const pedidosFiltrados = pedidos.filter((p) => {
+    const comprasFiltradas = compras.filter((c) => {
         let cumpleTab = true;
         if (tabActiva === 'entregados') {
-            cumpleTab = p.estado === 'Entregado';
+            cumpleTab = c.estado === 'Entregado';
         } else if (tabActiva === 'en_espera') {
-            cumpleTab = p.estado === 'En espera';
+            cumpleTab = c.estado === 'En espera';
         } else if (tabActiva === 'por_fecha') {
-            cumpleTab = fechaFiltro ? p.fecha === fechaFiltro : true;
+            cumpleTab = fechaFiltro ? c.fecha === fechaFiltro : true;
         }
 
         const query = busqueda.toLowerCase().trim();
         const cumpleBusqueda =
             !query ||
-            p.proveedor.toLowerCase().includes(query) ||
-            p.numeroPedido.toLowerCase().includes(query) ||
-            p.numeroProveedor.toLowerCase().includes(query);
+            c.proveedor.toLowerCase().includes(query) ||
+            c.numeroPedido.toLowerCase().includes(query) ||
+            c.numeroProveedor.toLowerCase().includes(query);
 
         return cumpleTab && cumpleBusqueda;
     });
 
     // Paginación progresiva configurada de 10 en 10
     const { datosVisibles, tieneMas, cargarMas } = usePagination(
-        pedidosFiltrados, 
+        comprasFiltradas, 
         10, 
         [busqueda, tabActiva, fechaFiltro]
     );
 
-    const abrirDetalle = (pedido) => {
-        setPedidoSeleccionado(pedido);
+    const abrirDetalle = (compra) => {
+        setCompraSeleccionada(compra);
     };
 
     const cerrarDetalle = () => {
-        setPedidoSeleccionado(null);
+        setCompraSeleccionada(null);
     };
 
     // Función para manejar la apertura del modal de edición con validación de estado
-    const abrirEdicionPedido = (p) => {
-        if (p.estado === 'Entregado') {
+    const abrirEdicionCompra = (c) => {
+        if (c.estado === 'Entregado') {
             Swal.fire({
                 icon: 'warning',
                 title: 'No se puede modificar',
-                text: `El pedido N.º ${p.numeroPedido} ya figura como "Entregado" y no admite modificaciones.`,
+                text: `La compra N.º ${c.numeroPedido} ya figura como "Entregado" y no admite modificaciones.`,
                 confirmButtonColor: '#0d9488',
                 confirmButtonText: 'Entendido'
             });
             return;
         }
 
-        // Abre el componente reutilizable OrderEditModal
-        setPedidoEditando(p);
+        // Abre el componente reutilizable OrderEditModal adaptado para compras
+        setCompraEditando(c);
     };
 
-    // Función para actualizar el pedido modificado en el estado global
-    const handleGuardarPedidoEditado = (pedidoActualizado) => {
-        setPedidos((prev) =>
-            prev.map((item) => (item.id === pedidoActualizado.id ? pedidoActualizado : item))
+    // Función para actualizar la compra modificada en el estado global
+    const handleGuardarCompraEditada = (compraActualizada) => {
+        setCompras((prev) =>
+            prev.map((item) => (item.id === compraActualizada.id ? compraActualizada : item))
         );
 
         Swal.fire({
             icon: 'success',
-            title: '¡Pedido actualizado!',
-            text: `Los cambios en el pedido N.º ${pedidoActualizado.numeroPedido} se guardaron correctamente.`,
+            title: '¡Compra actualizada!',
+            text: `Los cambios en la compra N.º ${compraActualizada.numeroPedido} se guardaron correctamente.`,
             timer: 1800,
             showConfirmButton: false
         });
     };
 
-    // Función para cambiar el estado del pedido (Entregado <-> En espera)
-    const cambiarEstadoPedido = async (p) => {
-        const nuevoEstado = p.estado === 'Entregado' ? 'En espera' : 'Entregado';
+    // Función para guardar la nueva compra creada
+    const handleGuardarNuevaCompra = (nuevaCompra) => {
+        setCompras((prev) => [nuevaCompra, ...prev]);
+
+        Swal.fire({
+            icon: 'success',
+            title: '¡Compra creada!',
+            text: `La compra N.º ${nuevaCompra.numeroPedido} para ${nuevaCompra.proveedor} se registró con éxito.`,
+            timer: 1800,
+            showConfirmButton: false
+        });
+    };
+
+    // Función para cambiar el estado de la compra (Entregado <-> En espera)
+    const cambiarEstadoCompra = async (c) => {
+        const nuevoEstado = c.estado === 'Entregado' ? 'En espera' : 'Entregado';
         const { isConfirmed } = await Swal.fire({
             icon: 'question',
-            title: '¿Cambiar estado del pedido?',
-            text: `El pedido N.º ${p.numeroPedido} pasará a estar "${nuevoEstado}".`,
+            title: '¿Cambiar estado de la compra?',
+            text: `La compra N.º ${c.numeroPedido} pasará a estar "${nuevoEstado}".`,
             showCancelButton: true,
             confirmButtonText: 'Sí, cambiar',
             cancelButtonText: 'Cancelar',
@@ -121,8 +145,8 @@ export default function Pedidos() {
         
         if (!isConfirmed) return;
 
-        setPedidos((prev) => 
-            prev.map((item) => (item.id === p.id ? { ...item, estado: nuevoEstado } : item))
+        setCompras((prev) => 
+            prev.map((item) => (item.id === c.id ? { ...item, estado: nuevoEstado } : item))
         );
 
         Swal.fire({
@@ -134,17 +158,17 @@ export default function Pedidos() {
     };
 
     return (
-        <div className="contenedor-pedidos-page">
+        <div className="contenedor-compras-page">
             <Encabezado 
-                titulo="Pedidos" 
-                subtitulo="Gestión y seguimiento de pedidos a proveedores" 
+                titulo="Compras" 
+                subtitulo="Gestión y seguimiento de compras a proveedores" 
             />
             
             {/* Buscador */}
             <SearchBar 
                 value={busqueda} 
                 onChange={setBusqueda} 
-                placeholder="Buscar por proveedor o numero de pedido..." 
+                placeholder="Buscar por proveedor o número de compra..." 
             />
 
             {/* Pestañas de Filtro */}
@@ -170,25 +194,25 @@ export default function Pedidos() {
                 </div>
             )}
 
-            {/* Listado de Tarjetas de Pedidos */}
+            {/* Listado de Tarjetas de Compras */}
             <div className="lista-tarjetas-pedidos">
                 {datosVisibles.length > 0 ? (
-                    datosVisibles.map((p) => {
-                        const esEntregado = p.estado === 'Entregado';
+                    datosVisibles.map((c) => {
+                        const esEntregado = c.estado === 'Entregado';
                         return (
-                            <div key={p.id} className="tarjeta-pedido">
+                            <div key={c.id} className="tarjeta-pedido">
                                 <div className="tarjeta-pedido-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                     <div className="tarjeta-proveedor-info">
-                                        <span className="avatar-iniciales-pedido">{iniciales(p.proveedor)}</span>
+                                        <span className="avatar-iniciales-pedido">{iniciales(c.proveedor)}</span>
                                         <div>
-                                            <strong>Proveedor: {p.proveedor}</strong>
-                                            <div className="sub-texto-pedido">N.º Proveedor: {p.numeroProveedor}</div>
-                                            <div className="sub-texto-pedido">Pedido N.º: {p.numeroPedido}</div>
+                                            <strong>Proveedor: {c.proveedor}</strong>
+                                            <div className="sub-texto-pedido">N.º Proveedor: {c.numeroProveedor}</div>
+                                            <div className="sub-texto-pedido">Compra N.º: {c.numeroPedido}</div>
                                         </div>
                                     </div>
                                     {/* Fecha visible a simple vista en la tarjeta */}
                                     <div className="fecha-tarjeta-pedido" style={{ fontSize: '0.8rem', fontWeight: '600', color: '#0f766e', background: '#f0fdfa', padding: '0.3rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #ccfbf1', whiteSpace: 'nowrap' }}>
-                                        {p.fecha}
+                                        {c.fecha}
                                     </div>
                                 </div>
 
@@ -196,21 +220,21 @@ export default function Pedidos() {
                                     <div className="info-bloque">
                                         <span className="label-tel">TELÉFONO PROVEEDOR</span>
                                         <div className="telefono-flex">
-                                            <IconPhone size={16} /> {p.telefono}
+                                            <IconPhone size={16} /> {c.telefono}
                                         </div>
                                     </div>
                                     <div className="info-bloque text-right">
                                         <span className="label-tel">Destino</span>
-                                        <div className="destino-texto">{p.destino}</div>
+                                        <div className="destino-texto">{c.destino}</div>
                                     </div>
                                 </div>
 
                                 <div className="tarjeta-pedido-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                                         <span className={`etiqueta-estado-pedido ${esEntregado ? 'estado-entregado' : 'estado-espera'}`}>
-                                            <span className="punto-estado"></span> {p.estado}
+                                            <span className="punto-estado"></span> {c.estado}
                                         </span>
-                                        <button className="boton-detalle-pedido" onClick={() => abrirDetalle(p)}>
+                                        <button className="boton-detalle-pedido" onClick={() => abrirDetalle(c)}>
                                             <IconEye size={16} /> Detalle
                                         </button>
                                     </div>
@@ -220,9 +244,9 @@ export default function Pedidos() {
                                         <button
                                             type="button"
                                             className={`boton-accion-icono ${esEntregado ? 'accion-deshabilitada' : ''}`}
-                                            onClick={() => abrirEdicionPedido(p)}
-                                            title={esEntregado ? 'No se puede modificar un pedido entregado' : 'Modificar pedido'}
-                                            aria-label={`Modificar pedido ${p.numeroPedido}`}
+                                            onClick={() => abrirEdicionCompra(c)}
+                                            title={esEntregado ? 'No se puede modificar una compra entregada' : 'Modificar compra'}
+                                            aria-label={`Modificar compra ${c.numeroPedido}`}
                                             style={{ 
                                                 background: '#f1f5f9', 
                                                 border: '1px solid #cbd5e1', 
@@ -239,11 +263,10 @@ export default function Pedidos() {
                                         </button>
                                         <button
                                             type="button"
-                                            className="boton-accion-icono"
-                                            onClick={() => cambiarEstadoPedido(p)}
+                                            className={`boton-accion-icono ${esEntregado ? 'accion-desactivar' : 'accion-activar'}`}
+                                            onClick={() => cambiarEstadoCompra(c)}
                                             title={esEntregado ? 'Marcar en espera' : 'Marcar entregado'}
-                                            aria-label="Cambiar estado del pedido"
-                                            style={{ background: esEntregado ? '#fee2e2' : '#bbf7d0', border: 'none', borderRadius: '0.4rem', padding: '0.4rem', cursor: 'pointer', display: 'grid', placeItems: 'center', color: esEntregado ? '#991b1b' : '#166534' }}
+                                            aria-label="Cambiar estado de la compra"
                                         >
                                             <IconPower size={16} />
                                         </button>
@@ -253,27 +276,22 @@ export default function Pedidos() {
                         );
                     })
                 ) : (
-                    <p className="sin-resultados">No se encontraron pedidos registrados.</p>
+                    <p className="sin-resultados">No se encontraron compras registradas.</p>
                 )}
             </div>
 
             {tieneMas && (
-                <LoadMoreButton onClick={cargarMas} text="Ver más pedidos" />
+                <LoadMoreButton onClick={cargarMas} text="Ver más compras" />
             )}
 
-            {/* Botón Flotante para Crear Pedido */}
+            {/* Botón Flotante para Crear Compra */}
             <GenericFab 
-                onClick={() => Swal.fire({
-                    icon: 'info',
-                    title: 'Nuevo Pedido',
-                    text: 'Aquí se abrirá el formulario para seleccionar proveedor y productos de la tabla intermedia.',
-                    confirmButtonColor: '#0d9488'
-                })} 
-                title="Crear nuevo pedido" 
+                onClick={() => setIsCreateModalOpen(true)} 
+                title="Crear nueva compra" 
             />
 
-            {/* Modal de Detalle del Pedido */}
-            {pedidoSeleccionado && (
+            {/* Modal de Detalle de la Compra */}
+            {compraSeleccionada && (
                 <div className="modal-overlay-detalle">
                     <div className="modal-detalle-contenido">
                         <button className="boton-volver-modal" onClick={cerrarDetalle}>
@@ -283,12 +301,12 @@ export default function Pedidos() {
                         <div className="modal-proveedor-header">
                             <h3>Proveedor</h3>
                             <div className="proveedor-caja-seleccionada">
-                                {pedidoSeleccionado.proveedor}
+                                {compraSeleccionada.proveedor}
                             </div>
                         </div>
 
                         <div className="lista-productos-detalle">
-                            {pedidoSeleccionado.detalles.map((item, index) => (
+                            {compraSeleccionada.detalles.map((item, index) => (
                                 <div key={index} className="producto-item-fila">
                                     <div className="icono-producto-caja">
                                         <IconBox size={20} />
@@ -306,20 +324,29 @@ export default function Pedidos() {
                         <div className="modal-detalle-total">
                             <span>TOTAL :</span>
                             <span className="monto-total-caja">
-                                ${pedidoSeleccionado.detalles.reduce((acc, curr) => acc + (curr.precioUnidad * curr.cantidad), 0).toLocaleString()}
+                                ${compraSeleccionada.detalles.reduce((acc, curr) => acc + (curr.precioUnidad * curr.cantidad), 0).toLocaleString()}
                             </span>
                         </div>
                     </div>
                 </div>
             )}
 
-            {/* Modal Reutilizable de Edición de Pedidos (OrderEditModal) */}
+            {/* Modal Reutilizable de Edición de Compras (OrderEditModal) */}
             <OrderEditModal
-                isOpen={!!pedidoEditando}
-                onClose={() => setPedidoEditando(null)}
-                order={pedidoEditando}
+                isOpen={!!compraEditando}
+                onClose={() => setCompraEditando(null)}
+                order={compraEditando}
                 catalog={catalogoGeneralProductos}
-                onSave={handleGuardarPedidoEditado}
+                onSave={handleGuardarCompraEditada}
+            />
+
+            {/* Modal de Creación de Nueva Compra (OrderCreateModal) */}
+            <OrderCreateModal
+                isOpen={isCreateModalOpen}
+                onClose={() => setIsCreateModalOpen(false)}
+                catalog={catalogoGeneralProductos}
+                siguienteNumeroPedido={siguienteNumeroCompra}
+                onSave={handleGuardarNuevaCompra}
             />
         </div>
     );

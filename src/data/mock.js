@@ -786,7 +786,7 @@ export const pedidos = [
 
 export const modulos = [
   { nombre: 'Empleados', detalle: 'Gestionar usuarios y permisos', icono: IconUsers, ruta: '/empleados' },
-  { nombre: 'Pedidos', detalle: 'Gestión y seguimiento de pedidos a proveedores', icono: IconBox },
+  { nombre: 'Compras', detalle: 'Gestión y seguimiento de pedidos a proveedores', icono: IconBox },
   { nombre: 'Proveedores', detalle: 'Gestionar información y estado de proveedores', icono: IconTruck },
   { nombre: 'Ventas', detalle: 'Seguimiento de ventas', icono: IconShoppingCart },
   { nombre: 'Facturación', detalle: 'Seguimiento de facturas', icono: IconFileText },

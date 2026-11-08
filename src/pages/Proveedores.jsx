@@ -64,24 +64,24 @@ export default function Proveedores() {
         { name: 'telefono', label: 'Teléfono', placeholder: '+54 387 000-0000', required: true },
         { name: 'email', label: 'Email', type: 'email', placeholder: 'nombre@gmail.com', required: true },
         { 
-        name: 'sucursal', 
-        label: 'Sucursal', 
-        type: 'select', 
-        options: ['Casa Central', 'Sucursal Sur', 'Depósito Norte'],
-        required: true 
+            name: 'sucursal', 
+            label: 'Sucursal', 
+            type: 'select', 
+            options: ['Casa Central', 'Sucursal Sur', 'Depósito Norte'],
+            required: true 
         }
     ];
 
     const justificar = async (p) => {
         const { value } = await Swal.fire({
-        title: `Detalle / Motivo - ${p.nombreFantasia}`,
-        input: 'textarea',
-        inputPlaceholder: 'Escribí el motivo...',
-        showCancelButton: true,
-        confirmButtonText: 'Guardar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#0d9488',
-        inputValidator: (v) => (!v.trim() ? 'Ingresá un motivo' : null),
+            title: `Detalle / Motivo - ${p.nombreFantasia}`,
+            input: 'textarea',
+            inputPlaceholder: 'Escribí el motivo...',
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#0d9488',
+            inputValidator: (v) => (!v.trim() ? 'Ingresá un motivo' : null),
         });
         if (value) Swal.fire({ icon: 'success', title: 'Información guardada', timer: 1500, showConfirmButton: false });
     };
@@ -125,24 +125,24 @@ export default function Proveedores() {
         }
 
         const nuevoProveedor = {
-        id: Date.now(),
-        codigo: data.codigo,
-        nombreFantasia: data.nombreFantasia,
-        razonSocial: data.razonSocial,
-        cuit: data.cuit,
-        telefono: data.telefono,
-        email: data.email,
-        sucursal: data.sucursal,
-        activo: true
+            id: Date.now(),
+            codigo: data.codigo,
+            nombreFantasia: data.nombreFantasia,
+            razonSocial: data.razonSocial,
+            cuit: data.cuit,
+            telefono: data.telefono,
+            email: data.email,
+            sucursal: data.sucursal,
+            activo: true
         };
 
         setProveedores((prev) => [...prev, nuevoProveedor]);
         Swal.fire({
-        icon: 'success',
-        title: '¡Proveedor agregado!',
-        text: `${nuevoProveedor.nombreFantasia} se registró correctamente.`,
-        timer: 1800,
-        showConfirmButton: false
+            icon: 'success',
+            title: '¡Proveedor agregado!',
+            text: `${nuevoProveedor.nombreFantasia} se registró correctamente.`,
+            timer: 1800,
+            showConfirmButton: false
         });
     };
 
@@ -154,31 +154,31 @@ export default function Proveedores() {
         { id: 'sucursal', label: 'Por sucursal' }
     ];
 
-    // 1. Lógica de filtrado por pestañas, sucursal seleccionada y barra de búsqueda
+    // Lógica de filtrado por pestañas, sucursal seleccionada y barra de búsqueda
     const proveedoresFiltrados = proveedores.filter((p) => {
         let cumpleTab = true;
         if (tabActiva === 'activos') {
-        cumpleTab = p.activo;
+            cumpleTab = p.activo;
         } else if (tabActiva === 'inactivos') {
-        cumpleTab = !p.activo;
+            cumpleTab = !p.activo;
         } else if (tabActiva === 'sucursal') {
-        cumpleTab = sucursalSeleccionada ? p.sucursal === sucursalSeleccionada : true;
+            cumpleTab = sucursalSeleccionada ? p.sucursal === sucursalSeleccionada : true;
         }
 
         const query = busqueda.toLowerCase().trim();
         const cumpleBusqueda =
-        !query ||
-        String(p.codigo).toLowerCase().includes(query) ||
-        p.nombreFantasia.toLowerCase().includes(query) ||
-        p.razonSocial.toLowerCase().includes(query) ||
-        p.cuit.toLowerCase().includes(query) ||
-        (p.email && p.email.toLowerCase().includes(query)) ||
-        p.sucursal.toLowerCase().includes(query);
+            !query ||
+            String(p.codigo).toLowerCase().includes(query) ||
+            p.nombreFantasia.toLowerCase().includes(query) ||
+            p.razonSocial.toLowerCase().includes(query) ||
+            p.cuit.toLowerCase().includes(query) ||
+            (p.email && p.email.toLowerCase().includes(query)) ||
+            p.sucursal.toLowerCase().includes(query);
 
         return cumpleTab && cumpleBusqueda;
     });
 
-    // 2. Aplicamos el hook de paginación progresiva (bloques de 10)
+    // Aplicamos el hook de paginación progresiva (bloques de 10)
     const { datosVisibles, tieneMas, cargarMas } = usePagination(
         proveedoresFiltrados, 
         10, 
@@ -217,18 +217,18 @@ export default function Proveedores() {
             tabs={tabs} 
             activeTab={tabActiva} 
             onTabChange={(id) => {
-            setTabActiva(id);
-            if (id !== 'sucursal') setSucursalSeleccionada(''); // Resetea el filtro si cambia de pestaña
+                setTabActiva(id);
+                if (id !== 'sucursal') setSucursalSeleccionada(''); // Resetea el filtro si cambia de pestaña
             }} 
         />
 
         {/* Selector reutilizable condicional para filtrar por sucursal */}
         {tabActiva === 'sucursal' && (
             <FilterSelect
-            value={sucursalSeleccionada}
-            onChange={setSucursalSeleccionada}
-            options={sucursalesDisponibles}
-            placeholder="Seleccioná una sucursal..."
+                value={sucursalSeleccionada}
+                onChange={setSucursalSeleccionada}
+                options={sucursalesDisponibles}
+                placeholder="Seleccioná una sucursal..."
             />
         )}
         
@@ -237,60 +237,60 @@ export default function Proveedores() {
             columnas={columnas}
             datos={datosVisibles}
             renderFila={(p) => (
-            <tr key={p.id} className="fila-empleado">
-                <td className="celda-tabla-legajo">N.° {p.codigo}</td>
-                <td className="celda-tabla-info">
-                <span className="info-empleado-flex">
-                    <span className="avatar-iniciales">{iniciales(p.nombreFantasia)}</span>
-                    <div style={{ textAlign: 'left' }}>
-                    <strong>{p.nombreFantasia}</strong>
-                    <div style={{ fontSize: '0.8rem', color: 'rgba(15,42,48,0.6)' }}>{p.razonSocial}</div>
-                    </div>
-                </span>
-                </td>
-                <td className="celda-tabla-texto">{p.cuit}</td>
-                <td className="celda-tabla-texto">{p.telefono}</td>
-                <td className="celda-tabla-gris">{p.email || '-'}</td>
-                <td className="celda-tabla-gris">{p.sucursal}</td>
-                <td className="celda-tabla-texto">
-                <span className={`etiqueta-estado ${p.activo ? 'estado-activo' : 'estado-inactivo'}`}>
-                    {p.activo ? 'Activo' : 'Inactivo'}
-                </span>
-                </td>
-                <td className="celda-tabla-info">
-                {!p.activo ? (
-                    <button onClick={() => justificar(p)} className="boton-justificacion">
-                    <span className="contenido-boton-justificacion">
-                        <IconPencil size={16} />Detalle
-                    </span>
-                    </button>
-                ) : (
-                    <span className="celda-tabla-gris">-</span>
-                )}
-                </td>
-                <td className="celda-tabla-info">
-                <span className="acciones-fila">
-                    <button
-                    type="button"
-                    className="boton-accion-icono"
-                    onClick={() => abrirEdicion(p)}
-                    title="Editar proveedor"
-                    aria-label={`Editar ${p.nombreFantasia}`}
-                    >
-                    <IconEdit size={18} />
-                    </button>
-                    <button
-                    type="button"
-                    className={`boton-accion-icono ${p.activo ? 'accion-desactivar' : 'accion-activar'}`}
-                    onClick={() => cambiarEstado(p)}
-                    title={p.activo ? 'Desactivar proveedor' : 'Activar proveedor'}
-                    aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombreFantasia}`}
-                    >
-                    <IconPower size={18} />
-                    </button>
-                </span>
-                </td>
-            </tr>
+                <tr key={p.id} className="fila-empleado">
+                    <td className="celda-tabla-legajo">N.° {p.codigo}</td>
+                    <td className="celda-tabla-info">
+                        <span className="info-empleado-flex">
+                            <span className="avatar-iniciales">{iniciales(p.nombreFantasia)}</span>
+                            <div style={{ textAlign: 'left' }}>
+                                <strong>{p.nombreFantasia}</strong>
+                                <div style={{ fontSize: '0.8rem', color: 'rgba(15,42,48,0.6)' }}>{p.razonSocial}</div>
+                            </div>
+                        </span>
+                    </td>
+                    <td className="celda-tabla-texto">{p.cuit}</td>
+                    <td className="celda-tabla-texto">{p.telefono}</td>
+                    <td className="celda-tabla-gris">{p.email || '-'}</td>
+                    <td className="celda-tabla-gris">{p.sucursal}</td>
+                    <td className="celda-tabla-texto">
+                        <span className={`etiqueta-estado ${p.activo ? 'estado-activo' : 'estado-inactivo'}`}>
+                            {p.activo ? 'Activo' : 'Inactivo'}
+                        </span>
+                    </td>
+                    <td className="celda-tabla-info">
+                        {!p.activo ? (
+                            <button onClick={() => justificar(p)} className="boton-justificacion">
+                                <span className="contenido-boton-justificacion">
+                                    <IconPencil size={16} />Detalle
+                                </span>
+                            </button>
+                        ) : (
+                            <span className="celda-tabla-gris">-</span>
+                        )}
+                    </td>
+                    <td className="celda-tabla-info">
+                        <span className="acciones-fila">
+                            <button
+                                type="button"
+                                className="boton-accion-icono"
+                                onClick={() => abrirEdicion(p)}
+                                title="Editar proveedor"
+                                aria-label={`Editar ${p.nombreFantasia}`}
+                            >
+                                <IconEdit size={18} />
+                            </button>
+                            <button
+                                type="button"
+                                className={`boton-accion-icono ${p.activo ? 'accion-desactivar' : 'accion-activar'}`}
+                                onClick={() => cambiarEstado(p)}
+                                title={p.activo ? 'Desactivar proveedor' : 'Activar proveedor'}
+                                aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombreFantasia}`}
+                            >
+                                <IconPower size={18} />
+                            </button>
+                        </span>
+                    </td>
+                </tr>
             )}
         />
 

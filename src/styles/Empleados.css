@@ -92,6 +92,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
     border-radius: 9999px;
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
+    font-weight: 600;
 }
 
 .estado-activo {
@@ -144,17 +145,28 @@ ESTILOS DE EMPLEADOS - FER-CONS
     background-color: var(--color-tarjeta);
     color: var(--color-oscuro);
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .boton-accion-icono:hover {
     background-color: var(--color-circulo);
+    transform: scale(1.05);
 }
 
+/* Empleado Activo -> Botón de acción rápido en fondo rojo */
 .accion-desactivar {
-    color: #991b1b;
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+}
+.accion-desactivar:hover {
+    background-color: #fecaca !important;
 }
 
+/* Empleado Inactivo -> Botón de acción rápido en fondo verde */
 .accion-activar {
-    color: #166534;
+    background-color: #bbf7d0 !important;
+    color: #166534 !important;
+}
+.accion-activar:hover {
+    background-color: #a7f3d0 !important;
 }

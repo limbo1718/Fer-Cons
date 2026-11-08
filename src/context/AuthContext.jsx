@@ -6,7 +6,7 @@ const AuthContext = createContext(null);
 
 // Tiempo de expiración para la prueba (1 minuto)
 // Para pasar a producción, usar: 30 * 60 * 1000
-const EXPIRATION_TIME = 1 * 60 * 1000;
+const EXPIRATION_TIME = 30 * 60 * 1000;
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(() => {
