@@ -9,15 +9,14 @@ import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
-import { showDetailAlert } from '../components/common/showDetailAlert.js'; // Helper compartido de detalles
-import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js'; // Helper compartido de confirmación con input
+import { showDetailAlert } from '../components/common/showDetailAlert.js';
+import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
 import { empleados as datos } from '../data/mock.js';
 import '../styles/Empleados.css';
 
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
-// Separa "Daniel Pérez Ruiz" en nombre ("Daniel") y apellido ("Pérez Ruiz") para precargar el formulario
 const separarNombre = (completo = '') => {
   const [primero = '', ...resto] = completo.trim().split(' ');
   return { nombre: primero, apellido: resto.join(' ') };
@@ -31,19 +30,16 @@ export default function Empleados() {
   const [tabActiva, setTabActiva] = useState('todos');
   const [rolSeleccionado, setRolSeleccionado] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [empleadoEditando, setEmpleadoEditando] = useState(null); // null = modo "nuevo"
+  const [empleadoEditando, setEmpleadoEditando] = useState(null);
 
   const activos = empleados.filter((e) => e.activo).length;
   const inactivos = empleados.filter((e) => !e.activo).length;
 
-  // Extraemos dinámicamente los roles únicos de los empleados para el selector
   const rolesDisponibles = [...new Set(empleados.map((e) => e.rol))];
 
-  // Cálculo del siguiente legajo autogenerado para el formulario de prueba
   const ultimoLegajo = empleados.length > 0 ? empleados[empleados.length - 1].legajo : '0218';
   const siguienteLegajo = String(Number(ultimoLegajo) + 1).padStart(4, '0');
 
-  // Valores con los que se abre el modal: datos del empleado (editar) o legajo nuevo (agregar)
   const valoresIniciales = useMemo(() => {
     if (!empleadoEditando) return { legajo: siguienteLegajo };
     const { nombre, apellido } = empleadoEditando.apellido
@@ -76,7 +72,6 @@ export default function Empleados() {
     setEmpleadoEditando(null);
   };
 
-  // Función para mostrar el motivo de la baja usando el modal unificado de detalles
   const verDetalleBaja = (e) => {
     showDetailAlert({
       title: e.nombre,
@@ -89,7 +84,6 @@ export default function Empleados() {
     });
   };
 
-  // Configuración de los campos obligatorios para el formulario genérico de empleados
   const camposEmpleado = [
     { name: 'dni', label: 'DNI', placeholder: 'Ej: 45952361', required: true },
     { name: 'legajo', label: 'Legajo', disabled: true, badge: 'AUTOGENERADO' },
@@ -125,20 +119,20 @@ export default function Empleados() {
         confirmButtonText: 'Dar de baja'
       });
 
-      if (!motivo) return; // Si canceló o cerró, no hace nada
+      if (!motivo) return;
       motivoBaja = motivo;
     } else {
       const { isConfirmed } = await Swal.fire({
         title: '',
         html: `
-          <div style="text-align: center; font-family: inherit; padding: 0.5rem 0;">
-            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; display: block; margin-bottom: 0.25rem;">
+          <div class="swal-reactivacion-wrapper">
+            <span class="swal-reactivacion-sub">
               Reactivación
             </span>
-            <h2 style="margin: 0 0 0.75rem 0; color: #0f2a30; font-size: 1.25rem; font-weight: 600;">
+            <h2 class="swal-reactivacion-titulo">
               ¿Activar empleado?
             </h2>
-            <p style="margin: 0; color: #475569; font-size: 0.95rem;">
+            <p class="swal-reactivacion-texto">
               <strong>${e.nombre}</strong> pasará a estar activo nuevamente en el sistema.
             </p>
           </div>
@@ -146,11 +140,27 @@ export default function Empleados() {
         showCancelButton: true,
         confirmButtonText: 'Activar',
         cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#0d9488',
-        cancelButtonColor: '#64748b',
+        buttonsStyling: false,
         width: '460px',
         padding: '2rem',
-        backdrop: 'rgba(15, 42, 48, 0.65)'
+        backdrop: 'rgba(15, 42, 48, 0.65)',
+        didOpen: () => {
+          const confirmBtn = Swal.getConfirmButton();
+          const cancelBtn = Swal.getCancelButton();
+          const actions = Swal.getActions();
+
+          if (actions) {
+            actions.className = 'swal-actions-custom';
+          }
+
+          if (confirmBtn) {
+            confirmBtn.className = 'swal-btn-confirm-custom';
+          }
+
+          if (cancelBtn) {
+            cancelBtn.className = 'swal-btn-cancel-custom';
+          }
+        }
       });
       if (!isConfirmed) return;
     }
@@ -173,7 +183,6 @@ export default function Empleados() {
   };
 
   const handleGuardarEmpleado = (data) => {
-    // Modo edición: actualiza el empleado existente en lugar de agregar uno nuevo
     if (empleadoEditando) {
       const actualizado = {
         ...empleadoEditando,
@@ -222,7 +231,6 @@ export default function Empleados() {
     });
   };
 
-  // Configuración de las pestañas de filtro superior
   const tabs = [
     { id: 'todos', label: 'Todos', count: empleados.length },
     { id: 'activos', label: 'Activos', count: activos },
@@ -230,7 +238,6 @@ export default function Empleados() {
     { id: 'rol', label: 'Por rol' }
   ];
 
-  // 1. Lógica de filtrado por pestañas, rol seleccionado y barra de búsqueda
   const empleadosFiltrados = empleados.filter((e) => {
     let cumpleTab = true;
     if (tabActiva === 'activos') {
@@ -251,14 +258,12 @@ export default function Empleados() {
     return cumpleTab && cumpleBusqueda;
   });
 
-  // 2. Aplicamos el hook de paginación progresiva (bloques de 10)
   const { datosVisibles, tieneMas, cargarMas } = usePagination(
     empleadosFiltrados, 
     10, 
     [busqueda, tabActiva, rolSeleccionado]
   );
 
-  // Definición de columnas de la tabla
   const columnas = [
     'Legajo', 
     'Empleado', 
@@ -277,24 +282,21 @@ export default function Empleados() {
         subtitulo="Gestionar usuarios y permisos" 
       />
       
-      {/* Componente de Búsqueda */}
       <SearchBar 
         value={busqueda} 
         onChange={setBusqueda} 
         placeholder="Buscar por legajo, nombre o sucursal..." 
       />
 
-      {/* Componente de Pestañas de Filtro */}
       <FilterTabs 
         tabs={tabs} 
         activeTab={tabActiva} 
         onTabChange={(id) => {
           setTabActiva(id);
-          if (id !== 'rol') setRolSeleccionado(''); // Resetea el rol si se cambia de pestaña
+          if (id !== 'rol') setRolSeleccionado('');
         }} 
       />
 
-      {/* Selector reutilizable condicional para filtrar por rol cuando la pestaña activa es 'rol' */}
       {tabActiva === 'rol' && (
         <FilterSelect
           value={rolSeleccionado}
@@ -304,7 +306,6 @@ export default function Empleados() {
         />
       )}
       
-      {/* Tabla Genérica con datos filtrados (ahora usando datosVisibles) */}
       <GenericTable
         columnas={columnas}
         datos={datosVisibles}
@@ -326,7 +327,6 @@ export default function Empleados() {
               </span>
             </td>
             <td className="celda-tabla-info">
-              {/* Lógica condicional: El botón de detalle solo aparece si el empleado está inactivo */}
               {!e.activo ? (
                 <button 
                   type="button"
@@ -368,7 +368,6 @@ export default function Empleados() {
         )}
       />
 
-      {/* Botón "Ver más" condicional */}
       {tieneMas && (
         <LoadMoreButton 
           onClick={cargarMas} 
@@ -376,13 +375,11 @@ export default function Empleados() {
         />
       )}
 
-      {/* Botón flotante genérico para abrir el modal */}
       <GenericFab 
         onClick={abrirNuevo} 
         title="Agregar nuevo empleado" 
       />
 
-      {/* Instancia del Modal Genérico para Empleados */}
       <GenericModalForm
         isOpen={isModalOpen}
         onClose={cerrarModal}

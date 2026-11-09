@@ -82,6 +82,13 @@ export const proveedores = [
   { id: 35, codigo: '035', nombreFantasia: 'Distribuidora General Ferretera', razonSocial: 'Distri Ferretera S.R.L', cuit: '30-7099221-5', telefono: '+54 387 422-1144', email: 'contacto@distriferretera.com.ar', sucursal: 'Casa Central', activo: true }
 ];
 
+export const metodosPago = [
+    { id: 1, nombre: 'Efectivo' },
+    { id: 2, nombre: 'Transferencia Bancaria' },
+    { id: 3, nombre: 'Tarjeta de Crédito' },
+    { id: 4, nombre: 'Cuenta Corriente' }
+];
+
 // Opciones estáticas compartidas para Marcas y Unidades
 export const marcasOpciones = [
     'Genérica', 

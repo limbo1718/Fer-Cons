@@ -9,8 +9,8 @@ import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
-import { showDetailAlert } from '../components/common/showDetailAlert.js'; // Helper compartido de detalles
-import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js'; // Helper compartido de confirmación con input
+import { showDetailAlert } from '../components/common/showDetailAlert.js';
+import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
 import { proveedores as datos } from '../data/mock.js';
 import '../styles/Proveedores.css';
@@ -25,19 +25,16 @@ export default function Proveedores() {
     const [tabActiva, setTabActiva] = useState('todos');
     const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [proveedorEditando, setProveedorEditando] = useState(null); // null = modo "nuevo"
+    const [proveedorEditando, setProveedorEditando] = useState(null);
 
     const activos = proveedores.filter((p) => p.activo).length;
     const inactivos = proveedores.filter((p) => !p.activo).length;
 
-    // Extraemos dinámicamente las sucursales únicas para el selector de filtro
     const sucursalesDisponibles = [...new Set(proveedores.map((p) => p.sucursal))];
 
-    // Cálculo del siguiente código autogenerado
     const ultimoCodigo = proveedores.length > 0 ? proveedores[proveedores.length - 1].codigo : '003';
     const siguienteCodigo = String(Number(ultimoCodigo) + 1).padStart(3, '0');
 
-    // Valores con los que se abre el modal: datos del proveedor (editar) o código nuevo (agregar)
     const valoresIniciales = useMemo(() => {
         if (!proveedorEditando) return { codigo: siguienteCodigo };
         const { codigo, nombreFantasia, razonSocial, cuit, telefono, email, sucursal } = proveedorEditando;
@@ -59,7 +56,6 @@ export default function Proveedores() {
         setProveedorEditando(null);
     };
 
-    // Función para mostrar el motivo de la baja usando el modal unificado de detalles
     const verDetalleBaja = (p) => {
         showDetailAlert({
             title: p.nombreFantasia,
@@ -71,7 +67,6 @@ export default function Proveedores() {
         });
     };
 
-    // Configuración de los campos obligatorios para el formulario genérico de proveedores
     const camposProveedor = [
         { name: 'codigo', label: 'Código', disabled: true, badge: 'AUTOGENERADO' },
         { name: 'nombreFantasia', label: 'Nombre de Fantasía', placeholder: 'Ej: Ceramica Norte', required: true },
@@ -92,7 +87,6 @@ export default function Proveedores() {
         const desactivar = p.activo;
         let motivoBaja = p.detalleBaja || '';
 
-        // Si va a pasar a inactivo, solicitamos el motivo mediante el helper unificado
         if (desactivar) {
             const motivo = await showConfirmInputAlert({
                 title: `Motivo de baja - ${p.nombreFantasia}`,
@@ -101,21 +95,20 @@ export default function Proveedores() {
                 confirmButtonText: 'Dar de baja'
             });
 
-            if (!motivo) return; // Si canceló o cerró, no hace nada
+            if (!motivo) return;
             motivoBaja = motivo;
         } else {
-            // Si se va a activar, confirmamos con el diseño corporativo simétrico
             const { isConfirmed } = await Swal.fire({
                 title: '',
                 html: `
-                    <div style="text-align: center; font-family: inherit; padding: 0.5rem 0;">
-                        <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; display: block; margin-bottom: 0.25rem;">
+                    <div class="swal-reactivacion-wrapper">
+                        <span class="swal-reactivacion-sub">
                             Reactivación
                         </span>
-                        <h2 style="margin: 0 0 0.75rem 0; color: #0f2a30; font-size: 1.25rem; font-weight: 600;">
+                        <h2 class="swal-reactivacion-titulo">
                             ¿Activar proveedor?
                         </h2>
-                        <p style="margin: 0; color: #475569; font-size: 0.95rem;">
+                        <p class="swal-reactivacion-texto">
                             <strong>${p.nombreFantasia}</strong> pasará a estar activo nuevamente en el sistema.
                         </p>
                     </div>
@@ -184,7 +177,6 @@ export default function Proveedores() {
     };
 
     const handleGuardarProveedor = (data) => {
-        // Modo edición: actualiza el proveedor existente en lugar de agregar uno nuevo
         if (proveedorEditando) {
             const actualizado = {
                 ...proveedorEditando,
@@ -229,7 +221,6 @@ export default function Proveedores() {
         });
     };
 
-    // Configuración de las pestañas de filtro superior
     const tabs = [
         { id: 'todos', label: 'Todos', count: proveedores.length },
         { id: 'activos', label: 'Activos', count: activos },
@@ -237,7 +228,6 @@ export default function Proveedores() {
         { id: 'sucursal', label: 'Por sucursal' }
     ];
 
-    // Lógica de filtrado por pestañas, sucursal seleccionada y barra de búsqueda
     const proveedoresFiltrados = proveedores.filter((p) => {
         let cumpleTab = true;
         if (tabActiva === 'activos') {
@@ -261,14 +251,12 @@ export default function Proveedores() {
         return cumpleTab && cumpleBusqueda;
     });
 
-    // Aplicamos el hook de paginación progresiva (bloques de 10)
     const { datosVisibles, tieneMas, cargarMas } = usePagination(
         proveedoresFiltrados, 
         10, 
         [busqueda, tabActiva, sucursalSeleccionada]
     );
 
-    // Definición de columnas de la tabla de proveedores
     const columnas = [
         'Código', 
         'Proveedor', 
@@ -288,24 +276,21 @@ export default function Proveedores() {
             subtitulo="Gestionar información y estado de proveedores" 
         />
         
-        {/* Componente de Búsqueda */}
         <SearchBar 
             value={busqueda} 
             onChange={setBusqueda} 
             placeholder="Buscar por código, nombre, razón social, cuit o email..." 
         />
 
-        {/* Componente de Pestañas de Filtro */}
         <FilterTabs 
             tabs={tabs} 
             activeTab={tabActiva} 
             onTabChange={(id) => {
                 setTabActiva(id);
-                if (id !== 'sucursal') setSucursalSeleccionada(''); // Resetea el filtro si cambia de pestaña
+                if (id !== 'sucursal') setSucursalSeleccionada('');
             }} 
         />
 
-        {/* Selector reutilizable condicional para filtrar por sucursal */}
         {tabActiva === 'sucursal' && (
             <FilterSelect
                 value={sucursalSeleccionada}
@@ -315,7 +300,6 @@ export default function Proveedores() {
             />
         )}
         
-        {/* Tabla Genérica con datos filtrados (ahora usando datosVisibles) */}
         <GenericTable
             columnas={columnas}
             datos={datosVisibles}
@@ -325,9 +309,9 @@ export default function Proveedores() {
                     <td className="celda-tabla-info">
                         <span className="info-empleado-flex">
                             <span className="avatar-iniciales">{iniciales(p.nombreFantasia)}</span>
-                            <div style={{ textAlign: 'left' }}>
+                            <div className="proveedor-info-detalles">
                                 <strong>{p.nombreFantasia}</strong>
-                                <div style={{ fontSize: '0.8rem', color: 'rgba(15,42,48,0.6)' }}>{p.razonSocial}</div>
+                                <div className="proveedor-razon-social">{p.razonSocial}</div>
                             </div>
                         </span>
                     </td>
@@ -382,7 +366,6 @@ export default function Proveedores() {
             )}
         />
 
-        {/* Botón "Ver más" condicional */}
         {tieneMas && (
             <LoadMoreButton 
                 onClick={cargarMas} 
@@ -390,13 +373,11 @@ export default function Proveedores() {
             />
         )}
 
-        {/* Botón flotante genérico para abrir el modal */}
         <GenericFab 
             onClick={abrirNuevo} 
             title="Agregar nuevo proveedor" 
         />
 
-        {/* Instancia del Modal Genérico para Proveedores */}
         <GenericModalForm
             isOpen={isModalOpen}
             onClose={cerrarModal}

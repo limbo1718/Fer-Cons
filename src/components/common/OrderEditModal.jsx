@@ -1,17 +1,27 @@
 import { useState, useEffect } from 'react';
-import { IconX, IconTrash, IconPlus, IconMinus, IconSearch, IconBox } from '@tabler/icons-react';
-import { categorias } from '../../data/mock.js';
+import { IconX, IconTrash, IconPlus, IconMinus, IconSearch, IconBox, IconCreditCard } from '@tabler/icons-react';
+import { categorias, metodosPago } from '../../data/mock.js';
 import '../../styles/OrderEditModal.css';
 
 export default function OrderEditModal({ isOpen, onClose, order, catalog = [], onSave }) {
     const [items, setItems] = useState([]);
+    const [pagos, setPagos] = useState([]);
     const [busquedaProducto, setBusquedaProducto] = useState('');
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('TODAS');
 
-    // Sincroniza los detalles del pedido seleccionado cuando se abre el modal
+    // Sincroniza los detalles y pagos del pedido seleccionado cuando se abre el modal
     useEffect(() => {
-        if (order && order.detalles) {
-            setItems(JSON.parse(JSON.stringify(order.detalles)));
+        if (order) {
+            if (order.detalles) {
+                setItems(JSON.parse(JSON.stringify(order.detalles)));
+            } else {
+                setItems([]);
+            }
+            if (order.pagos) {
+                setPagos(JSON.parse(JSON.stringify(order.pagos)));
+            } else {
+                setPagos([]);
+            }
         }
         setBusquedaProducto('');
         setCategoriaSeleccionada('TODAS');
@@ -102,11 +112,53 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
     // Cálculo dinámico del total
     const totalCalculado = items.reduce((acc, curr) => acc + curr.precioUnidad * curr.cantidad, 0);
 
+    // --- Lógica de Métodos de Pago ---
+    const agregarMetodoPago = () => {
+        const totalPagadoActual = pagos.reduce((acc, p) => acc + (parseFloat(p.monto) || 0), 0);
+        const resto = Math.max(0, totalCalculado - totalPagadoActual);
+
+        setPagos((prev) => [
+            ...prev,
+            {
+                idMetodoPago: metodosPago[0]?.id || 1,
+                nombreMetodo: metodosPago[0]?.nombre || 'Efectivo',
+                monto: resto > 0 ? resto : 0
+            }
+        ]);
+    };
+
+    const actualizarPago = (index, campo, valor) => {
+        setPagos((prev) => {
+            const nuevosPagos = [...prev];
+            if (campo === 'idMetodoPago') {
+                const metodoEncontrado = metodosPago.find(m => m.id === parseInt(valor));
+                nuevosPagos[index] = {
+                    ...nuevosPagos[index],
+                    idMetodoPago: parseInt(valor),
+                    nombreMetodo: metodoEncontrado ? metodoEncontrado.nombre : ''
+                };
+            } else if (campo === 'monto') {
+                nuevosPagos[index] = {
+                    ...nuevosPagos[index],
+                    monto: valor === '' ? '' : parseFloat(valor) || 0
+                };
+            }
+            return nuevosPagos;
+        });
+    };
+
+    const eliminarPago = (index) => {
+        setPagos((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const totalPagos = pagos.reduce((acc, curr) => acc + (parseFloat(curr.monto) || 0), 0);
+
     const handleGuardarCambios = (e) => {
         e.preventDefault();
         const pedidoActualizado = {
             ...order,
-            detalles: items
+            detalles: items,
+            pagos: pagos
         };
         onSave(pedidoActualizado);
         onClose();
@@ -195,7 +247,7 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
                                         <div className="order-item-info">
                                             <strong>{item.producto}</strong>
                                             <div className="order-item-precio">
-                                                {item.codigo && <span style={{ marginRight: '6px' }}>[{item.codigo}]</span>}
+                                                {item.codigo && <span className="order-item-codigo-tag">[{item.codigo}]</span>}
                                                 Unitario: ${item.precioUnidad.toLocaleString()}
                                             </div>
                                         </div>
@@ -244,11 +296,71 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
                         )}
                     </div>
 
-                    {/* Footer con cálculo total */}
+                    {/* Sección: Métodos de Pago en Edición */}
+                    <div className="order-buscador-container order-pagos-seccion-wrapper">
+                        <div className="order-pagos-header-row">
+                            <label className="order-label order-pagos-label-main">
+                                <IconCreditCard size={18} /> Métodos de Pago:
+                            </label>
+                            <button
+                                type="button"
+                                onClick={agregarMetodoPago}
+                                className="order-btn-agregar-pago"
+                            >
+                                <IconPlus size={14} /> Agregar Pago
+                            </button>
+                        </div>
+
+                        {pagos.length > 0 ? (
+                            <div className="order-pagos-lista-items">
+                                {pagos.map((pago, index) => (
+                                    <div key={index} className="order-pago-fila">
+                                        <select
+                                            value={pago.idMetodoPago}
+                                            onChange={(e) => actualizarPago(index, 'idMetodoPago', e.target.value)}
+                                            className="order-select-categoria order-select-pago"
+                                        >
+                                            {metodosPago.map((m) => (
+                                                <option key={m.id} value={m.id}>{m.nombre}</option>
+                                            ))}
+                                        </select>
+                                        
+                                        <input
+                                            type="number"
+                                            placeholder="Monto"
+                                            value={pago.monto}
+                                            onChange={(e) => actualizarPago(index, 'monto', e.target.value)}
+                                            className="order-input-search order-input-pago"
+                                        />
+
+                                        <button
+                                            type="button"
+                                            onClick={() => eliminarPago(index)}
+                                            className="order-delete-btn"
+                                            title="Eliminar método de pago"
+                                        >
+                                            <IconTrash size={16} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="order-sin-items order-sin-pagos-text">No se agregaron métodos de pago (opcional).</p>
+                        )}
+                    </div>
+
+                    {/* Footer con cálculo total y validación de pagos */}
                     <div className="order-modal-footer">
-                        <div className="order-total-box">
-                            <span>TOTAL ACTUALIZADO:</span>
-                            <span className="order-total-monto">${totalCalculado.toLocaleString()}</span>
+                        <div className="order-total-box order-total-box-flex">
+                            <div className="order-total-texto-linea">
+                                <span>TOTAL ACTUALIZADO: </span>
+                                <span className="order-total-monto">${totalCalculado.toLocaleString()}</span>
+                            </div>
+                            {pagos.length > 0 && (
+                                <div className={`order-pagos-estado-badge ${totalPagos === totalCalculado ? 'badge-coincide' : 'badge-diferencia'}`}>
+                                    Pagado: ${totalPagos.toLocaleString()} {totalPagos !== totalCalculado && '(Diferencia con el total)'}
+                                </div>
+                            )}
                         </div>
 
                         <div className="order-modal-actions">

@@ -1,6 +1,6 @@
 /* ============================================
-   ESTILOS DE ORDER EDIT MODAL - FER-CONS
-   ============================================ */
+ESTILOS DE ORDER EDIT MODAL - FER-CONS
+============================================ */
 
 .order-modal-overlay {
     position: fixed;
@@ -248,6 +248,10 @@
     color: rgba(15, 42, 48, 0.6);
 }
 
+.order-item-codigo-tag {
+    margin-right: 6px;
+}
+
 .order-item-controles {
     display: flex;
     align-items: center;
@@ -329,7 +333,77 @@
     border: 1px dashed #cbd5e1;
 }
 
-/* Footer y Total */
+/* ============================================
+ESTILOS DE MÉTODOS DE PAGO (EDICIÓN)
+============================================ */
+
+.order-pagos-seccion-wrapper {
+    margin-top: 1.5rem;
+}
+
+.order-pagos-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.order-pagos-label-main {
+    margin: 0 !important;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.order-pagos-lista-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.order-pago-fila {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    background: #f8fafc;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+}
+
+.order-select-pago {
+    flex: 2;
+}
+
+.order-input-pago {
+    flex: 1;
+    padding: 0.65rem 0.75rem;
+}
+
+.order-btn-agregar-pago {
+    background: #0d9488;
+    color: #fff;
+    border: none;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background 0.2s;
+}
+
+.order-btn-agregar-pago:hover {
+    background: #0f766e;
+}
+
+.order-sin-pagos-text {
+    font-size: 0.85rem;
+}
+
+/* Footer, Total y Validación de Pagos */
 .order-modal-footer {
     display: flex;
     flex-direction: column;
@@ -349,11 +423,36 @@
     font-size: 1rem;
 }
 
+.order-total-box-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.order-total-texto-linea {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .order-total-monto {
     color: #166534;
     background: #bbf7d0;
     padding: 0.25rem 0.75rem;
     border-radius: 0.5rem;
+}
+
+.order-pagos-estado-badge {
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+.badge-coincide {
+    color: #059669;
+}
+
+.badge-diferencia {
+    color: #d97706;
 }
 
 .order-modal-actions {

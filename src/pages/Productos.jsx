@@ -57,7 +57,6 @@ export default function Productos() {
     const abrirEdicion = (p) => { setProductoEditando(p); setIsModalOpen(true); };
     const cerrarModal = () => { setIsModalOpen(false); setProductoEditando(null); };
 
-    // Muestra la descripción general o el motivo de baja si está inactivo
     const verDescripcion = (p) => {
         showDetailAlert({
             title: p.nombre,
@@ -98,14 +97,14 @@ export default function Productos() {
             const { isConfirmed } = await Swal.fire({
                 title: '',
                 html: `
-                    <div style="text-align: center; font-family: inherit; padding: 0.5rem 0;">
-                        <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; display: block; margin-bottom: 0.25rem;">
+                    <div class="swal-reactivacion-wrapper">
+                        <span class="swal-reactivacion-sub">
                             Reactivación
                         </span>
-                        <h2 style="margin: 0 0 0.75rem 0; color: #0f2a30; font-size: 1.25rem; font-weight: 600;">
+                        <h2 class="swal-reactivacion-titulo">
                             ¿Activar producto?
                         </h2>
-                        <p style="margin: 0; color: #475569; font-size: 0.95rem;">
+                        <p class="swal-reactivacion-texto">
                             <strong>${p.nombre}</strong> pasará a estar activo nuevamente.
                         </p>
                     </div>
@@ -121,9 +120,15 @@ export default function Productos() {
                     const confirmBtn = Swal.getConfirmButton();
                     const cancelBtn = Swal.getCancelButton();
                     const actions = Swal.getActions();
-                    if (actions) { actions.style.display = 'flex'; actions.style.gap = '0.75rem'; actions.style.marginTop = '1rem'; }
-                    if (confirmBtn) { confirmBtn.style.backgroundColor = '#0d9488'; confirmBtn.style.color = '#ffffff'; confirmBtn.style.border = 'none'; confirmBtn.style.borderRadius = '0.5rem'; confirmBtn.style.padding = '0.65rem 1.25rem'; confirmBtn.style.fontWeight = '600'; confirmBtn.style.cursor = 'pointer'; }
-                    if (cancelBtn) { cancelBtn.style.backgroundColor = '#f1f5f9'; cancelBtn.style.color = '#334155'; cancelBtn.style.border = '1px solid #cbd5e1'; cancelBtn.style.borderRadius = '0.5rem'; cancelBtn.style.padding = '0.65rem 1.25rem'; cancelBtn.style.fontWeight = '600'; cancelBtn.style.cursor = 'pointer'; }
+                    if (actions) { 
+                        actions.className = 'swal-actions-custom'; 
+                    }
+                    if (confirmBtn) { 
+                        confirmBtn.className = 'swal-btn-confirm-custom'; 
+                    }
+                    if (cancelBtn) { 
+                        cancelBtn.className = 'swal-btn-cancel-custom'; 
+                    }
                 }
             });
             if (!isConfirmed) return;
@@ -211,7 +216,6 @@ export default function Productos() {
 
     const { datosVisibles, tieneMas, cargarMas } = usePagination(productosFiltrados, 10, [busqueda, tabActiva, categoriaSeleccionada]);
 
-    // Columnas limpias originales sin columnas de justificación extrañas
     const columnas = [
         'Código', 
         'Producto', 
@@ -247,10 +251,10 @@ export default function Productos() {
                         <td className="celda-tabla-info">
                             <span className="info-empleado-flex">
                                 <span className="avatar-iniciales">{iniciales(p.nombre)}</span>
-                                <span className="block font-medium">{p.nombre}</span>
+                                <span className="producto-nombre-span">{p.nombre}</span>
                             </span>
                         </td>
-                        <td className="celda-tabla-texto font-semibold text-emerald-600">${Number(p.precioUnidad).toLocaleString('es-AR')}</td>
+                        <td className="celda-tabla-texto producto-precio-celda">${Number(p.precioUnidad).toLocaleString('es-AR')}</td>
                         <td className="celda-tabla-gris">{catObj ? catObj.nombre : 'Sin categoría'}</td>
                         <td className="celda-tabla-texto">{marcaNombre}</td>
                         <td className="celda-tabla-texto">{unidadObj ? unidadObj.label : 'Unidad'}</td>

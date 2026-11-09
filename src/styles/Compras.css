@@ -152,6 +152,13 @@ ESTILOS DE COMPRAS - FER-CONS
     gap: 0.5rem;
 }
 
+.tarjeta-footer-acciones-izq {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
 .etiqueta-estado-pedido {
     padding: 0.35rem 0.85rem;
     border-radius: 9999px;
@@ -244,13 +251,13 @@ ESTILOS DE COMPRAS - FER-CONS
 }
 
 /* ================================================================= */
-/* MODAL DE DETALLE DE COMPRAS (CORREGIDO PARA APARICIÓN FLUIDA)      */
+/* MODAL DE DETALLE DE COMPRAS                                       */
 /* ================================================================= */
 .modal-overlay-detalle {
     position: fixed;
     inset: 0;
-    background-color: rgba(15, 42, 48, 0.65); /* Fondo oscuro corporativo */
-    backdrop-filter: blur(4px); /* Efecto blur unificado */
+    background-color: rgba(15, 42, 48, 0.65);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -360,9 +367,68 @@ ESTILOS DE COMPRAS - FER-CONS
     display: block;
 }
 
+.producto-item-codigo {
+    font-size: 0.75rem;
+    color: #555;
+}
+
 .producto-item-info div {
     color: #64748b;
     font-size: 0.75rem;
+}
+
+.producto-vacio-msg {
+    text-align: center;
+    padding: 1.5rem 0;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.producto-vacio-icon {
+    margin: 0 auto 0.5rem auto;
+    opacity: 0.4;
+    display: block;
+}
+
+/* ================================================================= */
+/* SECCIÓN DE MÉTODOS DE PAGO EN EL MODAL DE DETALLE                 */
+/* ================================================================= */
+.detalle-pagos-seccion {
+    margin-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 0.75rem;
+}
+
+.detalle-pagos-titulo {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #334155;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 0.5rem;
+}
+
+.detalle-pagos-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: #f8fafc;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e2e8f0;
+}
+
+.detalle-pago-fila {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #475569;
+}
+
+.detalle-pago-monto {
+    font-weight: 600;
+    color: #0f2a30;
 }
 
 .modal-detalle-total {

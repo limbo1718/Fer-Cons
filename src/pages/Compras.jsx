@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconPhone, IconBox, IconEye, IconEdit, IconPower } from '@tabler/icons-react';
+import { IconPhone, IconBox, IconEye, IconEdit, IconPower, IconCreditCard } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
 import FilterTabs from '../components/common/FilterTabs.jsx';
@@ -98,7 +98,6 @@ export default function Compras() {
             return;
         }
 
-        // Abre el componente reutilizable OrderEditModal adaptado para compras
         setCompraEditando(c);
     };
 
@@ -181,7 +180,7 @@ export default function Compras() {
                 }} 
             />
 
-            {/* Selector de fecha condicional centrado y estilizado */}
+            {/* Selector de fecha condicional */}
             {tabActiva === 'por_fecha' && (
                 <div className="filtro-fecha-container">
                     <span className="label-filtro-fecha">Filtrar por fecha específica:</span>
@@ -201,7 +200,7 @@ export default function Compras() {
                         const esEntregado = c.estado === 'Entregado';
                         return (
                             <div key={c.id} className="tarjeta-pedido">
-                                <div className="tarjeta-pedido-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                                <div className="tarjeta-pedido-header">
                                     <div className="tarjeta-proveedor-info">
                                         <span className="avatar-iniciales-pedido">{iniciales(c.proveedor)}</span>
                                         <div>
@@ -210,8 +209,7 @@ export default function Compras() {
                                             <div className="sub-texto-pedido">Compra N.º: {c.numeroPedido}</div>
                                         </div>
                                     </div>
-                                    {/* Fecha visible a simple vista en la tarjeta */}
-                                    <div className="fecha-tarjeta-pedido" style={{ fontSize: '0.8rem', fontWeight: '600', color: '#0f766e', background: '#f0fdfa', padding: '0.3rem 0.6rem', borderRadius: '0.5rem', border: '1px solid #ccfbf1', whiteSpace: 'nowrap' }}>
+                                    <div className="fecha-tarjeta-pedido">
                                         {c.fecha}
                                     </div>
                                 </div>
@@ -229,8 +227,8 @@ export default function Compras() {
                                     </div>
                                 </div>
 
-                                <div className="tarjeta-pedido-footer" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                <div className="tarjeta-pedido-footer">
+                                    <div className="tarjeta-footer-acciones-izq">
                                         <span className={`etiqueta-estado-pedido ${esEntregado ? 'estado-entregado' : 'estado-espera'}`}>
                                             <span className="punto-estado"></span> {c.estado}
                                         </span>
@@ -239,25 +237,13 @@ export default function Compras() {
                                         </button>
                                     </div>
 
-                                    {/* Acciones de fila (Modificar con validación y Cambiar Estado) */}
-                                    <span className="acciones-fila" style={{ display: 'flex', gap: '0.4rem' }}>
+                                    <span className="acciones-fila">
                                         <button
                                             type="button"
                                             className={`boton-accion-icono ${esEntregado ? 'accion-deshabilitada' : ''}`}
                                             onClick={() => abrirEdicionCompra(c)}
                                             title={esEntregado ? 'No se puede modificar una compra entregada' : 'Modificar compra'}
                                             aria-label={`Modificar compra ${c.numeroPedido}`}
-                                            style={{ 
-                                                background: '#f1f5f9', 
-                                                border: '1px solid #cbd5e1', 
-                                                borderRadius: '0.4rem', 
-                                                padding: '0.4rem', 
-                                                cursor: esEntregado ? 'not-allowed' : 'pointer', 
-                                                display: 'grid', 
-                                                placeItems: 'center', 
-                                                color: '#0f2a30',
-                                                opacity: esEntregado ? 0.4 : 1 
-                                            }}
                                         >
                                             <IconEdit size={16} />
                                         </button>
@@ -314,19 +300,36 @@ export default function Compras() {
                                         </div>
                                         <div className="producto-item-info">
                                             <strong>{item.producto}</strong>
-                                            {item.codigo && <div style={{ fontSize: '0.75rem', color: '#555' }}>Código: {item.codigo}</div>}
+                                            {item.codigo && <div className="producto-item-codigo">Código: {item.codigo}</div>}
                                             <div>Precio unidad: ${item.precioUnidad.toLocaleString()}</div>
                                             <div>Cantidad: {item.cantidad} bultos</div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <div style={{ textAlign: 'center', padding: '1.5rem 0', color: '#64748b', fontSize: '0.9rem' }}>
-                                    <IconBox size={32} style={{ margin: '0 auto 0.5rem auto', opacity: 0.4, display: 'block' }} />
+                                <div className="producto-vacio-msg">
+                                    <IconBox size={32} className="producto-vacio-icon" />
                                     No hay productos registrados en esta orden.
                                 </div>
                             )}
                         </div>
+
+                        {/* Sección de Métodos de Pago en el Detalle */}
+                        {compraSeleccionada.pagos && compraSeleccionada.pagos.length > 0 && (
+                            <div className="detalle-pagos-seccion">
+                                <span className="detalle-pagos-titulo">
+                                    <IconCreditCard size={16} /> Métodos de Pago:
+                                </span>
+                                <div className="detalle-pagos-lista">
+                                    {compraSeleccionada.pagos.map((p, idx) => (
+                                        <div key={idx} className="detalle-pago-fila">
+                                            <span>{p.nombreMetodo}</span>
+                                            <span className="detalle-pago-monto">${Number(p.monto).toLocaleString()}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
 
                         <div className="modal-detalle-total">
                             <span>TOTAL :</span>
@@ -340,7 +343,7 @@ export default function Compras() {
                 </div>
             )}
 
-            {/* Modal Reutilizable de Edición de Compras (OrderEditModal) */}
+            {/* Modal de Edición de Compras */}
             <OrderEditModal
                 isOpen={!!compraEditando}
                 onClose={() => setCompraEditando(null)}
@@ -349,7 +352,7 @@ export default function Compras() {
                 onSave={handleGuardarCompraEditada}
             />
 
-            {/* Modal de Creación de Nueva Compra (OrderCreateModal) */}
+            {/* Modal de Creación de Nueva Compra */}
             <OrderCreateModal
                 isOpen={isCreateModalOpen}
                 onClose={() => setIsCreateModalOpen(false)}
