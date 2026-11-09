@@ -82,16 +82,55 @@ export const proveedores = [
   { id: 35, codigo: '035', nombreFantasia: 'Distribuidora General Ferretera', razonSocial: 'Distri Ferretera S.R.L', cuit: '30-7099221-5', telefono: '+54 387 422-1144', email: 'contacto@distriferretera.com.ar', sucursal: 'Casa Central', activo: true }
 ];
 
+// Opciones estáticas compartidas para Marcas y Unidades
+export const marcasOpciones = [
+    'Genérica', 
+    'Cortines', 
+    'Weber', 
+    'Holcim', 
+    'Andina', 
+    'Cacique', 
+    'Sika', 
+    'Ferrum', 
+    'FV', 
+    'Eternit'
+];
+
+export const unidadesOpciones = [
+    { id: 1, label: 'Unidad' },
+    { id: 2, label: 'Bolsa' },
+    { id: 3, label: 'Metro / Barra' },
+    { id: 4, label: 'm²' },
+    { id: 5, label: 'Bolsón / m³' }
+];
+
+// Funciones auxiliares opcionales para consultar marcas o unidades de forma limpia
+export const getMarcaNombre = (idMarca) => {
+    return marcasOpciones[idMarca - 1] || 'Genérica';
+};
+
+export const getUnidadLabel = (idUnidad) => {
+    const unidad = unidadesOpciones.find(u => u.id === idUnidad);
+    return unidad ? unidad.label : 'Unidad';
+};
+
+export const categorias = [
+    { id: 1, nombre: 'Cerámicos y Revestimientos' },
+    { id: 2, nombre: 'Hierros y Aceros' },
+    { id: 3, nombre: 'Cementos, Cales y Áridos' },
+    { id: 4, nombre: 'Sanitarios y Plomería' }
+];
+
 export const productos = [
   // --- Categoría 1: Cerámicos y Revestimientos ---
   {
     id: 101,
     codigo: 'CER-6060-MB',
     idCategoria: 1,
-    idMarca: 1, // Ej: Genérica / Marca propia
-    idUnidad: 4, // Ej: m²
+    idMarca: 1, // Genérica
+    idUnidad: 4, // m²
     nombre: 'Porcellanato 60x60 Mármol Blanco',
-    precioUnidad: 37050, // Precio de venta sugerido
+    precioUnidad: 37050,
     descripcion: 'Porcellanato brillante de alto tránsito'
   },
   {
@@ -126,11 +165,10 @@ export const productos = [
   },
   {
     id: 105,
-    idCategoria: 1,
     codigo: 'ZOC-1045',
     idCategoria: 1,
     idMarca: 1,
-    idUnidad: 1, // Unidad
+    idUnidad: 1,
     nombre: 'Zócalo Cerámico 10x45',
     precioUnidad: 4030,
     descripcion: 'Zócalo coordinado'
@@ -192,7 +230,7 @@ export const productos = [
     codigo: 'HIE-RET-6',
     idCategoria: 2,
     idMarca: 1,
-    idUnidad: 3, // Metro / Barra
+    idUnidad: 3,
     nombre: 'Hierro Retorcido 6mm x 12m',
     precioUnidad: 7020,
     descripcion: 'Hierro ADN retorcido para construcción'
@@ -491,13 +529,6 @@ export const productos = [
     precioUnidad: 253500,
     descripcion: 'Tanque reserva domiciliaria'
   }
-];
-
-export const categorias = [
-    { id: 1, nombre: 'Cerámicos y Revestimientos' },
-    { id: 2, nombre: 'Hierros y Aceros' },
-    { id: 3, nombre: 'Cementos, Cales y Áridos' },
-    { id: 4, nombre: 'Sanitarios y Plomería' }
 ];
 
 export const pedidos = [

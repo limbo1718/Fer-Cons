@@ -13,3 +13,8 @@
 }
 
 body { @apply font-sans text-oscuro; }
+
+/* Fuerza el efecto blur idéntico al de los formularios en los fondos de SweetAlert2 */
+body.swal2-shown > [class^="swal2-container"] {
+    backdrop-filter: blur(4px) !important;
+}

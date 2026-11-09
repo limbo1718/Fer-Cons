@@ -1,0 +1,162 @@
+/* ============================================
+ESTILOS DE PRODUCTOS - FER-CONS
+============================================ */
+
+.contenedor-tabla-productos {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 2rem;
+    overflow-x: auto;
+    border-radius: 1rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .contenedor-tabla-productos {
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+}
+
+.tabla-productos {
+    width: 100%;
+    min-width: 800px;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.cabecera-fila-productos {
+    border-bottom: 1px solid rgba(15, 42, 48, 0.2);
+}
+
+.celda-cabecera-productos {
+    padding: 1rem;
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--color-oscuro);
+}
+
+.contenido-precio-th {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.fila-producto {
+    border-bottom: 1px solid rgba(15, 42, 48, 0.1);
+}
+
+.fila-producto:last-child {
+    border-bottom: none;
+}
+
+.celda-tabla-codigo {
+    padding: 1rem;
+    color: rgba(15, 42, 48, 0.7);
+    font-weight: 500;
+}
+
+.celda-tabla-info {
+    padding: 1rem;
+}
+
+.info-producto-flex {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.avatar-iniciales {
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 0.5rem;
+    background-color: var(--color-sidebar);
+    font-size: 0.875rem;
+    color: #ffffff;
+    flex-shrink: 0;
+}
+
+.celda-tabla-texto {
+    padding: 1rem;
+    color: var(--color-oscuro);
+}
+
+.celda-tabla-gris {
+    padding: 1rem;
+    color: rgba(15, 42, 48, 0.7);
+}
+
+.etiqueta-estado {
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.estado-activo {
+    background-color: #bbf7d0;
+    color: #166534;
+}
+
+.estado-inactivo {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+/* Botones de acciones por fila (info / editar / activar-desactivar) */
+.acciones-fila {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.boton-accion-icono {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--color-tarjeta);
+    color: var(--color-oscuro);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.boton-accion-icono:hover {
+    background-color: var(--color-circulo);
+    transform: scale(1.05);
+}
+
+/* Opcional: Estilo específico para el botón de info/descripción si quieres distinguirlo suavemente */
+.accion-info {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+}
+.accion-info:hover {
+    background-color: #bae6fd !important;
+}
+
+/* Producto Activo -> Botón de acción rápido en fondo rojo */
+.accion-desactivar {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+}
+.accion-desactivar:hover {
+    background-color: #fecaca !important;
+}
+
+/* Producto Inactivo -> Botón de acción rápido en fondo verde */
+.accion-activar {
+    background-color: #bbf7d0 !important;
+    color: #166534 !important;
+}
+.accion-activar:hover {
+    background-color: #a7f3d0 !important;
+}

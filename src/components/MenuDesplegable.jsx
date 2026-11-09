@@ -49,6 +49,7 @@ export default function MenuDesplegable() {
   };
 
   const handleModuloClick = (e, modulo) => {
+    
     const modulosEnDesarrollo = ['/ventas', '/presupuestos', '/stock', '/facturacion', '/caja'];
 
     if (!modulo.path || modulosEnDesarrollo.includes(modulo.path)) {

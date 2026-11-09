@@ -7,6 +7,7 @@ import Inicio from './pages/Inicio.jsx';
 import Actividad from './pages/Actividad.jsx';
 import Empleados from './pages/Empleados.jsx';
 import Proveedores from './pages/Proveedores.jsx';
+import Productos from './pages/Productos.jsx';
 import Compras from './pages/Compras.jsx';
 import Perfil from './pages/Perfil.jsx';
 
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="actividad" element={<Actividad />} />
         <Route path="empleados" element={<Empleados />} />
         <Route path="proveedores" element={<Proveedores />} />
+        <Route path="productos" element={<Productos />} /> {/* 2. Añadimos la ruta protegida */}
         <Route path="compras" element={<Compras />} />
         <Route path="perfil" element={<Perfil />} />
       </Route>

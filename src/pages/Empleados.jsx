@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconPhone, IconPencil, IconEdit, IconPower } from '@tabler/icons-react';
+import { IconPhone, IconEdit, IconPower, IconInfoCircle } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
@@ -9,6 +9,7 @@ import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
+import { showDetailAlert } from '../components/common/showDetailAlert.js'; // Helper compartido de detalles
 import { usePagination } from '../hooks/usePagination.js';
 import { empleados as datos } from '../data/mock.js';
 import '../styles/Empleados.css';
@@ -22,7 +23,9 @@ const separarNombre = (completo = '') => {
 };
 
 export default function Empleados() {
-  const [empleados, setEmpleados] = useState(datos);
+  const [empleados, setEmpleados] = useState(
+    datos.map(e => ({ ...e, detalleBaja: e.detalleBaja || '' }))
+  );
   const [busqueda, setBusqueda] = useState('');
   const [tabActiva, setTabActiva] = useState('todos');
   const [rolSeleccionado, setRolSeleccionado] = useState('');
@@ -72,6 +75,19 @@ export default function Empleados() {
     setEmpleadoEditando(null);
   };
 
+  // Función para mostrar el motivo de la baja usando el modal unificado de detalles
+  const verDetalleBaja = (e) => {
+    showDetailAlert({
+      title: e.nombre,
+      details: [
+        { label: 'Legajo', value: `N.° ${e.legajo}` },
+        { label: 'Rol', value: e.rol },
+        { label: 'Sucursal', value: e.sucursal }
+      ],
+      description: e.detalleBaja || 'Este empleado fue dado de baja sin especificar un motivo detallado.'
+    });
+  };
+
   // Configuración de los campos obligatorios para el formulario genérico de empleados
   const camposEmpleado = [
     { name: 'dni', label: 'DNI', placeholder: 'Ej: 45952361', required: true },
@@ -96,33 +112,55 @@ export default function Empleados() {
     }
   ];
 
-  const justificar = async (e) => {
-    const { value } = await Swal.fire({
-      title: `Justificación - ${e.nombre}`,
-      input: 'textarea',
-      inputPlaceholder: 'Escribí el motivo...',
-      showCancelButton: true,
-      confirmButtonText: 'Guardar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#4a9da8',
-      inputValidator: (v) => (!v.trim() ? 'Ingresá un motivo' : null),
-    });
-    if (value) Swal.fire({ icon: 'success', title: 'Justificación guardada', timer: 1500, showConfirmButton: false });
-  };
-
   const cambiarEstado = async (e) => {
     const desactivar = e.activo;
-    const { isConfirmed } = await Swal.fire({
-      icon: 'question',
-      title: desactivar ? '¿Desactivar empleado?' : '¿Activar empleado?',
-      text: `${e.nombre} pasará a estar ${desactivar ? 'inactivo' : 'activo'}.`,
-      showCancelButton: true,
-      confirmButtonText: desactivar ? 'Desactivar' : 'Activar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#4a9da8',
+    let motivoBaja = e.detalleBaja || '';
+
+    if (desactivar) {
+      const { value, isDismissed } = await Swal.fire({
+        title: `Motivo de baja - ${e.nombre}`,
+        input: 'textarea',
+        inputPlaceholder: 'Escribí detalladamente el motivo de la baja...',
+        inputValue: e.detalleBaja || '',
+        showCancelButton: true,
+        confirmButtonText: 'Dar de baja',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0d9488',
+        inputValidator: (v) => (!v.trim() ? 'Debes ingresar un motivo de baja' : null),
+        backdrop: 'rgba(15, 42, 48, 0.65)'
+      });
+
+      if (isDismissed) return;
+      motivoBaja = value;
+    } else {
+      const { isConfirmed } = await Swal.fire({
+        icon: 'question',
+        title: '¿Activar empleado?',
+        text: `${e.nombre} pasará a estar activo.`,
+        showCancelButton: true,
+        confirmButtonText: 'Activar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#0d9488',
+        backdrop: 'rgba(15, 42, 48, 0.65)'
+      });
+      if (!isConfirmed) return;
+    }
+
+    setEmpleados((prev) => 
+      prev.map((emp) => 
+        emp.id === e.id 
+          ? { ...emp, activo: !emp.activo, detalleBaja: desactivar ? motivoBaja : '' } 
+          : emp
+      )
+    );
+
+    Swal.fire({
+      icon: 'success',
+      title: desactivar ? 'Empleado desactivado' : 'Empleado activado',
+      text: `El estado de ${e.nombre} se actualizó correctamente.`,
+      timer: 1800,
+      showConfirmButton: false
     });
-    if (!isConfirmed) return;
-    setEmpleados((prev) => prev.map((emp) => (emp.id === e.id ? { ...emp, activo: !emp.activo } : emp)));
   };
 
   const handleGuardarEmpleado = (data) => {
@@ -161,14 +199,15 @@ export default function Empleados() {
       dni: data.dni,
       rol: data.rol,
       sucursal: data.sucursal,
-      activo: true
+      activo: true,
+      detalleBaja: ''
     };
 
     setEmpleados((prev) => [...prev, nuevoEmpleado]);
     Swal.fire({
       icon: 'success',
       title: '¡Empleado agregado!',
-      text: `${nuevoEmpleado.nombre} se registró correctamente (modo prueba).`,
+      text: `${nuevoEmpleado.nombre} se registró correctamente.`,
       timer: 1800,
       showConfirmButton: false
     });
@@ -204,7 +243,6 @@ export default function Empleados() {
   });
 
   // 2. Aplicamos el hook de paginación progresiva (bloques de 10)
-  // Se le pasan las dependencias para que el límite vuelva a 10 al buscar o cambiar filtros
   const { datosVisibles, tieneMas, cargarMas } = usePagination(
     empleadosFiltrados, 
     10, 
@@ -279,11 +317,16 @@ export default function Empleados() {
               </span>
             </td>
             <td className="celda-tabla-info">
-              {/* Lógica condicional: El botón de justificación solo aparece si el empleado está inactivo */}
+              {/* Lógica condicional: El botón de detalle solo aparece si el empleado está inactivo */}
               {!e.activo ? (
-                <button onClick={() => justificar(e)} className="boton-justificacion">
+                <button 
+                  type="button"
+                  onClick={() => verDetalleBaja(e)} 
+                  className="boton-justificacion"
+                  title="Ver motivo de baja"
+                >
                   <span className="contenido-boton-justificacion">
-                    <IconPencil size={16} />Justificación
+                    <IconInfoCircle size={16} />Detalle
                   </span>
                 </button>
               ) : (

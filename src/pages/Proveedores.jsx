@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconPhone, IconPencil, IconEdit, IconPower } from '@tabler/icons-react';
+import { IconPhone, IconPencil, IconEdit, IconPower, IconInfoCircle } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
@@ -9,6 +9,7 @@ import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
+import { showDetailAlert } from '../components/common/showDetailAlert.js'; // Helper compartido de detalles
 import { usePagination } from '../hooks/usePagination.js';
 import { proveedores as datos } from '../data/mock.js';
 import '../styles/Proveedores.css';
@@ -16,7 +17,9 @@ import '../styles/Proveedores.css';
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
 export default function Proveedores() {
-    const [proveedores, setProveedores] = useState(datos);
+    const [proveedores, setProveedores] = useState(
+        datos.map(p => ({ ...p, detalleBaja: p.detalleBaja || '' }))
+    );
     const [busqueda, setBusqueda] = useState('');
     const [tabActiva, setTabActiva] = useState('todos');
     const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
@@ -55,6 +58,18 @@ export default function Proveedores() {
         setProveedorEditando(null);
     };
 
+    // Función para mostrar el motivo de la baja usando el modal unificado de detalles
+    const verDetalleBaja = (p) => {
+        showDetailAlert({
+            title: p.nombreFantasia,
+            details: [
+                { label: 'Razón Social', value: p.razonSocial },
+                { label: 'CUIT', value: p.cuit }
+            ],
+            description: p.detalleBaja || 'Este proveedor fue dado de baja sin especificar un motivo detallado.'
+        });
+    };
+
     // Configuración de los campos obligatorios para el formulario genérico de proveedores
     const camposProveedor = [
         { name: 'codigo', label: 'Código', disabled: true, badge: 'AUTOGENERADO' },
@@ -72,33 +87,58 @@ export default function Proveedores() {
         }
     ];
 
-    const justificar = async (p) => {
-        const { value } = await Swal.fire({
-            title: `Detalle / Motivo - ${p.nombreFantasia}`,
-            input: 'textarea',
-            inputPlaceholder: 'Escribí el motivo...',
-            showCancelButton: true,
-            confirmButtonText: 'Guardar',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#0d9488',
-            inputValidator: (v) => (!v.trim() ? 'Ingresá un motivo' : null),
-        });
-        if (value) Swal.fire({ icon: 'success', title: 'Información guardada', timer: 1500, showConfirmButton: false });
-    };
-
     const cambiarEstado = async (p) => {
         const desactivar = p.activo;
-        const { isConfirmed } = await Swal.fire({
-            icon: 'question',
-            title: desactivar ? '¿Desactivar proveedor?' : '¿Activar proveedor?',
-            text: `${p.nombreFantasia} pasará a estar ${desactivar ? 'inactivo' : 'activo'}.`,
-            showCancelButton: true,
-            confirmButtonText: desactivar ? 'Desactivar' : 'Activar',
-            cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#0d9488',
+        
+        let motivoBaja = p.detalleBaja || '';
+
+        // Si va a pasar a inactivo, solicitamos obligatoriamente el motivo de la baja
+        if (desactivar) {
+            const { value, isDismissed } = await Swal.fire({
+                title: `Motivo de baja - ${p.nombreFantasia}`,
+                input: 'textarea',
+                inputPlaceholder: 'Escribí detalladamente el motivo de la baja...',
+                inputValue: p.detalleBaja || '',
+                showCancelButton: true,
+                confirmButtonText: 'Dar de baja',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#0d9488',
+                inputValidator: (v) => (!v.trim() ? 'Debes ingresar un motivo de baja' : null),
+                backdrop: 'rgba(15, 42, 48, 0.65)'
+            });
+
+            if (isDismissed) return;
+            motivoBaja = value;
+        } else {
+            // Si se va a activar, confirmamos de forma estándar
+            const { isConfirmed } = await Swal.fire({
+                icon: 'question',
+                title: '¿Activar proveedor?',
+                text: `${p.nombreFantasia} pasará a estar activo.`,
+                showCancelButton: true,
+                confirmButtonText: 'Activar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#0d9488',
+                backdrop: 'rgba(15, 42, 48, 0.65)'
+            });
+            if (!isConfirmed) return;
+        }
+
+        setProveedores((prev) => 
+            prev.map((prov) => 
+                prov.id === p.id 
+                    ? { ...prov, activo: !prov.activo, detalleBaja: desactivar ? motivoBaja : '' } 
+                    : prov
+            )
+        );
+
+        Swal.fire({
+            icon: 'success',
+            title: desactivar ? 'Proveedor desactivado' : 'Proveedor activado',
+            text: `El estado de ${p.nombreFantasia} se actualizó correctamente.`,
+            timer: 1800,
+            showConfirmButton: false
         });
-        if (!isConfirmed) return;
-        setProveedores((prev) => prev.map((prov) => (prov.id === p.id ? { ...prov, activo: !prov.activo } : prov)));
     };
 
     const handleGuardarProveedor = (data) => {
@@ -133,7 +173,8 @@ export default function Proveedores() {
             telefono: data.telefono,
             email: data.email,
             sucursal: data.sucursal,
-            activo: true
+            activo: true,
+            detalleBaja: ''
         };
 
         setProveedores((prev) => [...prev, nuevoProveedor]);
@@ -259,9 +300,14 @@ export default function Proveedores() {
                     </td>
                     <td className="celda-tabla-info">
                         {!p.activo ? (
-                            <button onClick={() => justificar(p)} className="boton-justificacion">
+                            <button 
+                                type="button" 
+                                onClick={() => verDetalleBaja(p)} 
+                                className="boton-justificacion"
+                                title="Ver motivo de baja"
+                            >
                                 <span className="contenido-boton-justificacion">
-                                    <IconPencil size={16} />Detalle
+                                    <IconInfoCircle size={16} />Detalle
                                 </span>
                             </button>
                         ) : (
