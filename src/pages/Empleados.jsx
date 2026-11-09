@@ -10,6 +10,7 @@ import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js'; // Helper compartido de detalles
+import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js'; // Helper compartido de confirmación con input
 import { usePagination } from '../hooks/usePagination.js';
 import { empleados as datos } from '../data/mock.js';
 import '../styles/Empleados.css';
@@ -117,30 +118,38 @@ export default function Empleados() {
     let motivoBaja = e.detalleBaja || '';
 
     if (desactivar) {
-      const { value, isDismissed } = await Swal.fire({
+      const motivo = await showConfirmInputAlert({
         title: `Motivo de baja - ${e.nombre}`,
-        input: 'textarea',
-        inputPlaceholder: 'Escribí detalladamente el motivo de la baja...',
+        subtitle: 'Gestión de Personal',
         inputValue: e.detalleBaja || '',
-        showCancelButton: true,
-        confirmButtonText: 'Dar de baja',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#0d9488',
-        inputValidator: (v) => (!v.trim() ? 'Debes ingresar un motivo de baja' : null),
-        backdrop: 'rgba(15, 42, 48, 0.65)'
+        confirmButtonText: 'Dar de baja'
       });
 
-      if (isDismissed) return;
-      motivoBaja = value;
+      if (!motivo) return; // Si canceló o cerró, no hace nada
+      motivoBaja = motivo;
     } else {
       const { isConfirmed } = await Swal.fire({
-        icon: 'question',
-        title: '¿Activar empleado?',
-        text: `${e.nombre} pasará a estar activo.`,
+        title: '',
+        html: `
+          <div style="text-align: center; font-family: inherit; padding: 0.5rem 0;">
+            <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; display: block; margin-bottom: 0.25rem;">
+              Reactivación
+            </span>
+            <h2 style="margin: 0 0 0.75rem 0; color: #0f2a30; font-size: 1.25rem; font-weight: 600;">
+              ¿Activar empleado?
+            </h2>
+            <p style="margin: 0; color: #475569; font-size: 0.95rem;">
+              <strong>${e.nombre}</strong> pasará a estar activo nuevamente en el sistema.
+            </p>
+          </div>
+        `,
         showCancelButton: true,
         confirmButtonText: 'Activar',
         cancelButtonText: 'Cancelar',
         confirmButtonColor: '#0d9488',
+        cancelButtonColor: '#64748b',
+        width: '460px',
+        padding: '2rem',
         backdrop: 'rgba(15, 42, 48, 0.65)'
       });
       if (!isConfirmed) return;

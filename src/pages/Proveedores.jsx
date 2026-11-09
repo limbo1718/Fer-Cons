@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconPhone, IconPencil, IconEdit, IconPower, IconInfoCircle } from '@tabler/icons-react';
+import { IconPhone, IconEdit, IconPower, IconInfoCircle } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
@@ -10,6 +10,7 @@ import GenericModalForm from '../components/common/GenericModalForm.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js'; // Helper compartido de detalles
+import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js'; // Helper compartido de confirmación con input
 import { usePagination } from '../hooks/usePagination.js';
 import { proveedores as datos } from '../data/mock.js';
 import '../styles/Proveedores.css';
@@ -89,37 +90,78 @@ export default function Proveedores() {
 
     const cambiarEstado = async (p) => {
         const desactivar = p.activo;
-        
         let motivoBaja = p.detalleBaja || '';
 
-        // Si va a pasar a inactivo, solicitamos obligatoriamente el motivo de la baja
+        // Si va a pasar a inactivo, solicitamos el motivo mediante el helper unificado
         if (desactivar) {
-            const { value, isDismissed } = await Swal.fire({
+            const motivo = await showConfirmInputAlert({
                 title: `Motivo de baja - ${p.nombreFantasia}`,
-                input: 'textarea',
-                inputPlaceholder: 'Escribí detalladamente el motivo de la baja...',
+                subtitle: 'Gestión de Proveedores',
                 inputValue: p.detalleBaja || '',
-                showCancelButton: true,
-                confirmButtonText: 'Dar de baja',
-                cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#0d9488',
-                inputValidator: (v) => (!v.trim() ? 'Debes ingresar un motivo de baja' : null),
-                backdrop: 'rgba(15, 42, 48, 0.65)'
+                confirmButtonText: 'Dar de baja'
             });
 
-            if (isDismissed) return;
-            motivoBaja = value;
+            if (!motivo) return; // Si canceló o cerró, no hace nada
+            motivoBaja = motivo;
         } else {
-            // Si se va a activar, confirmamos de forma estándar
+            // Si se va a activar, confirmamos con el diseño corporativo simétrico
             const { isConfirmed } = await Swal.fire({
-                icon: 'question',
-                title: '¿Activar proveedor?',
-                text: `${p.nombreFantasia} pasará a estar activo.`,
+                title: '',
+                html: `
+                    <div style="text-align: center; font-family: inherit; padding: 0.5rem 0;">
+                        <span style="font-size: 0.75rem; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; display: block; margin-bottom: 0.25rem;">
+                            Reactivación
+                        </span>
+                        <h2 style="margin: 0 0 0.75rem 0; color: #0f2a30; font-size: 1.25rem; font-weight: 600;">
+                            ¿Activar proveedor?
+                        </h2>
+                        <p style="margin: 0; color: #475569; font-size: 0.95rem;">
+                            <strong>${p.nombreFantasia}</strong> pasará a estar activo nuevamente en el sistema.
+                        </p>
+                    </div>
+                `,
                 showCancelButton: true,
                 confirmButtonText: 'Activar',
                 cancelButtonText: 'Cancelar',
-                confirmButtonColor: '#0d9488',
-                backdrop: 'rgba(15, 42, 48, 0.65)'
+                buttonsStyling: false,
+                width: '460px',
+                padding: '2rem',
+                backdrop: 'rgba(15, 42, 48, 0.65)',
+                didOpen: () => {
+                    const confirmBtn = Swal.getConfirmButton();
+                    const cancelBtn = Swal.getCancelButton();
+                    const actions = Swal.getActions();
+
+                    if (actions) {
+                        actions.style.display = 'flex';
+                        actions.style.gap = '0.75rem';
+                        actions.style.marginTop = '1rem';
+                    }
+
+                    if (confirmBtn) {
+                        confirmBtn.style.backgroundColor = '#0d9488';
+                        confirmBtn.style.color = '#ffffff';
+                        confirmBtn.style.border = 'none';
+                        confirmBtn.style.borderRadius = '0.5rem';
+                        confirmBtn.style.padding = '0.65rem 1.25rem';
+                        confirmBtn.style.fontSize = '0.9rem';
+                        confirmBtn.style.fontWeight = '600';
+                        confirmBtn.style.cursor = 'pointer';
+                        confirmBtn.style.boxShadow = 'none';
+                    }
+
+                    if (cancelBtn) {
+                        cancelBtn.style.backgroundColor = '#f1f5f9';
+                        cancelBtn.style.color = '#334155';
+                        cancelBtn.style.border = '1px solid #cbd5e1';
+                        cancelBtn.style.borderRadius = '0.5rem';
+                        cancelBtn.style.padding = '0.65rem 1.25rem';
+                        cancelBtn.style.fontSize = '0.9rem';
+                        cancelBtn.style.fontWeight = '600';
+                        cancelBtn.style.cursor = 'pointer';
+                        cancelBtn.style.boxShadow = 'none';
+                    }
+                }
             });
             if (!isConfirmed) return;
         }

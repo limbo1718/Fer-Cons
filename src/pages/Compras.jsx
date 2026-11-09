@@ -306,25 +306,34 @@ export default function Compras() {
                         </div>
 
                         <div className="lista-productos-detalle">
-                            {compraSeleccionada.detalles.map((item, index) => (
-                                <div key={index} className="producto-item-fila">
-                                    <div className="icono-producto-caja">
-                                        <IconBox size={20} />
+                            {compraSeleccionada.detalles && compraSeleccionada.detalles.length > 0 ? (
+                                compraSeleccionada.detalles.map((item, index) => (
+                                    <div key={index} className="producto-item-fila">
+                                        <div className="icono-producto-caja">
+                                            <IconBox size={20} />
+                                        </div>
+                                        <div className="producto-item-info">
+                                            <strong>{item.producto}</strong>
+                                            {item.codigo && <div style={{ fontSize: '0.75rem', color: '#555' }}>Código: {item.codigo}</div>}
+                                            <div>Precio unidad: ${item.precioUnidad.toLocaleString()}</div>
+                                            <div>Cantidad: {item.cantidad} bultos</div>
+                                        </div>
                                     </div>
-                                    <div className="producto-item-info">
-                                        <strong>{item.producto}</strong>
-                                        {item.codigo && <div style={{ fontSize: '0.75rem', color: '#555' }}>Código: {item.codigo}</div>}
-                                        <div>Precio unidad: ${item.precioUnidad.toLocaleString()}</div>
-                                        <div>Cantidad: {item.cantidad} bultos</div>
-                                    </div>
+                                ))
+                            ) : (
+                                <div style={{ textAlign: 'center', padding: '1.5rem 0', color: '#64748b', fontSize: '0.9rem' }}>
+                                    <IconBox size={32} style={{ margin: '0 auto 0.5rem auto', opacity: 0.4, display: 'block' }} />
+                                    No hay productos registrados en esta orden.
                                 </div>
-                            ))}
+                            )}
                         </div>
 
                         <div className="modal-detalle-total">
                             <span>TOTAL :</span>
                             <span className="monto-total-caja">
-                                ${compraSeleccionada.detalles.reduce((acc, curr) => acc + (curr.precioUnidad * curr.cantidad), 0).toLocaleString()}
+                                ${compraSeleccionada.detalles 
+                                    ? compraSeleccionada.detalles.reduce((acc, curr) => acc + (curr.precioUnidad * curr.cantidad), 0).toLocaleString() 
+                                    : '0'}
                             </span>
                         </div>
                     </div>
