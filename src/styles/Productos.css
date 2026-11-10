@@ -44,15 +44,18 @@ ESTILOS DE PRODUCTOS - FER-CONS
     gap: 0.25rem;
 }
 
-.fila-producto {
+.fila-producto,
+.fila-empleado {
     border-bottom: 1px solid rgba(15, 42, 48, 0.1);
 }
 
-.fila-producto:last-child {
+.fila-producto:last-child,
+.fila-empleado:last-child {
     border-bottom: none;
 }
 
-.celda-tabla-codigo {
+.celda-tabla-codigo,
+.celda-tabla-legajo {
     padding: 1rem;
     color: rgba(15, 42, 48, 0.7);
     font-weight: 500;
@@ -62,7 +65,8 @@ ESTILOS DE PRODUCTOS - FER-CONS
     padding: 1rem;
 }
 
-.info-producto-flex {
+.info-producto-flex,
+.info-empleado-flex {
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -145,7 +149,7 @@ ESTILOS DE PRODUCTOS - FER-CONS
     transform: scale(1.05);
 }
 
-/* Opcional: Estilo específico para el botón de info/descripción si quieres distinguirlo suavemente */
+/* Estilo específico para el botón de info/descripción */
 .accion-info {
     background-color: #e0f2fe !important;
     color: #0369a1 !important;
@@ -172,7 +176,7 @@ ESTILOS DE PRODUCTOS - FER-CONS
     background-color: #a7f3d0 !important;
 }
 
-/* Estilos personalizados para el popup de confirmación de reactivación (SweetAlert2) */
+/* Estilos personalizados para el popup de confirmación de reactivación y bajas (SweetAlert2) */
 .swal-reactivacion-wrapper {
     text-align: center;
     font-family: inherit;
@@ -205,11 +209,13 @@ ESTILOS DE PRODUCTOS - FER-CONS
 .swal-actions-custom {
     display: flex;
     gap: 0.75rem;
-    margin-top: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+    width: 100%;
 }
 
 .swal-btn-confirm-custom {
-    background-color: #0d9488 !important;
+    background-color: var(--color-primario, #0f2a30) !important;
     color: #ffffff !important;
     border: none !important;
     border-radius: 0.5rem !important;
@@ -218,6 +224,11 @@ ESTILOS DE PRODUCTOS - FER-CONS
     font-weight: 600 !important;
     cursor: pointer !important;
     box-shadow: none !important;
+    transition: opacity 0.2s;
+}
+
+.swal-btn-confirm-custom:hover {
+    opacity: 0.9;
 }
 
 .swal-btn-cancel-custom {
@@ -230,4 +241,9 @@ ESTILOS DE PRODUCTOS - FER-CONS
     font-weight: 600 !important;
     cursor: pointer !important;
     box-shadow: none !important;
+    transition: background-color 0.2s;
+}
+
+.swal-btn-cancel-custom:hover {
+    background-color: #e2e8f0 !important;
 }

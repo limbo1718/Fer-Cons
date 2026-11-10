@@ -16,32 +16,398 @@ export const usuarioDemo = {
   activo: true
 };
 
+export const roles = [
+  { id: 1, ocupacion: 'Administrador', descripcion: 'Gestión total del sistema y sucursales' },
+  { id: 2, ocupacion: 'Supervisor', descripcion: 'Supervisión de personal y operaciones' },
+  { id: 3, ocupacion: 'Encargado de Stock', descripcion: 'Control de inventario, ingresos y egresos' },
+  { id: 4, ocupacion: 'Cajero', descripcion: 'Atención de caja y cobros' },
+  { id: 5, ocupacion: 'Vendedor', descripcion: 'Atención al cliente y ventas en salón' },
+  { id: 6, ocupacion: 'Repositor', descripcion: 'Reposición de mercadería en góndolas' },
+  { id: 7, ocupacion: 'Administrativo', descripcion: 'Tareas administrativas generales' }
+];
+
+export const sucursales = [
+  { id: 1, nombre: 'Casa Central', direccion: 'Av. Belgrano 1234, Salta' },
+  { id: 2, nombre: 'Sucursal Sur', direccion: 'Av. Tavella 800, Salta' },
+  { id: 3, nombre: 'Depósito Norte', direccion: 'Parque Industrial, Salta' }
+];
+
 export const empleados = [
-  { id: 1, legajo: '0214', nombre: 'Daniel Pérez Ruiz', telefono: '+54 387 320-3022', rol: 'Vendedor', sucursal: 'Casa Central', activo: true },
-  { id: 2, legajo: '0215', nombre: 'Alvarez Santiago', telefono: '+54 387 570-3132', rol: 'Cajero', sucursal: 'Casa Central', activo: false },
-  { id: 3, legajo: '0216', nombre: 'Maita Alan', telefono: '+54 387 320-3451', rol: 'Vendedor', sucursal: 'Casa Central', activo: true },
-  { id: 4, legajo: '0217', nombre: 'Giménez Valeria', telefono: '+54 387 412-9988', rol: 'Encargado de Stock', sucursal: 'Depósito Norte', activo: true },
-  { id: 5, legajo: '0218', nombre: 'Rojas Carrizo Lucas', telefono: '+54 387 655-4433', rol: 'Repositor', sucursal: 'Sucursal Sur', activo: true },
-  { id: 6, legajo: '0219', nombre: 'Benítez Sofía', telefono: '+54 387 221-1199', rol: 'Cajero', sucursal: 'Sucursal Sur', activo: false },
-  { id: 7, legajo: '0220', nombre: 'Gómez Martín', telefono: '+54 387 499-1234', rol: 'Administrador', sucursal: 'Casa Central', activo: true },
-  { id: 8, legajo: '0221', nombre: 'Torres Lucía', telefono: '+54 387 611-5678', rol: 'Supervisor', sucursal: 'Sucursal Sur', activo: true },
-  { id: 9, legajo: '0222', nombre: 'Navarro Carlos', telefono: '+54 387 733-9876', rol: 'Repositor', sucursal: 'Depósito Norte', activo: false },
-  { id: 10, legajo: '0223', nombre: 'Morales Yamila', telefono: '+54 387 522-4321', rol: 'Vendedor', sucursal: 'Sucursal Sur', activo: true },
-  { id: 11, legajo: '0224', nombre: 'Paz Rodrigo', telefono: '+54 387 411-8877', rol: 'Vendedor', sucursal: 'Casa Central', activo: true },
-  { id: 12, legajo: '0225', nombre: 'Soria Florencia', telefono: '+54 387 399-2233', rol: 'Cajero', sucursal: 'Sucursal Sur', activo: true },
-  { id: 13, legajo: '0226', nombre: 'Vargas Esteban', telefono: '+54 387 688-4455', rol: 'Repositor', sucursal: 'Depósito Norte', activo: true },
-  { id: 14, legajo: '0227', nombre: 'Medina Camila', telefono: '+54 387 500-1122', rol: 'Administrativo', sucursal: 'Casa Central', activo: false },
-  { id: 15, legajo: '0228', nombre: 'Rios Gonzalo', telefono: '+54 387 311-6677', rol: 'Vendedor', sucursal: 'Sucursal Sur', activo: true },
-  { id: 16, legajo: '0229', nombre: 'Flores Natalia', telefono: '+54 387 455-9900', rol: 'Supervisor', sucursal: 'Depósito Norte', activo: true },
-  { id: 17, legajo: '0230', nombre: 'Acosta Hernán', telefono: '+54 387 622-3344', rol: 'Cajero', sucursal: 'Casa Central', activo: true },
-  { id: 18, legajo: '0231', nombre: 'Díaz Romina', telefono: '+54 387 377-5566', rol: 'Encargado de Stock', sucursal: 'Sucursal Sur', activo: false },
-  { id: 19, legajo: '0232', nombre: 'Juárez Facundo', telefono: '+54 387 488-7788', rol: 'Vendedor', sucursal: 'Casa Central', activo: true },
-  { id: 20, legajo: '0233', nombre: 'Herrera Antonella', telefono: '+54 387 533-2211', rol: 'Repositor', sucursal: 'Depósito Norte', activo: true },
-  { id: 21, legajo: '0234', nombre: 'Luna Maximiliano', telefono: '+54 387 699-0011', rol: 'Vendedor', sucursal: 'Sucursal Sur', activo: true },
-  { id: 22, legajo: '0235', nombre: 'Castro Julieta', telefono: '+54 387 344-8899', rol: 'Cajero', sucursal: 'Casa Central', activo: true },
-  { id: 23, legajo: '0236', nombre: 'Villalba Marcos', telefono: '+54 387 422-5544', rol: 'Supervisor', sucursal: 'Casa Central', activo: false },
-  { id: 24, legajo: '0237', nombre: 'Ponce Daiana', telefono: '+54 387 566-7788', rol: 'Vendedor', sucursal: 'Depósito Norte', activo: true },
-  { id: 25, legajo: '0238', nombre: 'Silva Cristian', telefono: '+54 387 677-1122', rol: 'Repositor', sucursal: 'Sucursal Sur', activo: true }
+  {
+    id: 1,
+    dni: '38412345',
+    legajo: '0214',
+    nombre: 'Daniel',
+    apellido: 'Pérez Ruiz',
+    email: 'daniel.perez@ferreteria.com',
+    telefono: '+54 387 320-3022',
+    id_rol: 5,
+    id_sucursal: 1,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 2,
+    dni: '40123987',
+    legajo: '0215',
+    nombre: 'Santiago',
+    apellido: 'Alvarez',
+    email: 'santiago.alvarez@ferreteria.com',
+    telefono: '+54 387 570-3132',
+    id_rol: 4,
+    id_sucursal: 1,
+    hora_entrada: '08:00',
+    hora_salida: '16:00',
+    activo: false,
+    detalleBaja: 'Renuncia voluntaria presentada por motivos personales.'
+  },
+  {
+    id: 3,
+    dni: '39222333',
+    legajo: '0216',
+    nombre: 'Alan',
+    apellido: 'Maita',
+    email: 'alan.maita@ferreteria.com',
+    telefono: '+54 387 320-3451',
+    id_rol: 5,
+    id_sucursal: 1,
+    hora_entrada: '09:00',
+    hora_salida: '18:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 4,
+    dni: '37888999',
+    legajo: '0217',
+    nombre: 'Valeria',
+    apellido: 'Giménez',
+    email: 'valeria.gimenez@ferreteria.com',
+    telefono: '+54 387 412-9988',
+    id_rol: 3,
+    id_sucursal: 3,
+    hora_entrada: '07:00',
+    hora_salida: '16:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 5,
+    dni: '41555666',
+    legajo: '0218',
+    nombre: 'Lucas',
+    apellido: 'Rojas Carrizo',
+    email: 'lucas.rojas@ferreteria.com',
+    telefono: '+54 387 655-4433',
+    id_rol: 6,
+    id_sucursal: 2,
+    hora_entrada: '08:30',
+    hora_salida: '17:30',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 6,
+    dni: '39444111',
+    legajo: '0219',
+    nombre: 'Sofía',
+    apellido: 'Benítez',
+    email: 'sofia.benitez@ferreteria.com',
+    telefono: '+54 387 221-1199',
+    id_rol: 4,
+    id_sucursal: 2,
+    hora_entrada: '12:00',
+    hora_salida: '20:00',
+    activo: false,
+    detalleBaja: 'Baja temporal por reestructuración de turnos en sucursal.'
+  },
+  {
+    id: 7,
+    dni: '35111222',
+    legajo: '0220',
+    nombre: 'Martín',
+    apellido: 'Gómez',
+    email: 'martin.gomez@ferreteria.com',
+    telefono: '+54 387 499-1234',
+    id_rol: 1,
+    id_sucursal: 1,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 8,
+    dni: '36777888',
+    legajo: '0221',
+    nombre: 'Lucía',
+    apellido: 'Torres',
+    email: 'lucia.torres@ferreteria.com',
+    telefono: '+54 387 611-5678',
+    id_rol: 2,
+    id_sucursal: 2,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 9,
+    dni: '42333000',
+    legajo: '0222',
+    nombre: 'Carlos',
+    apellido: 'Navarro',
+    email: 'carlos.navarro@ferreteria.com',
+    telefono: '+54 387 733-9876',
+    id_rol: 6,
+    id_sucursal: 3,
+    hora_entrada: '07:00',
+    hora_salida: '16:00',
+    activo: false,
+    detalleBaja: 'Inasistencias injustificadas reiteradas.'
+  },
+  {
+    id: 10,
+    dni: '40999111',
+    legajo: '0223',
+    nombre: 'Yamila',
+    apellido: 'Morales',
+    email: 'yamila.morales@ferreteria.com',
+    telefono: '+54 387 522-4321',
+    id_rol: 5,
+    id_sucursal: 2,
+    hora_entrada: '09:00',
+    hora_salida: '18:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 11,
+    dni: '38888222',
+    legajo: '0224',
+    nombre: 'Rodrigo',
+    apellido: 'Paz',
+    email: 'rodrigo.paz@ferreteria.com',
+    telefono: '+54 387 411-8877',
+    id_rol: 5,
+    id_sucursal: 1,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 12,
+    dni: '41222444',
+    legajo: '0225',
+    nombre: 'Florencia',
+    apellido: 'Soria',
+    email: 'florencia.soria@ferreteria.com',
+    telefono: '+54 387 399-2233',
+    id_rol: 4,
+    id_sucursal: 2,
+    hora_entrada: '08:00',
+    hora_salida: '16:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 13,
+    dni: '39555333',
+    legajo: '0226',
+    nombre: 'Esteban',
+    apellido: 'Vargas',
+    email: 'esteban.vargas@ferreteria.com',
+    telefono: '+54 387 688-4455',
+    id_rol: 6,
+    id_sucursal: 3,
+    hora_entrada: '07:00',
+    hora_salida: '16:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 14,
+    dni: '37666444',
+    legajo: '0227',
+    nombre: 'Camila',
+    apellido: 'Medina',
+    email: 'camila.medina@ferreteria.com',
+    telefono: '+54 387 500-1122',
+    id_rol: 7,
+    id_sucursal: 1,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: false,
+    detalleBaja: 'Licencia sin goce de sueldo prolongada.'
+  },
+  {
+    id: 15,
+    dni: '40333555',
+    legajo: '0228',
+    nombre: 'Gonzalo',
+    apellido: 'Rios',
+    email: 'gonzalo.rios@ferreteria.com',
+    telefono: '+54 387 311-6677',
+    id_rol: 5,
+    id_sucursal: 2,
+    hora_entrada: '09:00',
+    hora_salida: '18:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 16,
+    dni: '36444777',
+    legajo: '0229',
+    nombre: 'Natalia',
+    apellido: 'Flores',
+    email: 'natalia.flores@ferreteria.com',
+    telefono: '+54 387 455-9900',
+    id_rol: 2,
+    id_sucursal: 3,
+    hora_entrada: '07:00',
+    hora_salida: '16:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 17,
+    dni: '38999000',
+    legajo: '0230',
+    nombre: 'Hernán',
+    apellido: 'Acosta',
+    email: 'hernan.acosta@ferreteria.com',
+    telefono: '+54 387 622-3344',
+    id_rol: 4,
+    id_sucursal: 1,
+    hora_entrada: '08:00',
+    hora_salida: '16:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 18,
+    dni: '39111888',
+    legajo: '0231',
+    nombre: 'Romina',
+    apellido: 'Díaz',
+    email: 'romina.diaz@ferreteria.com',
+    telefono: '+54 387 377-5566',
+    id_rol: 3,
+    id_sucursal: 2,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: false,
+    detalleBaja: 'Finalización de contrato temporal.'
+  },
+  {
+    id: 19,
+    dni: '41777222',
+    legajo: '0232',
+    nombre: 'Facundo',
+    apellido: 'Juárez',
+    email: 'facundo.juarez@ferreteria.com',
+    telefono: '+54 387 488-7788',
+    id_rol: 5,
+    id_sucursal: 1,
+    hora_entrada: '09:00',
+    hora_salida: '18:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 20,
+    dni: '42888333',
+    legajo: '0233',
+    nombre: 'Antonella',
+    apellido: 'Herrera',
+    email: 'antonella.herrera@ferreteria.com',
+    telefono: '+54 387 533-2211',
+    id_rol: 6,
+    id_sucursal: 3,
+    hora_entrada: '07:00',
+    hora_salida: '16:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 21,
+    dni: '40666999',
+    legajo: '0234',
+    nombre: 'Maximiliano',
+    apellido: 'Luna',
+    email: 'maximiliano.luna@ferreteria.com',
+    telefono: '+54 387 699-0011',
+    id_rol: 5,
+    id_sucursal: 2,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 22,
+    dni: '38222777',
+    legajo: '0235',
+    nombre: 'Julieta',
+    apellido: 'Castro',
+    email: 'julieta.castro@ferreteria.com',
+    telefono: '+54 387 344-8899',
+    id_rol: 4,
+    id_sucursal: 1,
+    hora_entrada: '12:00',
+    hora_salida: '20:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 23,
+    dni: '36111555',
+    legajo: '0236',
+    nombre: 'Marcos',
+    apellido: 'Villalba',
+    email: 'marcos.villalba@ferreteria.com',
+    telefono: '+54 387 422-5544',
+    id_rol: 2,
+    id_sucursal: 1,
+    hora_entrada: '08:00',
+    hora_salida: '17:00',
+    activo: false,
+    detalleBaja: 'Desvinculación por motivos disciplinarios.'
+  },
+  {
+    id: 24,
+    dni: '41999444',
+    legajo: '0237',
+    nombre: 'Daiana',
+    apellido: 'Ponce',
+    email: 'daiana.ponce@ferreteria.com',
+    telefono: '+54 387 566-7788',
+    id_rol: 5,
+    id_sucursal: 3,
+    hora_entrada: '07:00',
+    hora_salida: '16:00',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    id: 25,
+    dni: '42000111',
+    legajo: '0238',
+    nombre: 'Cristian',
+    apellido: 'Silva',
+    email: 'cristian.silva@ferreteria.com',
+    telefono: '+54 387 677-1122',
+    id_rol: 6,
+    id_sucursal: 2,
+    hora_entrada: '08:30',
+    hora_salida: '17:30',
+    activo: true,
+    detalleBaja: ''
+  }
 ];
 
 export const proveedores = [
@@ -89,18 +455,17 @@ export const metodosPago = [
     { id: 4, nombre: 'Cuenta Corriente' }
 ];
 
-// Opciones estáticas compartidas para Marcas y Unidades
 export const marcasOpciones = [
-    'Genérica', 
-    'Cortines', 
-    'Weber', 
-    'Holcim', 
-    'Andina', 
-    'Cacique', 
-    'Sika', 
-    'Ferrum', 
-    'FV', 
-    'Eternit'
+    'Genérica',    // 1
+    'Cortines',    // 2
+    'Weber',       // 3
+    'Holcim',      // 4
+    'Andina',      // 5
+    'Cacique',     // 6
+    'Sika',        // 7
+    'Ferrum',      // 8
+    'FV',          // 9
+    'Eternit'      // 10
 ];
 
 export const unidadesOpciones = [
@@ -136,9 +501,11 @@ export const productos = [
     idCategoria: 1,
     idMarca: 1, // Genérica
     idUnidad: 4, // m²
+    idSucursal: 1, // Casa Central
     nombre: 'Porcellanato 60x60 Mármol Blanco',
     precioUnidad: 37050,
-    descripcion: 'Porcellanato brillante de alto tránsito'
+    descripcion: 'Porcellanato brillante de alto tránsito',
+    activo: true
   },
   {
     id: 102,
@@ -146,39 +513,47 @@ export const productos = [
     idCategoria: 1,
     idMarca: 2, // Cortines
     idUnidad: 4,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Cerámica 45x45 Cortines Hueso',
     precioUnidad: 18460,
-    descripcion: 'Cerámica esmaltada para pisos interiores'
+    descripcion: 'Cerámica esmaltada para pisos interiores',
+    activo: true
   },
   {
     id: 103,
     codigo: 'REV-3060-GRIS',
     idCategoria: 1,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 4,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Revestimiento Pared 30x60 Gris',
     precioUnidad: 24570,
-    descripcion: 'Cerámica texturada para paredes'
+    descripcion: 'Cerámica texturada para paredes',
+    activo: true
   },
   {
     id: 104,
     codigo: 'POR-20120-MAD',
     idCategoria: 1,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 4,
+    idSucursal: 1, // Casa Central
     nombre: 'Porcellanato 20x120 Símil Madera',
     precioUnidad: 41600,
-    descripcion: 'Placa símil madera rectificada'
+    descripcion: 'Placa símil madera rectificada',
+    activo: true
   },
   {
     id: 105,
     codigo: 'ZOC-1045',
     idCategoria: 1,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Zócalo Cerámico 10x45',
     precioUnidad: 4030,
-    descripcion: 'Zócalo coordinado'
+    descripcion: 'Zócalo coordinado',
+    activo: false // Inactivo de prueba
   },
   {
     id: 106,
@@ -186,49 +561,59 @@ export const productos = [
     idCategoria: 1,
     idMarca: 3, // Weber
     idUnidad: 2, // Bolsa
+    idSucursal: 3, // Depósito Norte
     nombre: 'Pegamento Weber Porcellanato 25kg',
     precioUnidad: 16250,
-    descripcion: 'Adhesivo impermeable flexible'
+    descripcion: 'Adhesivo impermeable flexible',
+    activo: true
   },
   {
     id: 107,
     codigo: 'PAS-IMP-1KG',
     idCategoria: 1,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 2,
+    idSucursal: 1, // Casa Central
     nombre: 'Pastina Impermeable 1kg Blanco',
     precioUnidad: 3640,
-    descripcion: 'Pastina antihongo'
+    descripcion: 'Pastina antihongo',
+    activo: true
   },
   {
     id: 108,
     codigo: 'LIS-ALU-25',
     idCategoria: 1,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Listón Decorativo Aluminio 2.5m',
     precioUnidad: 11570,
-    descripcion: 'Perfil terminación canto'
+    descripcion: 'Perfil terminación canto',
+    activo: true
   },
   {
     id: 109,
     codigo: 'MOS-VEN-3030',
     idCategoria: 1,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 4,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Mosaico Veneciano Malla 30x30',
     precioUnidad: 12350,
-    descripcion: 'Venecitas para piscinas y baños'
+    descripcion: 'Venecitas para piscinas y baños',
+    activo: true
   },
   {
     id: 110,
     codigo: 'GUA-CUR-10',
     idCategoria: 1,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 1, // Casa Central
     nombre: 'Guardacanto Curvo Aluminio 10mm',
     precioUnidad: 9620,
-    descripcion: 'Protector de esquinas'
+    descripcion: 'Protector de esquinas',
+    activo: true
   },
 
   // --- Categoría 2: Hierros y Aceros ---
@@ -236,101 +621,121 @@ export const productos = [
     id: 201,
     codigo: 'HIE-RET-6',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Hierro Retorcido 6mm x 12m',
     precioUnidad: 7020,
-    descripcion: 'Hierro ADN retorcido para construcción'
+    descripcion: 'Hierro ADN retorcido para construcción',
+    activo: true
   },
   {
     id: 202,
     codigo: 'HIE-RET-8',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Hierro Retorcido 8mm x 12m',
     precioUnidad: 11050,
-    descripcion: 'Hierro ADN retorcido para construcción'
+    descripcion: 'Hierro ADN retorcido para construcción',
+    activo: true
   },
   {
     id: 203,
     codigo: 'HIE-RET-10',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Hierro Retorcido 10mm x 12m',
     precioUnidad: 17160,
-    descripcion: 'Hierro ADN retorcido para construcción'
+    descripcion: 'Hierro ADN retorcido para construcción',
+    activo: true
   },
   {
     id: 204,
     codigo: 'HIE-RET-12',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Hierro Retorcido 12mm x 12m',
     precioUnidad: 24570,
-    descripcion: 'Hierro ADN retorcido para construcción'
+    descripcion: 'Hierro ADN retorcido para construcción',
+    activo: true
   },
   {
     id: 205,
     codigo: 'MAL-CIM-42',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Malla Cima 15x15 4.2mm (2x3m)',
     precioUnidad: 31850,
-    descripcion: 'Malla acanalada electrosoldada'
+    descripcion: 'Malla acanalada electrosoldada',
+    activo: true
   },
   {
     id: 206,
     codigo: 'MAL-CIM-55',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Malla Cima 15x15 5.5mm (2x3m)',
     precioUnidad: 46800,
-    descripcion: 'Malla acanalada electrosoldada'
+    descripcion: 'Malla acanalada electrosoldada',
+    activo: true
   },
   {
     id: 207,
     codigo: 'ALA-REC-16',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 2,
+    idSucursal: 1, // Casa Central
     nombre: 'Alambre Recocido N° 16 x 1kg',
     precioUnidad: 4940,
-    descripcion: 'Alambre para atar hierro'
+    descripcion: 'Alambre para atar hierro',
+    activo: false // Inactivo de prueba
   },
   {
     id: 208,
     codigo: 'PER-C-100',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Perfil C 100x50x2mm x 6m',
     precioUnidad: 54600,
-    descripcion: 'Perfil estructural abierto'
+    descripcion: 'Perfil estructural abierto',
+    activo: true
   },
   {
     id: 209,
     codigo: 'PER-C-120',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Perfil C 120x50x2mm x 6m',
     precioUnidad: 64350,
-    descripcion: 'Perfil estructural abierto'
+    descripcion: 'Perfil estructural abierto',
+    activo: true
   },
   {
     id: 210,
     codigo: 'CHA-NEG-18',
     idCategoria: 2,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Chapa Negra 18 (1x2m)',
     precioUnidad: 40300,
-    descripcion: 'Chapa laminada en caliente'
+    descripcion: 'Chapa laminada en caliente',
+    activo: true
   },
 
   // --- Categoría 3: Cementos, Cales y Áridos ---
@@ -340,9 +745,11 @@ export const productos = [
     idCategoria: 3,
     idMarca: 4, // Holcim
     idUnidad: 2,
+    idSucursal: 1, // Casa Central
     nombre: 'Cemento en bolsa x 25kg Holcim',
     precioUnidad: 19500,
-    descripcion: 'Cemento Portland normal'
+    descripcion: 'Cemento Portland normal',
+    activo: true
   },
   {
     id: 302,
@@ -350,9 +757,11 @@ export const productos = [
     idCategoria: 3,
     idMarca: 5, // Andina
     idUnidad: 2,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Cal viva en bolsa x 25kg Andina',
     precioUnidad: 15600,
-    descripcion: 'Cal para construcción'
+    descripcion: 'Cal para construcción',
+    activo: true
   },
   {
     id: 303,
@@ -360,59 +769,71 @@ export const productos = [
     idCategoria: 3,
     idMarca: 6, // Cacique
     idUnidad: 2,
+    idSucursal: 1, // Casa Central
     nombre: 'Cal apagada en bolsa x 30kg Cacique',
     precioUnidad: 15600,
-    descripcion: 'Cal hidratada en bolsa'
+    descripcion: 'Cal hidratada en bolsa',
+    activo: true
   },
   {
     id: 304,
     codigo: 'ARE-FIN-25',
     idCategoria: 3,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 2,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Arena fina en bolsa x 25kg Fara',
     precioUnidad: 7800,
-    descripcion: 'Arena zarandeada embolsada'
+    descripcion: 'Arena zarandeada embolsada',
+    activo: false // Inactivo de prueba
   },
   {
     id: 305,
     codigo: 'CAN-ROD-25',
     idCategoria: 3,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 2,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Canto rodado en bolsa x 25kg',
     precioUnidad: 8450,
-    descripcion: 'Árido decorativo'
+    descripcion: 'Árido decorativo',
+    activo: true
   },
   {
     id: 306,
     codigo: 'CEM-PLA-40',
     idCategoria: 3,
-    idMarca: 4,
+    idMarca: 4, // Holcim
     idUnidad: 2,
+    idSucursal: 1, // Casa Central
     nombre: 'Cemento de albañilería Plasticor 40kg',
     precioUnidad: 17940,
-    descripcion: 'Mortero premezclado'
+    descripcion: 'Mortero premezclado',
+    activo: true
   },
   {
     id: 307,
     codigo: 'CAS-MOL-1M3',
     idCategoria: 3,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 5, // Bolsón / m³
+    idSucursal: 3, // Depósito Norte
     nombre: 'Cascote molido x bolson 1m³',
     precioUnidad: 36400,
-    descripcion: 'Material para relleno y contrapisos'
+    descripcion: 'Material para relleno y contrapisos',
+    activo: true
   },
   {
     id: 308,
     codigo: 'ARE-GRU-1M3',
     idCategoria: 3,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 5,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Arena gruesa x bolsón 1m³',
     precioUnidad: 44200,
-    descripcion: 'Árido grueso a granel en bolsón'
+    descripcion: 'Árido grueso a granel en bolsón',
+    activo: true
   },
   {
     id: 309,
@@ -420,19 +841,23 @@ export const productos = [
     idCategoria: 3,
     idMarca: 7, // Sika
     idUnidad: 1,
+    idSucursal: 1, // Casa Central
     nombre: 'Acelerante de fragüe Sika 5L',
     precioUnidad: 24050,
-    descripcion: 'Aditivo para hormigón y morteros'
+    descripcion: 'Aditivo para hormigón y morteros',
+    activo: true
   },
   {
     id: 310,
     codigo: 'HID-SIK-4K',
     idCategoria: 3,
-    idMarca: 7,
+    idMarca: 7, // Sika
     idUnidad: 1,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Hidrófugo Pasta Sika 1 x 4kg',
     precioUnidad: 11960,
-    descripcion: 'Aditivo impermeabilizante'
+    descripcion: 'Aditivo impermeabilizante',
+    activo: true
   },
 
   // --- Categoría 4: Sanitarios y Plomería ---
@@ -440,41 +865,49 @@ export const productos = [
     id: 701,
     codigo: 'CAN-PVC-110',
     idCategoria: 4,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Caño PVC 110mm x 4m para Desagüe',
     precioUnidad: 21450,
-    descripcion: 'Cañería cloacal y pluvial'
+    descripcion: 'Cañería cloacal y pluvial',
+    activo: true
   },
   {
     id: 702,
     codigo: 'CAN-TER-20',
     idCategoria: 4,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 1, // Casa Central
     nombre: 'Caño Termofusión 20mm x 4m Agua',
     precioUnidad: 8060,
-    descripcion: 'Conducción de agua fría y caliente'
+    descripcion: 'Conducción de agua fría y caliente',
+    activo: true
   },
   {
     id: 703,
     codigo: 'CAN-TER-25',
     idCategoria: 4,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 3,
+    idSucursal: 1, // Casa Central
     nombre: 'Caño Termofusión 25mm x 4m Agua',
     precioUnidad: 11570,
-    descripcion: 'Conducción de agua fría y caliente'
+    descripcion: 'Conducción de agua fría y caliente',
+    activo: true
   },
   {
     id: 704,
     codigo: 'COD-PVC-110',
     idCategoria: 4,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Codo PVC 110mm x 90° con Acometida',
     precioUnidad: 4420,
-    descripcion: 'Accesorio desagüe cloacal'
+    descripcion: 'Accesorio desagüe cloacal',
+    activo: true
   },
   {
     id: 705,
@@ -482,19 +915,23 @@ export const productos = [
     idCategoria: 4,
     idMarca: 8, // Ferrum
     idUnidad: 1,
+    idSucursal: 1, // Casa Central
     nombre: 'Juego Inodoro y Depósito Ferrum Bari',
     precioUnidad: 240500,
-    descripcion: 'Loza sanitaria completa'
+    descripcion: 'Loza sanitaria completa',
+    activo: true
   },
   {
     id: 706,
     codigo: 'BID-FER-BAR',
     idCategoria: 4,
-    idMarca: 8,
+    idMarca: 8, // Ferrum
     idUnidad: 1,
+    idSucursal: 1, // Casa Central
     nombre: 'Bidet Ferrum Bari 1 Agujero',
     precioUnidad: 119600,
-    descripcion: 'Loza sanitaria bidet'
+    descripcion: 'Loza sanitaria bidet',
+    activo: true
   },
   {
     id: 707,
@@ -502,29 +939,35 @@ export const productos = [
     idCategoria: 4,
     idMarca: 9, // FV
     idUnidad: 1,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Grifería Monocomando Lavatorio FV',
     precioUnidad: 83200,
-    descripcion: 'Grifería cromada para baño'
+    descripcion: 'Grifería cromada para baño',
+    activo: true
   },
   {
     id: 708,
     codigo: 'SIF-DOB-COC',
     idCategoria: 4,
-    idMarca: 1,
+    idMarca: 1, // Genérica
     idUnidad: 1,
+    idSucursal: 2, // Sucursal Sur
     nombre: 'Sifón Doble para Pileta de Cocina',
     precioUnidad: 11310,
-    descripcion: 'Desagüe flexible para bacha doble'
+    descripcion: 'Desagüe flexible para bacha doble',
+    activo: false // Inactivo de prueba
   },
   {
     id: 709,
     codigo: 'VAL-DES-INO',
     idCategoria: 4,
-    idMarca: 9,
+    idMarca: 9, // FV
     idUnidad: 1,
+    idSucursal: 1, // Casa Central
     nombre: 'Válvula de Descarga para Inodoro FV',
     precioUnidad: 53300,
-    descripcion: 'Mecanismo de descarga'
+    descripcion: 'Mecanismo de descarga',
+    activo: true
   },
   {
     id: 710,
@@ -532,292 +975,386 @@ export const productos = [
     idCategoria: 4,
     idMarca: 10, // Eternit
     idUnidad: 1,
+    idSucursal: 3, // Depósito Norte
     nombre: 'Tanque de Agua 1000L Tricapa Eternit',
     precioUnidad: 253500,
-    descripcion: 'Tanque reserva domiciliaria'
+    descripcion: 'Tanque reserva domiciliaria',
+    activo: true
   }
 ];
 
-export const pedidos = [
+export const cajas = [
+  // Cajas de Casa Central (ID_Sucursal: 1)
+  { id_cajas: 1, id_sucursales: 1, estado: 'Activo' },
+  { id_cajas: 2, id_sucursales: 1, estado: 'Activo' },
+  { id_cajas: 3, id_sucursales: 1, estado: 'Inactivo' },
+
+  // Cajas de Sucursal Sur (ID_Sucursal: 2)
+  { id_cajas: 4, id_sucursales: 2, estado: 'Activo' },
+  { id_cajas: 5, id_sucursales: 2, estado: 'Activo' },
+  { id_cajas: 6, id_sucursales: 2, estado: 'Inactivo' },
+
+  // Cajas de Depósito Norte (ID_Sucursal: 3)
+  { id_cajas: 7, id_sucursales: 3, estado: 'Activo' },
+  { id_cajas: 8, id_sucursales: 3, estado: 'Inactivo' },
+  { id_cajas: 9, id_sucursales: 3, estado: 'Inactivo' }
+];
+
+export const compras = [
   {
-    id: 1,
+    id_compras: 1,
+    id_cajas: 1,           // Caja 1 (Casa Central)
+    id_sucursal: 1,        // Casa Central
     numeroPedido: '570',
     numeroProveedor: '003',
     proveedor: 'Áridos Norte S.A',
     telefono: '+54 388 754-7777',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-11-05',
+    fecha_compra: '2026-11-05 10:00:00',
+    monto_compra: 39000.00, // 5 x 7800
     detalles: [
       { codigo: 'ARE-25-FAR', producto: 'Arena fina en bolsa x 25kg Fara', precioUnidad: 7800, categoria: 'Áridos', cantidad: 5 }
     ]
   },
   {
-    id: 2,
+    id_compras: 2,
+    id_cajas: 1,
+    id_sucursal: 1,
     numeroPedido: '569',
     numeroProveedor: '007',
     proveedor: 'HierroNor',
     telefono: '+54 388 385-2932',
     destino: 'Casa Central',
     estado: 'Entregado',
-    fecha: '2026-11-04',
+    fecha_compra: '2026-11-04 11:30:00',
+    monto_compra: 110500.00, // 10 x 11050
     detalles: [
       { codigo: 'HIE-RET-8', producto: 'Hierro Retorcido 8mm x 12m', precioUnidad: 11050, categoria: 'Hierros y Aceros', cantidad: 10 }
     ]
   },
   {
-    id: 3,
+    id_compras: 3,
+    id_cajas: 7,           // Caja 7 (Depósito Norte)
+    id_sucursal: 3,        // Depósito Norte
     numeroPedido: '568',
     numeroProveedor: '002',
     proveedor: 'Bulonera City',
     telefono: '+54 388 235-5632',
-    destino: 'Sucursal - Zona Norte',
+    destino: 'Depósito Norte',
     estado: 'Entregado',
-    fecha: '2026-11-02',
+    fecha_compra: '2026-11-02 09:15:00',
+    monto_compra: 45000.00, // Monto genérico estimado / calculado
     detalles: []
   },
   {
-    id: 4,
+    id_compras: 4,
+    id_cajas: 2,
+    id_sucursal: 1,
     numeroPedido: '567',
     numeroProveedor: '012',
     proveedor: 'Cerámicos Del Norte',
     telefono: '+54 387 421-9988',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-11-06',
+    fecha_compra: '2026-11-06 15:45:00',
+    monto_compra: 555750.00, // 15 x 37050
     detalles: [
       { codigo: 'CER-6060-MB', producto: 'Porcellanato 60x60 Mármol Blanco', precioUnidad: 37050, categoria: 'Cerámicos y Revestimientos', cantidad: 15 }
     ]
   },
   {
-    id: 5,
+    id_compras: 5,
+    id_cajas: 4,           // Caja 4 (Sucursal Sur)
+    id_sucursal: 2,        // Sucursal Sur
     numeroPedido: '566',
     numeroProveedor: '005',
     proveedor: 'Cementos del Valle',
     telefono: '+54 388 456-1122',
-    destino: 'Sucursal - Sur',
+    destino: 'Sucursal Sur',
     estado: 'Entregado',
-    fecha: '2026-11-01',
+    fecha_compra: '2026-11-01 08:30:00',
+    monto_compra: 92000.00,
     detalles: []
   },
   {
-    id: 6,
+    id_compras: 6,
+    id_cajas: 3,
+    id_sucursal: 1,
     numeroPedido: '565',
     numeroProveedor: '008',
     proveedor: 'Pinturerías Integral',
     telefono: '+54 387 499-1020',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-11-07',
+    fecha_compra: '2026-11-07 14:00:00',
+    monto_compra: 64000.00,
     detalles: []
   },
   {
-    id: 7,
+    id_compras: 7,
+    id_cajas: 8,
+    id_sucursal: 3,
     numeroPedido: '564',
     numeroProveedor: '003',
     proveedor: 'Áridos Norte S.A',
     telefono: '+54 388 754-7777',
-    destino: 'Sucursal - Zona Norte',
+    destino: 'Depósito Norte',
     estado: 'Entregado',
-    fecha: '2026-10-30',
+    fecha_compra: '2026-10-30 16:20:00',
+    monto_compra: 120000.00,
     detalles: []
   },
   {
-    id: 8,
+    id_compras: 8,
+    id_cajas: 1,
+    id_sucursal: 1,
     numeroPedido: '563',
     numeroProveedor: '004',
     proveedor: 'Sanitarios del Litoral',
     telefono: '+54 387 512-3344',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-11-06',
+    fecha_compra: '2026-11-06 11:10:00',
+    monto_compra: 78000.00,
     detalles: []
   },
   {
-    id: 9,
+    id_compras: 9,
+    id_cajas: 5,
+    id_sucursal: 2,
     numeroPedido: '562',
     numeroProveedor: '007',
     proveedor: 'HierroNor',
     telefono: '+54 388 385-2932',
-    destino: 'Sucursal - Sur',
+    destino: 'Sucursal Sur',
     estado: 'Entregado',
-    fecha: '2026-10-28',
+    fecha_compra: '2026-10-28 10:00:00',
+    monto_compra: 210000.00,
     detalles: []
   },
   {
-    id: 10,
+    id_compras: 10,
+    id_cajas: 2,
+    id_sucursal: 1,
     numeroPedido: '561',
     numeroProveedor: '009',
     proveedor: 'Distribuidora Fara',
     telefono: '+54 388 600-9988',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-11-05',
+    fecha_compra: '2026-11-05 17:00:00',
+    monto_compra: 54000.00,
     detalles: []
   },
   {
-    id: 11,
+    id_compras: 11,
+    id_cajas: 1,
+    id_sucursal: 1,
     numeroPedido: '560',
     numeroProveedor: '002',
     proveedor: 'Bulonera City',
     telefono: '+54 388 235-5632',
     destino: 'Casa Central',
     estado: 'Entregado',
-    fecha: '2026-10-25',
+    fecha_compra: '2026-10-25 12:30:00',
+    monto_compra: 33000.00,
     detalles: []
   },
   {
-    id: 12,
+    id_compras: 12,
+    id_cajas: 7,
+    id_sucursal: 3,
     numeroPedido: '559',
     numeroProveedor: '012',
     proveedor: 'Cerámicos Del Norte',
     telefono: '+54 387 421-9988',
-    destino: 'Sucursal - Zona Norte',
+    destino: 'Depósito Norte',
     estado: 'En espera',
-    fecha: '2026-11-03',
+    fecha_compra: '2026-11-03 09:45:00',
+    monto_compra: 185000.00,
     detalles: []
   },
   {
-    id: 13,
+    id_compras: 13,
+    id_cajas: 3,
+    id_sucursal: 1,
     numeroPedido: '558',
     numeroProveedor: '005',
     proveedor: 'Cementos del Valle',
     telefono: '+54 388 456-1122',
     destino: 'Casa Central',
     estado: 'Entregado',
-    fecha: '2026-10-24',
+    fecha_compra: '2026-10-24 14:10:00',
+    monto_compra: 95000.00,
     detalles: []
   },
   {
-    id: 14,
+    id_compras: 14,
+    id_cajas: 1,
+    id_sucursal: 1,
     numeroPedido: '557',
     numeroProveedor: '003',
     proveedor: 'Áridos Norte S.A',
     telefono: '+54 388 754-7777',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-11-04',
+    fecha_compra: '2026-11-04 15:00:00',
+    monto_compra: 48000.00,
     detalles: []
   },
   {
-    id: 15,
+    id_compras: 15,
+    id_cajas: 4,
+    id_sucursal: 2,
     numeroPedido: '556',
     numeroProveedor: '008',
     proveedor: 'Pinturerías Integral',
     telefono: '+54 387 499-1020',
-    destino: 'Sucursal - Sur',
+    destino: 'Sucursal Sur',
     estado: 'Entregado',
-    fecha: '2026-10-20',
+    fecha_compra: '2026-10-20 11:00:00',
+    monto_compra: 67000.00,
     detalles: []
   },
   {
-    id: 16,
+    id_compras: 16,
+    id_cajas: 2,
+    id_sucursal: 1,
     numeroPedido: '555',
     numeroProveedor: '007',
     proveedor: 'HierroNor',
     telefono: '+54 388 385-2932',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-11-02',
+    fecha_compra: '2026-11-02 16:30:00',
+    monto_compra: 145000.00,
     detalles: []
   },
   {
-    id: 17,
+    id_compras: 17,
+    id_cajas: 1,
+    id_sucursal: 1,
     numeroPedido: '554',
     numeroProveedor: '004',
     proveedor: 'Sanitarios del Litoral',
     telefono: '+54 387 512-3344',
     destino: 'Casa Central',
     estado: 'Entregado',
-    fecha: '2026-10-18',
+    fecha_compra: '2026-10-18 10:15:00',
+    monto_compra: 83000.00,
     detalles: []
   },
   {
-    id: 18,
+    id_compras: 18,
+    id_cajas: 7,
+    id_sucursal: 3,
     numeroPedido: '553',
     numeroProveedor: '002',
     proveedor: 'Bulonera City',
     telefono: '+54 388 235-5632',
-    destino: 'Sucursal - Zona Norte',
+    destino: 'Depósito Norte',
     estado: 'En espera',
-    fecha: '2026-11-01',
+    fecha_compra: '2026-11-01 13:20:00',
+    monto_compra: 29000.00,
     detalles: []
   },
   {
-    id: 19,
+    id_compras: 19,
+    id_cajas: 3,
+    id_sucursal: 1,
     numeroPedido: '552',
     numeroProveedor: '005',
     proveedor: 'Cementos del Valle',
     telefono: '+54 388 456-1122',
     destino: 'Casa Central',
     estado: 'Entregado',
-    fecha: '2026-10-15',
+    fecha_compra: '2026-10-15 09:00:00',
+    monto_compra: 91000.00,
     detalles: []
   },
   {
-    id: 20,
+    id_compras: 20,
+    id_cajas: 2,
+    id_sucursal: 1,
     numeroPedido: '551',
     numeroProveedor: '012',
     proveedor: 'Cerámicos Del Norte',
     telefono: '+54 387 421-9988',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-10-31',
+    fecha_compra: '2026-10-31 15:10:00',
+    monto_compra: 230000.00,
     detalles: []
   },
   {
-    id: 21,
+    id_compras: 21,
+    id_cajas: 5,
+    id_sucursal: 2,
     numeroPedido: '550',
     numeroProveedor: '003',
     proveedor: 'Áridos Norte S.A',
     telefono: '+54 388 754-7777',
-    destino: 'Sucursal - Sur',
+    destino: 'Sucursal Sur',
     estado: 'Entregado',
-    fecha: '2026-10-12',
+    fecha_compra: '2026-10-12 10:45:00',
+    monto_compra: 75000.00,
     detalles: []
   },
   {
-    id: 22,
+    id_compras: 22,
+    id_cajas: 1,
+    id_sucursal: 1,
     numeroPedido: '549',
     numeroProveedor: '007',
     proveedor: 'HierroNor',
     telefono: '+54 388 385-2932',
     destino: 'Casa Central',
     estado: 'En espera',
-    fecha: '2026-10-29',
+    fecha_compra: '2026-10-29 14:30:00',
+    monto_compra: 160000.00,
     detalles: []
   },
   {
-    id: 23,
+    id_compras: 23,
+    id_cajas: 3,
+    id_sucursal: 1,
     numeroPedido: '548',
     numeroProveedor: '008',
     proveedor: 'Pinturerías Integral',
     telefono: '+54 387 499-1020',
     destino: 'Casa Central',
     estado: 'Entregado',
-    fecha: '2026-10-10',
+    fecha_compra: '2026-10-10 16:00:00',
+    monto_compra: 52000.00,
     detalles: []
   },
   {
-    id: 24,
+    id_compras: 24,
+    id_cajas: 7,
+    id_sucursal: 3,
     numeroPedido: '547',
     numeroProveedor: '002',
     proveedor: 'Bulonera City',
     telefono: '+54 388 235-5632',
-    destino: 'Sucursal - Zona Norte',
+    destino: 'Depósito Norte',
     estado: 'En espera',
-    fecha: '2026-10-27',
+    fecha_compra: '2026-10-27 11:20:00',
+    monto_compra: 41000.00,
     detalles: []
   },
   {
-    id: 25,
+    id_compras: 25,
+    id_cajas: 1,
+    id_sucursal: 1,
     numeroPedido: '546',
     numeroProveedor: '004',
     proveedor: 'Sanitarios del Litoral',
     telefono: '+54 387 512-3344',
     destino: 'Casa Central',
     estado: 'Entregado',
-    fecha: '2026-10-05',
+    fecha_compra: '2026-10-05 09:30:00',
+    monto_compra: 88000.00,
     detalles: []
   }
 ];

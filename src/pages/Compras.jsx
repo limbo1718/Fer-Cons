@@ -1,24 +1,37 @@
 import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconPhone, IconBox, IconEye, IconEdit, IconPower, IconCreditCard } from '@tabler/icons-react';
+import { IconPhone, IconBox, IconEye, IconEdit, IconPower, IconCreditCard, IconX } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
 import FilterTabs from '../components/common/FilterTabs.jsx';
+import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import OrderEditModal from '../components/common/OrderEditModal.jsx';
 import OrderCreateModal from '../components/common/OrderCreateModal.jsx';
 import { usePagination } from '../hooks/usePagination.js';
-import { pedidos as datosCompras, productos as catalogoGeneralProductos } from '../data/mock.js';
+import { compras as datosCompras, productos as catalogoGeneralProductos, cajas, sucursales } from '../data/mock.js';
 import '../styles/Compras.css';
 
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
+// Caja que realizó la compra y sucursal a la que pertenece esa caja
+const getCaja = (c) => cajas.find((x) => x.id_cajas === c.id_cajas);
+const getSucursal = (c) => {
+    const caja = getCaja(c);
+    return sucursales.find((s) => s.id === (caja ? caja.id_sucursales : c.id_sucursal));
+};
+
+const opcionesSucursales = sucursales.map((s) => ({ value: String(s.id), label: s.nombre }));
+
 export default function Compras() {
-    const [compras, setCompras] = useState(datosCompras);
+    const [compras, setCompras] = useState(
+        datosCompras.map((c) => ({ ...c, id: c.id_compras, fecha: c.fecha_compra.slice(0, 10) }))
+    );
     const [busqueda, setBusqueda] = useState('');
     const [tabActiva, setTabActiva] = useState('todos');
     const [fechaFiltro, setFechaFiltro] = useState('');
+    const [sucursalFiltro, setSucursalFiltro] = useState('');
     
     // Estado para el modal de detalle de la compra
     const [compraSeleccionada, setCompraSeleccionada] = useState(null);
@@ -46,7 +59,8 @@ export default function Compras() {
         { id: 'todos', label: 'Todos', count: totalCompras },
         { id: 'entregados', label: 'Entregados', count: entregadosCount },
         { id: 'en_espera', label: 'En espera', count: enEsperaCount },
-        { id: 'por_fecha', label: 'Por fecha' }
+        { id: 'por_fecha', label: 'Por fecha' },
+        { id: 'por_sucursal', label: 'Por sucursal' }
     ];
 
     // Lógica de Filtrado
@@ -58,6 +72,9 @@ export default function Compras() {
             cumpleTab = c.estado === 'En espera';
         } else if (tabActiva === 'por_fecha') {
             cumpleTab = fechaFiltro ? c.fecha === fechaFiltro : true;
+        } else if (tabActiva === 'por_sucursal') {
+            const suc = getSucursal(c);
+            cumpleTab = sucursalFiltro ? String(suc ? suc.id : '') === sucursalFiltro : true;
         }
 
         const query = busqueda.toLowerCase().trim();
@@ -74,7 +91,7 @@ export default function Compras() {
     const { datosVisibles, tieneMas, cargarMas } = usePagination(
         comprasFiltradas, 
         10, 
-        [busqueda, tabActiva, fechaFiltro]
+        [busqueda, tabActiva, fechaFiltro, sucursalFiltro]
     );
 
     const abrirDetalle = (compra) => {
@@ -156,6 +173,10 @@ export default function Compras() {
         });
     };
 
+    // Caja y sucursal de la compra abierta en el detalle
+    const cajaDetalle = compraSeleccionada ? getCaja(compraSeleccionada) : null;
+    const sucursalDetalle = compraSeleccionada ? getSucursal(compraSeleccionada) : null;
+
     return (
         <div className="contenedor-compras-page">
             <Encabezado 
@@ -177,6 +198,7 @@ export default function Compras() {
                 onTabChange={(id) => {
                     setTabActiva(id);
                     if (id !== 'por_fecha') setFechaFiltro('');
+                    if (id !== 'por_sucursal') setSucursalFiltro('');
                 }} 
             />
 
@@ -191,6 +213,16 @@ export default function Compras() {
                         className="input-fecha-filtro"
                     />
                 </div>
+            )}
+
+            {/* Selector de sucursal condicional */}
+            {tabActiva === 'por_sucursal' && (
+                <FilterSelect
+                    value={sucursalFiltro}
+                    onChange={setSucursalFiltro}
+                    options={opcionesSucursales}
+                    placeholder="Seleccioná una sucursal..."
+                />
             )}
 
             {/* Listado de Tarjetas de Compras */}
@@ -280,64 +312,89 @@ export default function Compras() {
             {compraSeleccionada && (
                 <div className="modal-overlay-detalle">
                     <div className="modal-detalle-contenido">
-                        <button className="boton-volver-modal" onClick={cerrarDetalle}>
-                            ← Volver
-                        </button>
-                        
-                        <div className="modal-proveedor-header">
-                            <h3>Proveedor</h3>
-                            <div className="proveedor-caja-seleccionada">
-                                {compraSeleccionada.proveedor}
+                        <div className="detalle-header">
+                            <div>
+                                <h2>Detalle de Compra N.º {compraSeleccionada.numeroPedido}</h2>
+                                <span className="detalle-subtitle">
+                                    {compraSeleccionada.fecha} · {compraSeleccionada.estado}
+                                </span>
                             </div>
+                            <button type="button" className="detalle-close-btn" onClick={cerrarDetalle} aria-label="Cerrar detalle">
+                                <IconX size={20} />
+                            </button>
                         </div>
 
-                        <div className="lista-productos-detalle">
-                            {compraSeleccionada.detalles && compraSeleccionada.detalles.length > 0 ? (
-                                compraSeleccionada.detalles.map((item, index) => (
-                                    <div key={index} className="producto-item-fila">
-                                        <div className="icono-producto-caja">
-                                            <IconBox size={20} />
+                        <div className="detalle-body">
+                            <div className="detalle-grid">
+                                <div className="detalle-dato detalle-dato-full">
+                                    <span className="detalle-label">Proveedor</span>
+                                    <span className="detalle-valor">{compraSeleccionada.proveedor}</span>
+                                </div>
+                                <div className="detalle-dato">
+                                    <span className="detalle-label">Sucursal</span>
+                                    <span className="detalle-valor">
+                                        {sucursalDetalle ? sucursalDetalle.nombre : compraSeleccionada.destino}
+                                    </span>
+                                </div>
+                                <div className="detalle-dato">
+                                    <span className="detalle-label">Caja</span>
+                                    <span className="detalle-valor">
+                                        {cajaDetalle ? `Caja ${cajaDetalle.id_cajas} (${cajaDetalle.estado})` : 'Sin caja asignada'}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <span className="detalle-label">Productos en la orden</span>
+                                <div className="lista-productos-detalle">
+                                    {compraSeleccionada.detalles && compraSeleccionada.detalles.length > 0 ? (
+                                        compraSeleccionada.detalles.map((item, index) => (
+                                            <div key={index} className="producto-item-fila">
+                                                <div className="icono-producto-caja">
+                                                    <IconBox size={20} />
+                                                </div>
+                                                <div className="producto-item-info">
+                                                    <strong>{item.producto}</strong>
+                                                    {item.codigo && <div className="producto-item-codigo">Código: {item.codigo}</div>}
+                                                    <div>Precio unidad: ${item.precioUnidad.toLocaleString()}</div>
+                                                    <div>Cantidad: {item.cantidad} bultos</div>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="producto-vacio-msg">
+                                            <IconBox size={32} className="producto-vacio-icon" />
+                                            No hay productos registrados en esta orden.
                                         </div>
-                                        <div className="producto-item-info">
-                                            <strong>{item.producto}</strong>
-                                            {item.codigo && <div className="producto-item-codigo">Código: {item.codigo}</div>}
-                                            <div>Precio unidad: ${item.precioUnidad.toLocaleString()}</div>
-                                            <div>Cantidad: {item.cantidad} bultos</div>
-                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Sección de Métodos de Pago en el Detalle */}
+                            {compraSeleccionada.pagos && compraSeleccionada.pagos.length > 0 && (
+                                <div className="detalle-pagos-seccion">
+                                    <span className="detalle-label detalle-label-icono">
+                                        <IconCreditCard size={16} /> Métodos de pago
+                                    </span>
+                                    <div className="detalle-pagos-lista">
+                                        {compraSeleccionada.pagos.map((p, idx) => (
+                                            <div key={idx} className="detalle-pago-fila">
+                                                <span>{p.nombreMetodo}</span>
+                                                <span className="detalle-pago-monto">${Number(p.monto).toLocaleString()}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                ))
-                            ) : (
-                                <div className="producto-vacio-msg">
-                                    <IconBox size={32} className="producto-vacio-icon" />
-                                    No hay productos registrados en esta orden.
                                 </div>
                             )}
-                        </div>
 
-                        {/* Sección de Métodos de Pago en el Detalle */}
-                        {compraSeleccionada.pagos && compraSeleccionada.pagos.length > 0 && (
-                            <div className="detalle-pagos-seccion">
-                                <span className="detalle-pagos-titulo">
-                                    <IconCreditCard size={16} /> Métodos de Pago:
+                            <div className="modal-detalle-total">
+                                <span>TOTAL :</span>
+                                <span className="monto-total-caja">
+                                    ${compraSeleccionada.detalles
+                                        ? compraSeleccionada.detalles.reduce((acc, curr) => acc + (curr.precioUnidad * curr.cantidad), 0).toLocaleString()
+                                        : '0'}
                                 </span>
-                                <div className="detalle-pagos-lista">
-                                    {compraSeleccionada.pagos.map((p, idx) => (
-                                        <div key={idx} className="detalle-pago-fila">
-                                            <span>{p.nombreMetodo}</span>
-                                            <span className="detalle-pago-monto">${Number(p.monto).toLocaleString()}</span>
-                                        </div>
-                                    ))}
-                                </div>
                             </div>
-                        )}
-
-                        <div className="modal-detalle-total">
-                            <span>TOTAL :</span>
-                            <span className="monto-total-caja">
-                                ${compraSeleccionada.detalles 
-                                    ? compraSeleccionada.detalles.reduce((acc, curr) => acc + (curr.precioUnidad * curr.cantidad), 0).toLocaleString() 
-                                    : '0'}
-                            </span>
                         </div>
                     </div>
                 </div>

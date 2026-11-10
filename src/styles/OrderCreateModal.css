@@ -92,14 +92,6 @@
     display: block;
 }
 
-/* Cuadrícula para datos generales del pedido (Proveedor, N.º, Destino, Fecha) */
-.order-grid-generales {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
-}
-
 .order-filtros-agregar-row {
     display: grid;
     grid-template-columns: 200px 1fr;
@@ -117,7 +109,6 @@
     transition: border-color 0.2s, box-shadow 0.2s;
     background: #fff;
     color: #0f2a30;
-    box-sizing: border-box;
 }
 
 .order-select-categoria:focus,
@@ -144,10 +135,7 @@
 
 /* Sugerencias dropdown */
 .order-sugerencias-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: relative;
     background: #fff;
     border: 1px solid #cbd5e1;
     border-radius: 0.5rem;
@@ -241,10 +229,6 @@
     margin-top: 0.1rem;
 }
 
-.order-item-codigo-tag {
-    margin-right: 6px;
-}
-
 .order-item-controles {
     display: flex;
     align-items: center;
@@ -318,75 +302,6 @@
     margin: 0;
 }
 
-/* ============================================
-ESTILOS DE MÉTODOS DE PAGO (CREACIÓN)
-============================================ */
-
-.order-pagos-seccion-wrapper {
-    margin-top: 1.5rem;
-}
-
-.order-pagos-header-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.8rem;
-}
-
-.order-pagos-label-main {
-    margin: 0 !important;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.order-pagos-lista-items {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.order-pago-fila {
-    display: flex;
-    gap: 0.5rem;
-    align-items: center;
-    background: #f8fafc;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    border: 1px solid #e2e8f0;
-}
-
-.order-select-pago {
-    flex: 2;
-}
-
-.order-input-pago {
-    flex: 1;
-}
-
-.order-btn-agregar-pago {
-    background: #0d9488;
-    color: #fff;
-    border: none;
-    padding: 0.3rem 0.7rem;
-    border-radius: 0.4rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    transition: background 0.2s;
-}
-
-.order-btn-agregar-pago:hover {
-    background: #0f766e;
-}
-
-.order-sin-pagos-text {
-    font-size: 0.85rem;
-}
-
 /* Footer y Totales */
 .order-modal-footer {
     border-top: 1px solid #e2e8f0;
@@ -408,32 +323,8 @@ ESTILOS DE MÉTODOS DE PAGO (CREACIÓN)
     color: #0f766e;
 }
 
-.order-total-box-flex {
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.order-total-texto-linea {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
 .order-total-monto {
     font-size: 1.15rem;
-}
-
-.order-pagos-estado-badge {
-    font-size: 0.8rem;
-    margin-top: 2px;
-}
-
-.badge-coincide {
-    color: #059669;
-}
-
-.badge-diferencia {
-    color: #d97706;
 }
 
 .order-modal-actions {

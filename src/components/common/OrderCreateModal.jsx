@@ -1,14 +1,19 @@
 import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { IconX, IconTrash, IconPlus, IconMinus, IconSearch, IconBox, IconCreditCard } from '@tabler/icons-react';
-import { categorias, proveedores as listaProveedores, metodosPago } from '../../data/mock.js';
+import { categorias, proveedores as listaProveedores, metodosPago, sucursales, cajas } from '../../data/mock.js';
 import '../../styles/OrderCreateModal.css';
+
+// Cajas activas de una sucursal
+const getCajasActivas = (idSucursal) =>
+    cajas.filter((c) => c.id_sucursales === Number(idSucursal) && c.estado === 'Activo');
 
 export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave, siguienteNumeroPedido }) {
     // Estados principales del formulario de nuevo pedido
     const [proveedorSeleccionado, setProveedorSeleccionado] = useState('');
     const [numeroPedido, setNumeroPedido] = useState('');
-    const [destino, setDestino] = useState('Casa Central');
+    const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
+    const [cajaSeleccionada, setCajaSeleccionada] = useState('');
     const [fecha, setFecha] = useState('');
     const [items, setItems] = useState([]);
     
@@ -22,9 +27,13 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
     // Inicializar valores al abrir el modal
     useEffect(() => {
         if (isOpen) {
+            const primeraSucursal = sucursales[0] ? String(sucursales[0].id) : '';
+            const primeraCaja = getCajasActivas(primeraSucursal)[0];
+
             setProveedorSeleccionado('');
             setNumeroPedido(siguienteNumeroPedido || '571');
-            setDestino('Casa Central');
+            setSucursalSeleccionada(primeraSucursal);
+            setCajaSeleccionada(primeraCaja ? String(primeraCaja.id_cajas) : '');
             const hoy = new Date().toISOString().split('T')[0];
             setFecha(hoy);
             setItems([]);
@@ -37,6 +46,15 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
     if (!isOpen) return null;
 
     const proveedorObj = listaProveedores.find((p) => p.nombreFantasia === proveedorSeleccionado);
+    const sucursalObj = sucursales.find((s) => s.id === Number(sucursalSeleccionada));
+    const cajasActivas = getCajasActivas(sucursalSeleccionada);
+
+    // Al cambiar de sucursal se muestran solo sus cajas activas y se preselecciona la primera
+    const handleSucursalChange = (idSucursal) => {
+        setSucursalSeleccionada(idSucursal);
+        const primeraCaja = getCajasActivas(idSucursal)[0];
+        setCajaSeleccionada(primeraCaja ? String(primeraCaja.id_cajas) : '');
+    };
 
     const nombresCategoriasMap = categorias.reduce((acc, cat) => {
         acc[cat.id] = cat.nombre;
@@ -164,6 +182,16 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
             return;
         }
 
+        if (!cajaSeleccionada) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Campo requerido',
+                text: 'Seleccioná una caja activa de la sucursal para registrar la compra.',
+                confirmButtonColor: '#0d9488'
+            });
+            return;
+        }
+
         if (items.length === 0) {
             Swal.fire({
                 icon: 'warning',
@@ -176,11 +204,13 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
 
         const nuevoPedidoCompleto = {
             id: Date.now(),
+            id_cajas: Number(cajaSeleccionada),
+            id_sucursal: Number(sucursalSeleccionada),
             numeroPedido: String(numeroPedido),
             numeroProveedor: proveedorObj ? String(proveedorObj.codigo) : '001',
             proveedor: proveedorSeleccionado,
             telefono: proveedorObj ? proveedorObj.telefono : '+54 388 000-0000',
-            destino: destino,
+            destino: sucursalObj ? sucursalObj.nombre : '',
             estado: 'En espera',
             fecha: fecha,
             detalles: items,
@@ -236,16 +266,34 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
                         </div>
 
                         <div>
-                            <label className="order-label">Destino:</label>
+                            <label className="order-label">Destino (Sucursal):</label>
                             <select
-                                value={destino}
-                                onChange={(e) => setDestino(e.target.value)}
+                                value={sucursalSeleccionada}
+                                onChange={(e) => handleSucursalChange(e.target.value)}
                                 className="order-select-categoria"
                             >
-                                <option value="Casa Central">Casa Central</option>
-                                <option value="Sucursal - Zona Norte">Sucursal - Zona Norte</option>
-                                <option value="Sucursal - Sur">Sucursal - Sur</option>
-                                <option value="Depósito Norte">Depósito Norte</option>
+                                {sucursales.map((s) => (
+                                    <option key={s.id} value={s.id}>{s.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="order-label">Caja:</label>
+                            <select
+                                value={cajaSeleccionada}
+                                onChange={(e) => setCajaSeleccionada(e.target.value)}
+                                className="order-select-categoria"
+                                required
+                            >
+                                {cajasActivas.length === 0 && (
+                                    <option value="">Sin cajas activas</option>
+                                )}
+                                {cajasActivas.map((c) => (
+                                    <option key={c.id_cajas} value={c.id_cajas}>
+                                        Caja {c.id_cajas}
+                                    </option>
+                                ))}
                             </select>
                         </div>
 

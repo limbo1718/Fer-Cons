@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import Swal from 'sweetalert2';
-import { IconEdit, IconPower, IconCash, IconInfoCircle } from '@tabler/icons-react';
+import { IconEdit, IconPower, IconCash, IconInfoCircle, IconBuildingStore } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
@@ -12,7 +12,7 @@ import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js';
 import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
-import { productos as datosMock, categorias, marcasOpciones, unidadesOpciones } from '../data/mock.js';
+import { productos as datosMock, categorias, marcasOpciones, unidadesOpciones, sucursales } from '../data/mock.js';
 import '../styles/Productos.css'; 
 
 const iniciales = (nombre = '') => 
@@ -20,27 +20,35 @@ const iniciales = (nombre = '') =>
 
 export default function Productos() {
     const [productos, setProductos] = useState(
-        datosMock.map(p => ({ ...p, activo: p.activo ?? true, detalleBaja: p.detalleBaja || '' }))
+        datosMock.map(p => ({ 
+            ...p, 
+            activo: p.activo ?? true, 
+            detalleBaja: p.detalleBaja || '',
+            idSucursal: p.idSucursal || 1 // Por defecto Casa Central si no viene especificado
+        }))
     );
     const [busqueda, setBusqueda] = useState('');
     const [tabActiva, setTabActiva] = useState('todos');
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('');
+    const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [productoEditando, setProductoEditando] = useState(null);
 
     const activos = productos.filter((p) => p.activo).length;
     const inactivos = productos.filter((p) => !p.activo).length;
     const categoriasDisponibles = categorias.map((c) => c.nombre);
+    const sucursalesDisponibles = sucursales.map((s) => s.nombre);
 
     const siguienteCodigo = useMemo(() => {
         return `PROD-${String(productos.length + 101)}`;
     }, [productos]);
 
     const valoresIniciales = useMemo(() => {
-        if (!productoEditando) return { codigo: siguienteCodigo };
+        if (!productoEditando) return { codigo: siguienteCodigo, idSucursal: sucursales[0]?.nombre || '' };
         const catObj = categorias.find(c => c.id === productoEditando.idCategoria);
         const marcaNombre = marcasOpciones[productoEditando.idMarca - 1] || 'Genérica';
         const unidadObj = unidadesOpciones.find(u => u.id === productoEditando.idUnidad);
+        const sucObj = sucursales.find(s => s.id === productoEditando.idSucursal);
         
         return {
             codigo: productoEditando.codigo || '',
@@ -50,6 +58,7 @@ export default function Productos() {
             categoria: catObj ? catObj.nombre : categorias[0]?.nombre || '',
             idMarca: marcaNombre,
             idUnidad: unidadObj ? unidadObj.label : 'Unidad',
+            idSucursal: sucObj ? sucObj.nombre : sucursales[0]?.nombre || '',
         };
     }, [productoEditando, siguienteCodigo]);
 
@@ -58,10 +67,12 @@ export default function Productos() {
     const cerrarModal = () => { setIsModalOpen(false); setProductoEditando(null); };
 
     const verDescripcion = (p) => {
+        const sucObj = sucursales.find(s => s.id === p.idSucursal);
         showDetailAlert({
             title: p.nombre,
             details: [
                 { label: 'Código', value: p.codigo },
+                { label: 'Sucursal', value: sucObj ? sucObj.nombre : 'No especificada' },
                 { label: 'Precio', value: `$${Number(p.precioUnidad).toLocaleString('es-AR')}` }
             ],
             description: p.activo 
@@ -75,6 +86,7 @@ export default function Productos() {
         { name: 'nombre', label: 'Nombre del Producto', placeholder: 'Ej: Porcellanato 60x60', required: true },
         { name: 'descripcion', label: 'Descripción', placeholder: 'Detalles del producto...', required: false },
         { name: 'precioUnidad', label: 'Precio de Venta ($)', type: 'number', placeholder: '37050', required: true },
+        { name: 'idSucursal', label: 'Sucursal Asignada', type: 'select', options: sucursalesDisponibles, required: true },
         { name: 'categoria', label: 'Categoría', type: 'select', options: categoriasDisponibles, required: true },
         { name: 'idMarca', label: 'Marca', type: 'select', options: marcasOpciones, required: true },
         { name: 'idUnidad', label: 'Unidad de Medida', type: 'select', options: unidadesOpciones.map(u => u.label), required: true }
@@ -98,15 +110,9 @@ export default function Productos() {
                 title: '',
                 html: `
                     <div class="swal-reactivacion-wrapper">
-                        <span class="swal-reactivacion-sub">
-                            Reactivación
-                        </span>
-                        <h2 class="swal-reactivacion-titulo">
-                            ¿Activar producto?
-                        </h2>
-                        <p class="swal-reactivacion-texto">
-                            <strong>${p.nombre}</strong> pasará a estar activo nuevamente.
-                        </p>
+                        <span class="swal-reactivacion-sub">Reactivación</span>
+                        <h2 class="swal-reactivacion-titulo">¿Activar producto?</h2>
+                        <p class="swal-reactivacion-texto"><strong>${p.nombre}</strong> pasará a estar activo nuevamente.</p>
                     </div>
                 `,
                 showCancelButton: true,
@@ -120,15 +126,9 @@ export default function Productos() {
                     const confirmBtn = Swal.getConfirmButton();
                     const cancelBtn = Swal.getCancelButton();
                     const actions = Swal.getActions();
-                    if (actions) { 
-                        actions.className = 'swal-actions-custom'; 
-                    }
-                    if (confirmBtn) { 
-                        confirmBtn.className = 'swal-btn-confirm-custom'; 
-                    }
-                    if (cancelBtn) { 
-                        cancelBtn.className = 'swal-btn-cancel-custom'; 
-                    }
+                    if (actions) actions.className = 'swal-actions-custom'; 
+                    if (confirmBtn) confirmBtn.className = 'swal-btn-confirm-custom'; 
+                    if (cancelBtn) cancelBtn.className = 'swal-btn-cancel-custom'; 
                 }
             });
             if (!isConfirmed) return;
@@ -157,6 +157,8 @@ export default function Productos() {
         const idMarca = marcasOpciones.indexOf(data.idMarca) + 1 || 1;
         const unidadEncontrada = unidadesOpciones.find(u => u.label === data.idUnidad);
         const idUnidad = unidadEncontrada ? unidadEncontrada.id : 1;
+        const sucEncontrada = sucursales.find(s => s.nombre === data.idSucursal);
+        const idSucursal = sucEncontrada ? sucEncontrada.id : 1;
 
         if (productoEditando) {
             const actualizado = {
@@ -168,6 +170,7 @@ export default function Productos() {
                 idCategoria,
                 idMarca,
                 idUnidad,
+                idSucursal,
             };
             setProductos((prev) => prev.map((prod) => (prod.id === actualizado.id ? actualizado : prod)));
             Swal.fire({ icon: 'success', title: '¡Producto actualizado!', timer: 1800, showConfirmButton: false });
@@ -183,6 +186,7 @@ export default function Productos() {
             idCategoria,
             idMarca,
             idUnidad,
+            idSucursal,
             activo: true,
             detalleBaja: ''
         };
@@ -195,31 +199,36 @@ export default function Productos() {
         { id: 'todos', label: 'Todos', count: productos.length },
         { id: 'activos', label: 'Activos', count: activos },
         { id: 'inactivos', label: 'Inactivos', count: inactivos },
-        { id: 'categoria', label: 'Por categoría' }
+        { id: 'categoria', label: 'Por categoría' },
+        { id: 'sucursal', label: 'Por sucursal' }
     ];
 
     const productosFiltrados = productos.filter((p) => {
         let cumpleTab = true;
         const catObj = categorias.find(c => c.id === p.idCategoria);
         const nombreCategoria = catObj ? catObj.nombre : '';
+        const sucObj = sucursales.find(s => s.id === p.idSucursal);
+        const nombreSucursal = sucObj ? sucObj.nombre : '';
 
         if (tabActiva === 'activos') cumpleTab = p.activo;
         else if (tabActiva === 'inactivos') cumpleTab = !p.activo;
         else if (tabActiva === 'categoria') cumpleTab = categoriaSeleccionada ? nombreCategoria === categoriaSeleccionada : true;
+        else if (tabActiva === 'sucursal') cumpleTab = sucursalSeleccionada ? nombreSucursal === sucursalSeleccionada : true;
 
         const query = busqueda.toLowerCase().trim();
         const marcaNombre = (marcasOpciones[p.idMarca - 1] || '').toLowerCase();
-        const cumpleBusqueda = !query || String(p.codigo).toLowerCase().includes(query) || p.nombre.toLowerCase().includes(query) || nombreCategoria.toLowerCase().includes(query) || marcaNombre.includes(query);
+        const cumpleBusqueda = !query || String(p.codigo).toLowerCase().includes(query) || p.nombre.toLowerCase().includes(query) || nombreCategoria.toLowerCase().includes(query) || marcaNombre.includes(query) || nombreSucursal.toLowerCase().includes(query);
 
         return cumpleTab && cumpleBusqueda;
     });
 
-    const { datosVisibles, tieneMas, cargarMas } = usePagination(productosFiltrados, 10, [busqueda, tabActiva, categoriaSeleccionada]);
+    const { datosVisibles, tieneMas, cargarMas } = usePagination(productosFiltrados, 10, [busqueda, tabActiva, categoriaSeleccionada, sucursalSeleccionada]);
 
     const columnas = [
         'Código', 
         'Producto', 
         <span key="prec" className="inline-flex items-center gap-1"><IconCash size={16} />Precio Unitario</span>, 
+        <span key="suc" className="inline-flex items-center gap-1"><IconBuildingStore size={16} />Sucursal</span>,
         'Categoría', 
         'Marca',
         'Unidad', 
@@ -230,11 +239,23 @@ export default function Productos() {
     return (
         <>
         <Encabezado titulo="Productos" subtitulo="Gestionar inventario, precios y artículos" />
-        <SearchBar value={busqueda} onChange={setBusqueda} placeholder="Buscar por código, nombre, categoría o marca..." />
-        <FilterTabs tabs={tabs} activeTab={tabActiva} onTabChange={(id) => { setTabActiva(id); if (id !== 'categoria') setCategoriaSeleccionada(''); }} />
+        <SearchBar value={busqueda} onChange={setBusqueda} placeholder="Buscar por código, nombre, categoría, marca o sucursal..." />
+        <FilterTabs 
+            tabs={tabs} 
+            activeTab={tabActiva} 
+            onTabChange={(id) => { 
+                setTabActiva(id); 
+                if (id !== 'categoria') setCategoriaSeleccionada(''); 
+                if (id !== 'sucursal') setSucursalSeleccionada(''); 
+            }} 
+        />
 
         {tabActiva === 'categoria' && (
             <FilterSelect value={categoriaSeleccionada} onChange={setCategoriaSeleccionada} options={categoriasDisponibles} placeholder="Seleccioná una categoría..." />
+        )}
+
+        {tabActiva === 'sucursal' && (
+            <FilterSelect value={sucursalSeleccionada} onChange={setSucursalSeleccionada} options={sucursalesDisponibles} placeholder="Seleccioná una sucursal..." />
         )}
         
         <GenericTable
@@ -244,6 +265,7 @@ export default function Productos() {
                 const catObj = categorias.find(c => c.id === p.idCategoria);
                 const marcaNombre = marcasOpciones[p.idMarca - 1] || 'Genérica';
                 const unidadObj = unidadesOpciones.find(u => u.id === p.idUnidad);
+                const sucObj = sucursales.find(s => s.id === p.idSucursal);
 
                 return (
                     <tr key={p.id} className="fila-empleado">
@@ -255,6 +277,7 @@ export default function Productos() {
                             </span>
                         </td>
                         <td className="celda-tabla-texto producto-precio-celda">${Number(p.precioUnidad).toLocaleString('es-AR')}</td>
+                        <td className="celda-tabla-gris">{sucObj ? sucObj.nombre : 'Sin sucursal'}</td>
                         <td className="celda-tabla-gris">{catObj ? catObj.nombre : 'Sin categoría'}</td>
                         <td className="celda-tabla-texto">{marcaNombre}</td>
                         <td className="celda-tabla-texto">{unidadObj ? unidadObj.label : 'Unidad'}</td>

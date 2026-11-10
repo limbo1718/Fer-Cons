@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
 import { IconX, IconTrash, IconPlus, IconMinus, IconSearch, IconBox, IconCreditCard } from '@tabler/icons-react';
-import { categorias, metodosPago } from '../../data/mock.js';
+import { categorias, metodosPago, sucursales, cajas } from '../../data/mock.js';
 import '../../styles/OrderEditModal.css';
+
+// Cajas activas de una sucursal
+const getCajasActivas = (idSucursal) =>
+    cajas.filter((c) => c.id_sucursales === Number(idSucursal) && c.estado === 'Activo');
 
 export default function OrderEditModal({ isOpen, onClose, order, catalog = [], onSave }) {
     const [items, setItems] = useState([]);
     const [pagos, setPagos] = useState([]);
+    const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
+    const [cajaSeleccionada, setCajaSeleccionada] = useState('');
     const [busquedaProducto, setBusquedaProducto] = useState('');
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('TODAS');
 
-    // Sincroniza los detalles y pagos del pedido seleccionado cuando se abre el modal
+    // Sincroniza los detalles, pagos, caja y sucursal del pedido seleccionado cuando se abre el modal
     useEffect(() => {
         if (order) {
             if (order.detalles) {
@@ -22,12 +28,37 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
             } else {
                 setPagos([]);
             }
+
+            const cajaActual = cajas.find((c) => c.id_cajas === order.id_cajas);
+            const idSucursal = cajaActual ? cajaActual.id_sucursales : order.id_sucursal;
+            setSucursalSeleccionada(idSucursal ? String(idSucursal) : '');
+            setCajaSeleccionada(order.id_cajas ? String(order.id_cajas) : '');
         }
         setBusquedaProducto('');
         setCategoriaSeleccionada('TODAS');
     }, [order, isOpen]);
 
     if (!isOpen || !order) return null;
+
+    const sucursalObj = sucursales.find((s) => s.id === Number(sucursalSeleccionada));
+
+    // Cajas activas de la sucursal elegida; si la caja actual de la compra está inactiva
+    // y pertenece a esa sucursal, se mantiene en la lista para que no desaparezca
+    const cajasActivas = getCajasActivas(sucursalSeleccionada);
+    const cajaActual = cajas.find((c) => c.id_cajas === order.id_cajas);
+    const cajasOpciones =
+        cajaActual &&
+        cajaActual.id_sucursales === Number(sucursalSeleccionada) &&
+        !cajasActivas.some((c) => c.id_cajas === cajaActual.id_cajas)
+            ? [cajaActual, ...cajasActivas]
+            : cajasActivas;
+
+    // Al cambiar de sucursal se muestran solo sus cajas activas y se preselecciona la primera
+    const handleSucursalChange = (idSucursal) => {
+        setSucursalSeleccionada(idSucursal);
+        const primeraCaja = getCajasActivas(idSucursal)[0];
+        setCajaSeleccionada(primeraCaja ? String(primeraCaja.id_cajas) : '');
+    };
 
     // Crear un mapa dinámico utilizando las categorías importadas de mock.js
     const nombresCategoriasMap = categorias.reduce((acc, cat) => {
@@ -157,6 +188,9 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
         e.preventDefault();
         const pedidoActualizado = {
             ...order,
+            id_cajas: Number(cajaSeleccionada),
+            id_sucursal: Number(sucursalSeleccionada),
+            destino: sucursalObj ? sucursalObj.nombre : order.destino,
             detalles: items,
             pagos: pagos
         };
@@ -178,6 +212,41 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
                 </div>
 
                 <form onSubmit={handleGuardarCambios} className="order-modal-form">
+                    {/* Sección de Sucursal y Caja de la compra */}
+                    <div className="order-buscador-container order-grid-generales">
+                        <div>
+                            <label className="order-label">Destino (Sucursal):</label>
+                            <select
+                                value={sucursalSeleccionada}
+                                onChange={(e) => handleSucursalChange(e.target.value)}
+                                className="order-select-categoria"
+                            >
+                                {sucursales.map((s) => (
+                                    <option key={s.id} value={s.id}>{s.nombre}</option>
+                                ))}
+                            </select>
+                        </div>
+
+                        <div>
+                            <label className="order-label">Caja:</label>
+                            <select
+                                value={cajaSeleccionada}
+                                onChange={(e) => setCajaSeleccionada(e.target.value)}
+                                className="order-select-categoria"
+                                required
+                            >
+                                {cajasOpciones.length === 0 && (
+                                    <option value="">Sin cajas activas</option>
+                                )}
+                                {cajasOpciones.map((c) => (
+                                    <option key={c.id_cajas} value={c.id_cajas}>
+                                        Caja {c.id_cajas}{c.estado !== 'Activo' ? ` (${c.estado})` : ''}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+
                     {/* Sección de búsqueda y filtro por categoría */}
                     <div className="order-buscador-container">
                         <label className="order-label">Agregar productos al pedido:</label>

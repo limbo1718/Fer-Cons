@@ -76,6 +76,17 @@ ESTILOS DE ORDER EDIT MODAL - FER-CONS
     padding-right: 0.25rem;
 }
 
+/* Cuadrícula de Sucursal y Caja */
+.order-grid-generales {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.order-grid-generales .order-select-categoria {
+    width: 100%;
+}
+
 .order-label {
     font-size: 0.85rem;
     font-weight: 600;
