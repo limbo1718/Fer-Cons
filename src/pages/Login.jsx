@@ -1,54 +1,102 @@
 import { useForm } from 'react-hook-form';
-import { Navigate, useNavigate, Link } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconUser, IconLock, IconSettings } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
-import { usuarioDemo } from '../data/mock.js';
+import { usuarioDemo, usuarios, roles, usuarios_x_roles } from '../data/mock.js';
 import InputField from '../components/common/InputField';
 import InputPassword from '../components/common/InputPassword';
 import ButtonSubmit from '../components/common/ButtonSubmit';
 import '../styles/Login.css';
 
 export default function Login() {
-  const { user, login } = useAuth();
+  // NUEVO: Extraemos passwordOverrides del contexto
+  const { user, login, passwordOverrides } = useAuth();
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   if (user) return <Navigate to="/" replace />;
 
+  const mostrarErrorGenerico = () => {
+    return Swal.fire({
+      icon: 'error',
+      title: 'Datos incorrectos',
+      text: 'El legajo, correo o contraseña son incorrectos.',
+      confirmButtonColor: '#326f7a',
+    });
+  };
+
   const onSubmit = ({ usuario, password }) => {
     const valor = usuario.trim();
 
-    // Legajo (exacto) o correo (sin distinguir mayúsculas)
-    const usuarioValido =
+    // 1. Verificamos si es el Admin Demo
+    const esAdminDemo =
       valor === usuarioDemo.legajo ||
       valor.toLowerCase() === usuarioDemo.correo.toLowerCase();
 
-    if (!usuarioValido || password !== usuarioDemo.password) {
-      return Swal.fire({
-        icon: 'error',
-        title: 'Datos incorrectos',
-        text: 'Revisá tu legajo o correo y tu contraseña.',
-        confirmButtonColor: '#326f7a',
+    if (esAdminDemo) {
+      // NUEVO: Buscamos si el admin demo tiene una contraseña actualizada
+      const passDemoActual = passwordOverrides[usuarioDemo.correo.toLowerCase()] || usuarioDemo.password;
+      
+      if (password !== passDemoActual) {
+        return mostrarErrorGenerico();
+      }
+
+      login({
+        nombre: usuarioDemo.nombre,
+        legajo: usuarioDemo.legajo,
+        correo: usuarioDemo.correo,
+        rol: usuarioDemo.rol,
       });
+
+      return Swal.fire({
+        icon: 'success',
+        title: '¡Bienvenido!',
+        text: `Ingreso exitoso, bienvenido ${usuarioDemo.nombre}`,
+        timer: 1800,
+        showConfirmButton: false,
+      }).then(() => navigate('/'));
     }
 
+    // 2. Si no es el Demo, buscamos en la tabla de usuarios reales
+    const usuarioEncontrado = usuarios.find(
+      (u) =>
+        String(u.Legajo) === valor ||
+        (u.Email && u.Email.toLowerCase() === valor.toLowerCase())
+    );
+
+    if (!usuarioEncontrado || !usuarioEncontrado.Estado) {
+      return mostrarErrorGenerico(); 
+    }
+
+    // NUEVO: Buscamos si el usuario tiene una contraseña actualizada en el contexto
+    const passRealActual = passwordOverrides[usuarioEncontrado.Email.toLowerCase()] || usuarioEncontrado.Contrasena;
+    
+    if (password !== passRealActual) {
+      return mostrarErrorGenerico();
+    }
+
+    // Si pasó todo, buscamos su Rol Activo para guardarlo en la sesión
+    const rolRelacion = usuarios_x_roles.find(
+      (ur) => ur.ID_Usuarios === usuarioEncontrado.ID_Usuarios && ur.Estado === true
+    );
+    const rolObj = rolRelacion ? roles.find((r) => r.ID_Roles === rolRelacion.ID_Roles) : null;
+    const nombreRol = rolObj ? rolObj.Ocupacion : 'Sin Rol';
+
     login({
-      nombre: usuarioDemo.nombre,
-      legajo: usuarioDemo.legajo,
-      correo: usuarioDemo.correo,
-      rol: usuarioDemo.rol,
+      nombre: `${usuarioEncontrado.Nombre} ${usuarioEncontrado.Apellido}`,
+      legajo: usuarioEncontrado.Legajo,
+      correo: usuarioEncontrado.Email,
+      rol: nombreRol,
     });
 
     Swal.fire({
       icon: 'success',
       title: '¡Bienvenido!',
-      text: `Ingreso exitoso, bienvenido ${usuarioDemo.nombre}`,
+      text: `Ingreso exitoso, bienvenido ${usuarioEncontrado.Nombre}`,
       timer: 1800,
       showConfirmButton: false,
-    });
-
-    navigate('/');
+    }).then(() => navigate('/'));
   };
 
   return (
@@ -87,10 +135,6 @@ export default function Login() {
         <div className="contenedor-boton">
           <ButtonSubmit text="Ingresar" disabled={isSubmitting} />
         </div>
-
-        <Link to="/cambiar-contrasena" className="enlace-olvido">
-          ¿Olvidaste tu contraseña?
-        </Link>
 
         <p className="texto-demo">
           Demo: legajo {usuarioDemo.legajo} · correo {usuarioDemo.correo} · contraseña {usuarioDemo.password}

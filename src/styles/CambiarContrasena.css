@@ -4,12 +4,15 @@ ESTILOS DE CAMBIAR CONTRASEÑA - FER-CONS
 
 .contenedor-login {
     position: relative;
-    min-height: 100vh;
+    /* MODIFICADO: Ocupa el espacio restante en lugar de forzar 100vh */
+    flex: 1; 
     display: grid;
     place-items: center;
     overflow: hidden;
     background-color: var(--color-login);
     box-sizing: border-box;
+    /* MODIFICADO: Un pequeño padding para que no se pegue al encabezado si la pantalla es chica */
+    padding: 2rem 1rem; 
 }
 
 /* Círculos decorativos idénticos al diseño original */

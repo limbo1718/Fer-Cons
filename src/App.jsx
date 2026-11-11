@@ -21,7 +21,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/cambiar-contrasena" element={<CambiarContrasena />} />
+      
       <Route element={<RutaProtegida />}>
         <Route index element={<Inicio />} />
         <Route path="actividad" element={<Actividad />} />
@@ -31,7 +31,9 @@ export default function App() {
         <Route path="sucursales" element={<Sucursales />} />
         <Route path="compras" element={<Compras />} />
         <Route path="perfil" element={<Perfil />} />
+        <Route path="cambiar-contrasena" element={<CambiarContrasena />} />
       </Route>
+
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

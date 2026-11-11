@@ -30,6 +30,16 @@ export function AuthProvider({ children }) {
     }
   });
 
+  // NUEVO: Estado para guardar las contraseñas modificadas
+  const [passwordOverrides, setPasswordOverrides] = useState(() => {
+    try {
+      const overrides = localStorage.getItem('passwords_override');
+      return overrides ? JSON.parse(overrides) : {};
+    } catch {
+      return {};
+    }
+  });
+
   // Referencia para mantener temporalmente al usuario al forzar el Login de fondo
   const ultimoUsuarioRef = useRef(null);
 
@@ -48,9 +58,20 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user_session', JSON.stringify(sessionData));
   }, []);
 
+  // NUEVO: Función para actualizar la contraseña de un usuario
+  const actualizarContrasena = useCallback((email, nuevaContrasena) => {
+    if (!email) return;
+    const emailLower = email.toLowerCase();
+
+    setPasswordOverrides((prev) => {
+      const updated = { ...prev, [emailLower]: nuevaContrasena };
+      localStorage.setItem('passwords_override', JSON.stringify(updated));
+      return updated;
+    });
+  }, []);
+
   // Manejo de la expiración: manda al login de fondo inmediatamente y muestra el cartel
   const manejarExpiracion = useCallback(() => {
-    // 1. Capturamos y guardamos la referencia del usuario antes de desmontar
     const storedData = localStorage.getItem('user_session');
     let usuarioActual = user;
 
@@ -67,10 +88,8 @@ export function AuthProvider({ children }) {
 
     ultimoUsuarioRef.current = usuarioARecuperar;
 
-    // 2. Cerramos sesión al instante para enviar al usuario al Login de fondo (frena peticiones al servidor)
     logout();
 
-    // 3. Mostramos la alerta flotando sobre la pantalla de Login
     Swal.fire({
       icon: 'warning',
       title: 'Sesión inactiva',
@@ -83,7 +102,6 @@ export function AuthProvider({ children }) {
       allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed && ultimoUsuarioRef.current) {
-        // Opción A: Restaura la sesión y lo devuelve automáticamente al inicio
         login(ultimoUsuarioRef.current);
         Swal.fire({
           icon: 'success',
@@ -93,7 +111,6 @@ export function AuthProvider({ children }) {
           showConfirmButton: false,
         });
       } else {
-        // Opción B: Se queda en la página de Login descartando los datos previos
         ultimoUsuarioRef.current = null;
       }
     });
@@ -118,10 +135,8 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     if (!user) return;
 
-    // Mantenemos sincronizada la referencia del usuario activo
     ultimoUsuarioRef.current = user;
 
-    // Control de inactividad eficiente: verifica cada 5 segundos sin saturar el servidor
     const interval = setInterval(() => {
       const storedData = localStorage.getItem('user_session');
       if (storedData) {
@@ -136,7 +151,6 @@ export function AuthProvider({ children }) {
       }
     }, 5000);
 
-    // Detección cuando el usuario cambia de pestaña/ventana y regresa a la app
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') {
         const storedData = localStorage.getItem('user_session');
@@ -170,7 +184,7 @@ export function AuthProvider({ children }) {
   }, [user, logout, resetTimer, manejarExpiracion]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, passwordOverrides, actualizarContrasena }}>
       {children}
     </AuthContext.Provider>
   );

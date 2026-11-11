@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import { IconPhone, IconEdit, IconPower, IconInfoCircle, IconClock } from '@tabler/icons-react';
+import { IconPhone, IconEdit, IconPower, IconInfoCircle, IconClock, IconKey } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
 import GenericTable from '../components/common/GenericTable.jsx';
 import SearchBar from '../components/common/SearchBar.jsx';
@@ -13,170 +14,294 @@ import { showDetailAlert } from '../components/common/showDetailAlert.js';
 import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
 import { showReactivateAlert } from '../components/common/showReactivateAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
-import { empleados as datosEmpleados, roles, sucursales } from '../data/mock.js';
+import { useAuth } from '../context/AuthContext.jsx';
+import { 
+  usuarios as datosUsuarios, 
+  roles, 
+  sucursales, 
+  usuarios_x_roles, 
+  sucursales_x_usuarios 
+} from '../data/mock.js';
 import '../styles/Empleados.css';
 
-const iniciales = (nombre = '') => nombre.split(' ').slice(0, 2).map((p) => p[0] || '').join('').toUpperCase();
+// ==========================================
+// CONSTANTES Y HELPERS
+// ==========================================
+const ITEMS_POR_PAGINA = 10;
+const LEGAJO_BASE = 218;
+
+const obtenerFechaHoy = () => {
+  const hoy = new Date();
+  return `${String(hoy.getDate()).padStart(2, '0')}/${String(hoy.getMonth() + 1).padStart(2, '0')}/${hoy.getFullYear()}`;
+};
+
+const obtenerIniciales = (nombre = '') => 
+  nombre.split(' ').slice(0, 2).map((p) => p[0] || '').join('').toUpperCase();
 
 const separarNombre = (completo = '') => {
   const [primero = '', ...resto] = completo.trim().split(' ');
   return { nombre: primero, apellido: resto.join(' ') };
 };
 
+const obtenerNombreRol = (idRol) => 
+  roles.find(r => r.ID_Roles === Number(idRol))?.Ocupacion || 'Sin Rol';
+
+const obtenerNombreSucursal = (idSucursal) => 
+  sucursales.find(s => s.ID_Sucursales === Number(idSucursal))?.Nombre || 'Sin Sucursal';
+
+const mapearUsuariosRelacionales = () => {
+  return datosUsuarios.map(usu => {
+    const rolData = usuarios_x_roles.find(ur => ur.ID_Usuarios === usu.ID_Usuarios && ur.Estado) 
+                  || usuarios_x_roles.find(ur => ur.ID_Usuarios === usu.ID_Usuarios);
+
+    const sucursalData = sucursales_x_usuarios.find(su => su.ID_Usuarios === usu.ID_Usuarios && su.Estado)
+                      || sucursales_x_usuarios.find(su => su.ID_Usuarios === usu.ID_Usuarios);
+
+    return {
+      id: usu.ID_Usuarios,
+      dni: usu.DNI_Usuarios,
+      legajo: usu.Legajo,
+      nombre: usu.Nombre,
+      apellido: usu.Apellido,
+      email: usu.Email,
+      telefono: usu.Telefono,
+      contrasena: usu.Contrasena,
+      activo: usu.Estado,
+      detalleBaja: rolData?.detalleBaja || '',
+      id_rol: rolData?.ID_Roles || null,
+      hora_entrada: rolData?.Hora_Entrada || '',
+      hora_salida: rolData?.Hora_Salida || '',
+      id_sucursal: sucursalData?.ID_Sucursales || null,
+      fechaAsociacion: sucursalData?.Fecha_Asociacion || 'N/A'
+    };
+  });
+};
+
+const COLUMNAS_TABLA = [
+  'Legajo', 
+  'DNI',
+  'Empleado', 
+  <span key="tel" className="columna-con-icono"><IconPhone size={16} />Teléfono</span>, 
+  'Rol', 
+  'Sucursal', 
+  'Asociación',
+  <span key="hor" className="columna-con-icono"><IconClock size={16} />Horario</span>,
+  'Estado', 
+  'Justificación',
+  'Acciones'
+];
+
+// ==========================================
+// COMPONENTE PRINCIPAL
+// ==========================================
 export default function Empleados() {
-  const [empleados, setEmpleados] = useState(
-    datosEmpleados.map(e => ({
-      ...e,
-      hora_entrada: e.hora_entrada || '',
-      hora_salida: e.hora_salida || '',
-      detalleBaja: e.detalleBaja || '',
-      id_sucursal: e.id_sucursal || sucursales[0]?.ID_Sucursales || 1
-    }))
-  );
+  const navigate = useNavigate();
+  const { user } = useAuth(); 
+  
+  const esAdmin = user?.rol === 'Administrador';
+
+  const [usuarios, setUsuarios] = useState(mapearUsuariosRelacionales);
   const [busqueda, setBusqueda] = useState('');
   const [tabActiva, setTabActiva] = useState('todos');
   const [rolSeleccionado, setRolSeleccionado] = useState('');
   const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
+  const [fechaSeleccionada, setFechaSeleccionada] = useState('');
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [empleadoEditando, setEmpleadoEditando] = useState(null);
+  const [usuarioEditando, setUsuarioEditando] = useState(null);
+  
+  const bloquearCierreRef = useRef(false);
 
-  // Mappers dinámicos relacionales corregidos a ID_Sucursales y Nombre
-  const getNombreRol = (id_rol) => roles.find(r => r.id === Number(id_rol))?.ocupacion || 'Sin Rol';
-  const getNombreSucursal = (id_sucursal) => sucursales.find(s => s.ID_Sucursales === Number(id_sucursal))?.Nombre || 'Sin Sucursal';
+  // Valores derivados
+  const activos = useMemo(() => usuarios.filter(u => u.activo).length, [usuarios]);
+  const inactivos = useMemo(() => usuarios.filter(u => !u.activo).length, [usuarios]);
+  
+  const rolesDisponibles = useMemo(() => roles.map(r => r.Ocupacion), []);
+  const sucursalesDisponibles = useMemo(() => sucursales.map(s => s.Nombre), []);
+  
+  // NOTA: Eliminamos fechasDisponibles porque ya no usamos el desplegable
 
-  const activos = empleados.filter((e) => e.activo).length;
-  const inactivos = empleados.filter((e) => !e.activo).length;
+  const siguienteLegajo = useMemo(() => {
+    const maxLegajo = usuarios.length > 0 
+      ? Math.max(...usuarios.map(u => Number(u.legajo) || 0)) 
+      : LEGAJO_BASE;
+    return String(maxLegajo + 1).padStart(4, '0');
+  }, [usuarios]);
 
-  const rolesDisponibles = roles.map(r => r.ocupacion);
-  const sucursalesDisponibles = sucursales.map(s => s.Nombre);
+  const usuariosFiltrados = useMemo(() => {
+    return usuarios.filter((usuario) => {
+      const nombreCompleto = `${usuario.nombre} ${usuario.apellido}`.toLowerCase();
+      const nombreRol = obtenerNombreRol(usuario.id_rol).toLowerCase();
+      const nombreSucursal = obtenerNombreSucursal(usuario.id_sucursal).toLowerCase();
+      const query = busqueda.toLowerCase().trim();
 
-  const ultimoLegajo = empleados.length > 0 ? empleados[empleados.length - 1].legajo : '0218';
-  const siguienteLegajo = String(Number(ultimoLegajo) + 1).padStart(4, '0');
+      let cumpleTab = true;
+      if (tabActiva === 'activos') cumpleTab = usuario.activo;
+      else if (tabActiva === 'inactivos') cumpleTab = !usuario.activo;
+      else if (tabActiva === 'rol') cumpleTab = rolSeleccionado ? nombreRol === rolSeleccionado.toLowerCase() : true;
+      else if (tabActiva === 'sucursal') cumpleTab = sucursalSeleccionada ? nombreSucursal === sucursalSeleccionada.toLowerCase() : true;
+      else if (tabActiva === 'fecha') {
+        if (fechaSeleccionada) {
+          // TRUCO: Convertimos el formato YYYY-MM-DD del input a DD/MM/YYYY del mock
+          const [year, month, day] = fechaSeleccionada.split('-');
+          const fechaFormateada = `${day}/${month}/${year}`;
+          cumpleTab = usuario.fechaAsociacion === fechaFormateada;
+        } else {
+          cumpleTab = true;
+        }
+      }
+
+      const cumpleBusqueda = !query ||
+        String(usuario.legajo).toLowerCase().includes(query) ||
+        nombreCompleto.includes(query) ||
+        nombreSucursal.includes(query) ||
+        (usuario.dni && String(usuario.dni).toLowerCase().includes(query));
+
+      return cumpleTab && cumpleBusqueda;
+    });
+  }, [usuarios, busqueda, tabActiva, rolSeleccionado, sucursalSeleccionada, fechaSeleccionada]);
+
+  const { datosVisibles, tieneMas, cargarMas } = usePagination(
+    usuariosFiltrados, 
+    ITEMS_POR_PAGINA, 
+    [usuariosFiltrados]
+  );
+
+  const tabs = [
+    { id: 'todos', label: 'Todos', count: usuarios.length },
+    { id: 'activos', label: 'Activos', count: activos },
+    { id: 'inactivos', label: 'Inactivos', count: inactivos },
+    { id: 'rol', label: 'Por rol' },
+    { id: 'sucursal', label: 'Por sucursal' },
+    { id: 'fecha', label: 'Por fecha' }
+  ];
+
+  const camposEmpleado = useMemo(() => {
+    const camposBase = [
+      { name: 'dni', label: 'DNI', placeholder: 'Ej: 45952361', required: true, type: 'number', pattern: '[0-9]*' },
+      { name: 'legajo', label: 'Legajo', disabled: true, badge: 'AUTOGENERADO' },
+      { name: 'fechaAsociacion', label: 'Fecha de Asociación', disabled: true, badge: 'AUTOGENERADO' },
+      { name: 'nombre', label: 'Nombre', placeholder: 'Nombre del Empleado', required: true },
+      { name: 'apellido', label: 'Apellido', placeholder: 'Apellido del Empleado', required: true },
+      { name: 'telefono', label: 'Teléfono', placeholder: '+54 387 000-0000', required: true },
+      { name: 'email', label: 'Email', type: 'email', placeholder: 'nombre@gmail.com', required: true },
+      { name: 'rol', label: 'Rol', type: 'select', options: rolesDisponibles, required: true },
+      { name: 'sucursal', label: 'Sucursal', type: 'select', options: sucursalesDisponibles, required: true },
+      { name: 'hora_entrada', label: 'Hora de Entrada (Opcional)', type: 'time', required: false },
+      { name: 'hora_salida', label: 'Hora de Salida (Opcional)', type: 'time', required: false }
+    ];
+
+    if (!usuarioEditando) {
+      camposBase.splice(7, 0, { 
+        name: 'contrasena', 
+        label: 'Contraseña Inicial', 
+        type: 'password', 
+        placeholder: 'Mínimo 4 caracteres', 
+        required: true,
+        minLength: 4 
+      });
+    }
+
+    return camposBase;
+  }, [usuarioEditando, rolesDisponibles, sucursalesDisponibles]);
 
   const valoresIniciales = useMemo(() => {
-    if (!empleadoEditando) {
+    if (!usuarioEditando) {
       return { 
         legajo: siguienteLegajo,
         hora_entrada: '',
         hora_salida: '',
-        sucursal: sucursales[0]?.Nombre || ''
+        sucursal: sucursales[0]?.Nombre || '',
+        fechaAsociacion: obtenerFechaHoy(),
+        contrasena: ''
       };
     }
 
-    const { nombre, apellido } = empleadoEditando.apellido
-      ? { nombre: empleadoEditando.nombre, apellido: empleadoEditando.apellido }
-      : separarNombre(empleadoEditando.nombre);
+    const { nombre, apellido } = usuarioEditando.apellido
+      ? { nombre: usuarioEditando.nombre, apellido: usuarioEditando.apellido }
+      : separarNombre(usuarioEditando.nombre);
 
-    const sucObj = sucursales.find(s => s.ID_Sucursales === empleadoEditando.id_sucursal);
+    const sucObj = sucursales.find(s => s.ID_Sucursales === usuarioEditando.id_sucursal);
 
     return {
-      legajo: empleadoEditando.legajo,
-      dni: empleadoEditando.dni || '',
+      legajo: usuarioEditando.legajo,
+      dni: usuarioEditando.dni || '',
       nombre,
       apellido,
-      telefono: empleadoEditando.telefono || '',
-      email: empleadoEditando.email || '',
-      rol: getNombreRol(empleadoEditando.id_rol),
+      telefono: usuarioEditando.telefono || '',
+      email: usuarioEditando.email || '',
+      rol: obtenerNombreRol(usuarioEditando.id_rol),
       sucursal: sucObj ? sucObj.Nombre : sucursales[0]?.Nombre || '',
-      hora_entrada: empleadoEditando.hora_entrada || '',
-      hora_salida: empleadoEditando.hora_salida || '',
+      hora_entrada: usuarioEditando.hora_entrada || '',
+      hora_salida: usuarioEditando.hora_salida || '',
+      fechaAsociacion: usuarioEditando.fechaAsociacion || 'N/A'
     };
-  }, [empleadoEditando, siguienteLegajo]);
+  }, [usuarioEditando, siguienteLegajo]);
 
-  const abrirNuevo = () => {
-    setEmpleadoEditando(null);
+  // ==========================================
+  // MANEJADORES DE EVENTOS
+  // ==========================================
+  const abrirModalNuevo = () => {
+    setUsuarioEditando(null);
     setIsModalOpen(true);
   };
 
-  const abrirEdicion = (e) => {
-    setEmpleadoEditando(e);
+  const abrirModalEdicion = (usuario) => {
+    setUsuarioEditando(usuario);
     setIsModalOpen(true);
   };
 
   const cerrarModal = () => {
+    if (bloquearCierreRef.current) {
+      bloquearCierreRef.current = false;
+      return;
+    }
     setIsModalOpen(false);
-    setEmpleadoEditando(null);
+    setUsuarioEditando(null);
   };
 
-  const verDetalleBaja = (e) => {
-    const nombreCompleto = `${e.nombre} ${e.apellido}`;
+  const irACambiarContrasena = (usuario) => {
+    navigate('/cambiar-contrasena', { state: { email: usuario.email } });
+  };
 
+  const verDetalleBaja = (usuario) => {
     showDetailAlert({
-      title: nombreCompleto,
+      title: `${usuario.nombre} ${usuario.apellido}`,
       details: [
-        { label: 'Legajo', value: `N.° ${e.legajo}` },
-        { label: 'Rol', value: getNombreRol(e.id_rol) },
-        { label: 'Sucursal', value: getNombreSucursal(e.id_sucursal) }
+        { label: 'Legajo', value: `N.° ${usuario.legajo}` },
+        { label: 'DNI', value: usuario.dni }, 
+        { label: 'Rol', value: obtenerNombreRol(usuario.id_rol) },
+        { label: 'Sucursal', value: obtenerNombreSucursal(usuario.id_sucursal) },
+        { label: 'Asociación', value: usuario.fechaAsociacion }
       ],
-      description: e.detalleBaja || 'Este empleado fue dado de baja sin especificar un motivo detallado.'
+      description: usuario.detalleBaja || 'Este empleado fue dado de baja sin especificar un motivo detallado.'
     });
   };
 
-  const camposEmpleado = [
-    { name: 'dni', label: 'DNI', placeholder: 'Ej: 45952361', required: true },
-    { name: 'legajo', label: 'Legajo', disabled: true, badge: 'AUTOGENERADO' },
-    { name: 'nombre', label: 'Nombre', placeholder: 'Nombre del Empleado', required: true },
-    { name: 'apellido', label: 'Apellido', placeholder: 'Apellido del Empleado', required: true },
-    { name: 'telefono', label: 'Teléfono', placeholder: '+54 387 000-0000', required: true },
-    { name: 'email', label: 'Email', type: 'email', placeholder: 'nombre@gmail.com', required: true },
-    { 
-      name: 'rol', 
-      label: 'Rol', 
-      type: 'select', 
-      options: rolesDisponibles,
-      required: true 
-    },
-    { 
-      name: 'sucursal', 
-      label: 'Sucursal', 
-      type: 'select', 
-      options: sucursalesDisponibles,
-      required: true 
-    },
-    { 
-      name: 'hora_entrada', 
-      label: 'Hora de Entrada (Opcional)', 
-      type: 'time', 
-      required: false 
-    },
-    { 
-      name: 'hora_salida', 
-      label: 'Hora de Salida (Opcional)', 
-      type: 'time', 
-      required: false 
-    }
-  ];
-
-  const cambiarEstado = async (e) => {
-    const desactivar = e.activo;
-    let motivoBaja = e.detalleBaja || '';
-    const nombreCompleto = `${e.nombre} ${e.apellido}`;
+  const cambiarEstado = async (usuario) => {
+    const desactivar = usuario.activo;
+    let motivoBaja = usuario.detalleBaja || '';
+    const nombreCompleto = `${usuario.nombre} ${usuario.apellido}`;
 
     if (desactivar) {
       const motivo = await showConfirmInputAlert({
         title: `Motivo de baja - ${nombreCompleto}`,
         subtitle: 'Gestión de Personal',
-        inputValue: e.detalleBaja || '',
+        inputValue: usuario.detalleBaja || '',
         confirmButtonText: 'Dar de baja'
       });
-
       if (!motivo) return;
       motivoBaja = motivo;
     } else {
-      const confirmado = await showReactivateAlert({
-        entity: 'empleado',
-        name: nombreCompleto
-      });
+      const confirmado = await showReactivateAlert({ entity: 'empleado', name: nombreCompleto });
       if (!confirmado) return;
     }
 
-    setEmpleados((prev) => 
-      prev.map((emp) => 
-        emp.id === e.id 
-          ? { ...emp, activo: !emp.activo, detalleBaja: desactivar ? motivoBaja : '' } 
-          : emp
-      )
-    );
+    setUsuarios(prev => prev.map(u => 
+      u.id === usuario.id 
+        ? { ...u, activo: !u.activo, detalleBaja: desactivar ? motivoBaja : '' } 
+        : u
+    ));
 
     Swal.fire({
       icon: 'success',
@@ -187,39 +312,12 @@ export default function Empleados() {
     });
   };
 
-  const handleGuardarEmpleado = (data) => {
-    const rolObj = roles.find(r => r.ocupacion === data.rol);
+  const crearUsuario = (data) => {
+    const rolObj = roles.find(r => r.Ocupacion === data.rol);
     const sucursalObj = sucursales.find(s => s.Nombre === data.sucursal);
-
-    const id_rol = rolObj ? rolObj.id : 1;
-    const id_sucursal = sucursalObj ? sucursalObj.ID_Sucursales : 1;
     const nombreCompleto = `${data.nombre} ${data.apellido}`;
 
-    if (empleadoEditando) {
-      const actualizado = {
-        ...empleadoEditando,
-        nombre: data.nombre,
-        apellido: data.apellido,
-        telefono: data.telefono,
-        email: data.email,
-        dni: data.dni,
-        id_rol,
-        id_sucursal,
-        hora_entrada: data.hora_entrada || '',
-        hora_salida: data.hora_salida || '',
-      };
-      setEmpleados((prev) => prev.map((emp) => (emp.id === actualizado.id ? actualizado : emp)));
-      Swal.fire({
-        icon: 'success',
-        title: '¡Empleado actualizado!',
-        text: `Los datos de ${nombreCompleto} se guardaron correctamente.`,
-        timer: 1800,
-        showConfirmButton: false,
-      });
-      return;
-    }
-
-    const nuevoEmpleado = {
+    const nuevoUsuario = {
       id: Date.now(),
       legajo: data.legajo,
       nombre: data.nombre,
@@ -227,15 +325,17 @@ export default function Empleados() {
       telefono: data.telefono,
       email: data.email,
       dni: data.dni,
-      id_rol,
-      id_sucursal,
+      contrasena: data.contrasena,
+      id_rol: rolObj ? rolObj.ID_Roles : 1,
+      id_sucursal: sucursalObj ? sucursalObj.ID_Sucursales : 1,
       hora_entrada: data.hora_entrada || '',
       hora_salida: data.hora_salida || '',
       activo: true,
-      detalleBaja: ''
+      detalleBaja: '',
+      fechaAsociacion: data.fechaAsociacion
     };
 
-    setEmpleados((prev) => [...prev, nuevoEmpleado]);
+    setUsuarios(prev => [...prev, nuevoUsuario]);
     Swal.fire({
       icon: 'success',
       title: '¡Empleado agregado!',
@@ -245,70 +345,70 @@ export default function Empleados() {
     });
   };
 
-  const tabs = [
-    { id: 'todos', label: 'Todos', count: empleados.length },
-    { id: 'activos', label: 'Activos', count: activos },
-    { id: 'inactivos', label: 'Inactivos', count: inactivos },
-    { id: 'rol', label: 'Por rol' },
-    { id: 'sucursal', label: 'Por sucursal' }
-  ];
+  const actualizarUsuario = (data) => {
+    const rolObj = roles.find(r => r.Ocupacion === data.rol);
+    const sucursalObj = sucursales.find(s => s.Nombre === data.sucursal);
+    const nombreCompleto = `${data.nombre} ${data.apellido}`;
 
-  const empleadosFiltrados = empleados.filter((e) => {
-    const nombreCompleto = `${e.nombre} ${e.apellido}`.toLowerCase();
-    const nombreRol = getNombreRol(e.id_rol).toLowerCase();
-    const nombreSucursal = getNombreSucursal(e.id_sucursal).toLowerCase();
+    const actualizado = {
+      ...usuarioEditando,
+      nombre: data.nombre,
+      apellido: data.apellido,
+      telefono: data.telefono,
+      email: data.email,
+      dni: data.dni,
+      id_rol: rolObj ? rolObj.ID_Roles : 1,
+      id_sucursal: sucursalObj ? sucursalObj.ID_Sucursales : 1,
+      hora_entrada: data.hora_entrada || '',
+      hora_salida: data.hora_salida || '',
+    };
 
-    let cumpleTab = true;
-    if (tabActiva === 'activos') {
-      cumpleTab = e.activo;
-    } else if (tabActiva === 'inactivos') {
-      cumpleTab = !e.activo;
-    } else if (tabActiva === 'rol') {
-      cumpleTab = rolSeleccionado ? nombreRol === rolSeleccionado.toLowerCase() : true;
-    } else if (tabActiva === 'sucursal') {
-      cumpleTab = sucursalSeleccionada ? nombreSucursal === sucursalSeleccionada.toLowerCase() : true;
+    setUsuarios(prev => prev.map(u => (u.id === actualizado.id ? actualizado : u)));
+    
+    Swal.fire({
+      icon: 'success',
+      title: '¡Empleado actualizado!',
+      text: `Los datos de ${nombreCompleto} se guardaron correctamente.`,
+      timer: 1800,
+      showConfirmButton: false,
+    });
+  };
+
+  const handleGuardarUsuario = (data) => {
+    // VALIDACIÓN DE CONTRASEÑA CORTA CON SWEETALERT
+    if (!usuarioEditando && data.contrasena && data.contrasena.length < 4) {
+      bloquearCierreRef.current = true; 
+      
+      Swal.fire({
+        icon: 'warning',
+        title: 'Contraseña muy corta',
+        text: 'La contraseña debe tener al menos 4 caracteres.',
+        confirmButtonColor: '#326f7a',
+        customClass: {
+          container: 'swal-alto-z-index' 
+        }
+      });
+      return; 
     }
 
-    const query = busqueda.toLowerCase().trim();
-    const cumpleBusqueda =
-      !query ||
-      String(e.legajo).toLowerCase().includes(query) ||
-      nombreCompleto.includes(query) ||
-      nombreSucursal.includes(query) ||
-      (e.dni && e.dni.toLowerCase().includes(query));
+    if (usuarioEditando) {
+      actualizarUsuario(data);
+    } else {
+      crearUsuario(data);
+    }
+  };
 
-    return cumpleTab && cumpleBusqueda;
-  });
-
-  const { datosVisibles, tieneMas, cargarMas } = usePagination(
-    empleadosFiltrados, 
-    10, 
-    [busqueda, tabActiva, rolSeleccionado, sucursalSeleccionada]
-  );
-
-  const columnas = [
-    'Legajo', 
-    'Empleado', 
-    <span key="tel" className="inline-flex items-center gap-1"><IconPhone size={16} />Teléfono</span>, 
-    'Rol', 
-    'Sucursal', 
-    <span key="hor" className="inline-flex items-center gap-1"><IconClock size={16} />Horario</span>,
-    'Estado', 
-    'Justificación',
-    'Acciones'
-  ];
-
+  // ==========================================
+  // RENDERIZADO
+  // ==========================================
   return (
     <>
-      <Encabezado 
-        titulo="Empleados" 
-        subtitulo="Gestionar usuarios y permisos" 
-      />
+      <Encabezado titulo="Empleados" subtitulo="Gestionar usuarios y permisos" />
       
       <SearchBar 
         value={busqueda} 
         onChange={setBusqueda} 
-        placeholder="Buscar por legajo, nombre, DNI o sucursal..." 
+        placeholder="Buscar por legajo, DNI, nombre o sucursal..." 
       />
 
       <FilterTabs 
@@ -318,6 +418,7 @@ export default function Empleados() {
           setTabActiva(id);
           if (id !== 'rol') setRolSeleccionado('');
           if (id !== 'sucursal') setSucursalSeleccionada('');
+          if (id !== 'fecha') setFechaSeleccionada('');
         }} 
       />
 
@@ -338,41 +439,54 @@ export default function Empleados() {
           placeholder="Seleccioná una sucursal..."
         />
       )}
+
+      {/* NUEVO FILTRO DE FECHA IGUAL A COMPRAS */}
+      {tabActiva === 'fecha' && (
+        <div className="filtro-fecha-container">
+          <span className="label-filtro-fecha">Filtrar por fecha específica:</span>
+          <input 
+            type="date" 
+            value={fechaSeleccionada} 
+            onChange={(e) => setFechaSeleccionada(e.target.value)} 
+            className="input-fecha-filtro"
+          />
+        </div>
+      )}
       
       <GenericTable
-        columnas={columnas}
+        columnas={COLUMNAS_TABLA}
         datos={datosVisibles}
-        renderFila={(e) => {
-          const nombreCompleto = `${e.nombre} ${e.apellido}`;
-          const rolTexto = getNombreRol(e.id_rol);
-          const sucursalTexto = getNombreSucursal(e.id_sucursal);
-          const horarioTexto = (e.hora_entrada && e.hora_salida) 
-            ? `${e.hora_entrada} - ${e.hora_salida}` 
+        renderFila={(usuario) => {
+          const nombreCompleto = `${usuario.nombre} ${usuario.apellido}`;
+          const horarioTexto = (usuario.hora_entrada && usuario.hora_salida) 
+            ? `${usuario.hora_entrada} - ${usuario.hora_salida}` 
             : '-';
 
           return (
-            <tr key={e.id} className="fila-empleado">
-              <td className="celda-tabla-legajo">N.° {e.legajo}</td>
+            <tr key={usuario.id} className="fila-empleado">
+              <td className="celda-tabla-legajo">N.° {usuario.legajo}</td>
+              <td className="celda-tabla-texto">{usuario.dni}</td> 
               <td className="celda-tabla-info">
                 <span className="info-empleado-flex">
-                  <span className="avatar-iniciales">{iniciales(nombreCompleto)}</span>
+                  <span className="avatar-iniciales">{obtenerIniciales(nombreCompleto)}</span>
                   {nombreCompleto}
                 </span>
               </td>
-              <td className="celda-tabla-texto">{e.telefono}</td>
-              <td className="celda-tabla-gris">{rolTexto}</td>
-              <td className="celda-tabla-texto">{sucursalTexto}</td>
+              <td className="celda-tabla-texto">{usuario.telefono}</td>
+              <td className="celda-tabla-gris">{obtenerNombreRol(usuario.id_rol)}</td>
+              <td className="celda-tabla-texto">{obtenerNombreSucursal(usuario.id_sucursal)}</td>
+              <td className="celda-tabla-texto">{usuario.fechaAsociacion}</td>
               <td className="celda-tabla-texto">{horarioTexto}</td>
               <td className="celda-tabla-texto">
-                <span className={`etiqueta-estado ${e.activo ? 'estado-activo' : 'estado-inactivo'}`}>
-                  {e.activo ? 'Activo' : 'Inactivo'}
+                <span className={`etiqueta-estado ${usuario.activo ? 'estado-activo' : 'estado-inactivo'}`}>
+                  {usuario.activo ? 'Activo' : 'Inactivo'}
                 </span>
               </td>
               <td className="celda-tabla-info">
-                {!e.activo ? (
+                {!usuario.activo ? (
                   <button 
                     type="button"
-                    onClick={() => verDetalleBaja(e)} 
+                    onClick={() => verDetalleBaja(usuario)} 
                     className="boton-justificacion"
                     title="Ver motivo de baja"
                   >
@@ -386,10 +500,21 @@ export default function Empleados() {
               </td>
               <td className="celda-tabla-info">
                 <span className="acciones-fila">
+                  {esAdmin && (
+                    <button
+                      type="button"
+                      className="boton-accion-icono"
+                      onClick={() => irACambiarContrasena(usuario)}
+                      title="Cambiar contraseña"
+                      aria-label={`Cambiar contraseña de ${nombreCompleto}`}
+                    >
+                      <IconKey size={18} />
+                    </button>
+                  )}
                   <button
                     type="button"
                     className="boton-accion-icono"
-                    onClick={() => abrirEdicion(e)}
+                    onClick={() => abrirModalEdicion(usuario)}
                     title="Editar empleado"
                     aria-label={`Editar ${nombreCompleto}`}
                   >
@@ -397,10 +522,10 @@ export default function Empleados() {
                   </button>
                   <button
                     type="button"
-                    className={`boton-accion-icono ${e.activo ? 'accion-desactivar' : 'accion-activar'}`}
-                    onClick={() => cambiarEstado(e)}
-                    title={e.activo ? 'Desactivar empleado' : 'Activar empleado'}
-                    aria-label={`${e.activo ? 'Desactivar' : 'Activar'} ${nombreCompleto}`}
+                    className={`boton-accion-icono ${usuario.activo ? 'accion-desactivar' : 'accion-activar'}`}
+                    onClick={() => cambiarEstado(usuario)}
+                    title={usuario.activo ? 'Desactivar empleado' : 'Activar empleado'}
+                    aria-label={`${usuario.activo ? 'Desactivar' : 'Activar'} ${nombreCompleto}`}
                   >
                     <IconPower size={18} />
                   </button>
@@ -411,27 +536,19 @@ export default function Empleados() {
         }}
       />
 
-      {tieneMas && (
-        <LoadMoreButton 
-          onClick={cargarMas} 
-          text="Ver más empleados" 
-        />
-      )}
+      {tieneMas && <LoadMoreButton onClick={cargarMas} text="Ver más empleados" />}
 
-      <GenericFab 
-        onClick={abrirNuevo} 
-        title="Agregar nuevo empleado" 
-      />
+      <GenericFab onClick={abrirModalNuevo} title="Agregar nuevo empleado" />
 
       <GenericModalForm
         isOpen={isModalOpen}
         onClose={cerrarModal}
-        title={empleadoEditando ? 'Editar empleado' : 'Nuevo empleado'}
-        subtitle={empleadoEditando ? 'Modificá los datos del empleado y guardá los cambios.' : '¡Rellena los campos para añadir a tu nuevo empleado!'}
+        title={usuarioEditando ? 'Editar empleado' : 'Nuevo empleado'}
+        subtitle={usuarioEditando ? 'Modificá los datos del empleado y guardá los cambios.' : '¡Rellena los campos para añadir a tu nuevo empleado!'}
         fields={camposEmpleado}
         initialValues={valoresIniciales}
-        onSubmit={handleGuardarEmpleado}
-        submitText={empleadoEditando ? 'Guardar cambios' : 'Guardar empleado'}
+        onSubmit={handleGuardarUsuario}
+        submitText={usuarioEditando ? 'Guardar cambios' : 'Guardar empleado'}
       />
     </>
   );

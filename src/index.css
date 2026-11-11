@@ -18,3 +18,8 @@ body { @apply font-sans text-oscuro; }
 body.swal2-shown > [class^="swal2-container"] {
     backdrop-filter: blur(4px) !important;
 }
+
+/* Fuerza al SweetAlert a mostrarse por encima de cualquier modal */
+.swal-alto-z-index {
+    z-index: 99999 !important;
+}
