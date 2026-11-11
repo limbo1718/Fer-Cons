@@ -49,7 +49,7 @@ export default function MenuDesplegable() {
   };
 
   const handleModuloClick = (e, modulo) => {
-    
+    // Si deseas que sucursales esté plenamente activa, nos aseguramos de que no esté en esta lista
     const modulosEnDesarrollo = ['/ventas', '/presupuestos', '/stock', '/facturacion', '/caja'];
 
     if (!modulo.path || modulosEnDesarrollo.includes(modulo.path)) {

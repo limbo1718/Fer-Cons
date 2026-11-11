@@ -4,9 +4,12 @@ import { IconX, IconTrash, IconPlus, IconMinus, IconSearch, IconBox, IconCreditC
 import { categorias, proveedores as listaProveedores, metodosPago, sucursales, cajas } from '../../data/mock.js';
 import '../../styles/OrderCreateModal.css';
 
-// Cajas activas de una sucursal
+// Cajas activas de una sucursal activa
 const getCajasActivas = (idSucursal) =>
-    cajas.filter((c) => c.id_sucursales === Number(idSucursal) && c.estado === 'Activo');
+    cajas.filter((c) => (c.id_sucursales === Number(idSucursal) || c.ID_Sucursales === Number(idSucursal)) && (c.estado === 'Activo' || c.estado === 'activo'));
+
+// Filtrar únicamente sucursales activas
+const sucursalesActivas = sucursales.filter((s) => s.activo === true || s.activo === undefined);
 
 export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave, siguienteNumeroPedido }) {
     // Estados principales del formulario de nuevo pedido
@@ -24,10 +27,10 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
     const [busquedaProducto, setBusquedaProducto] = useState('');
     const [categoriaSeleccionada, setCategoriaSeleccionada] = useState('TODAS');
 
-    // Inicializar valores al abrir el modal
+    // Inicializar valores al abrir el modal usando sucursales activas
     useEffect(() => {
         if (isOpen) {
-            const primeraSucursal = sucursales[0] ? String(sucursales[0].id) : '';
+            const primeraSucursal = sucursalesActivas[0] ? String(sucursalesActivas[0].ID_Sucursales || sucursalesActivas[0].id) : '';
             const primeraCaja = getCajasActivas(primeraSucursal)[0];
 
             setProveedorSeleccionado('');
@@ -46,7 +49,7 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
     if (!isOpen) return null;
 
     const proveedorObj = listaProveedores.find((p) => p.nombreFantasia === proveedorSeleccionado);
-    const sucursalObj = sucursales.find((s) => s.id === Number(sucursalSeleccionada));
+    const sucursalObj = sucursalesActivas.find((s) => String(s.ID_Sucursales || s.id) === String(sucursalSeleccionada));
     const cajasActivas = getCajasActivas(sucursalSeleccionada);
 
     // Al cambiar de sucursal se muestran solo sus cajas activas y se preselecciona la primera
@@ -210,7 +213,7 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
             numeroProveedor: proveedorObj ? String(proveedorObj.codigo) : '001',
             proveedor: proveedorSeleccionado,
             telefono: proveedorObj ? proveedorObj.telefono : '+54 388 000-0000',
-            destino: sucursalObj ? sucursalObj.nombre : '',
+            destino: sucursalObj ? (sucursalObj.Nombre || sucursalObj.nombre) : '',
             estado: 'En espera',
             fecha: fecha,
             detalles: items,
@@ -272,9 +275,13 @@ export default function OrderCreateModal({ isOpen, onClose, catalog = [], onSave
                                 onChange={(e) => handleSucursalChange(e.target.value)}
                                 className="order-select-categoria"
                             >
-                                {sucursales.map((s) => (
-                                    <option key={s.id} value={s.id}>{s.nombre}</option>
-                                ))}
+                                {sucursalesActivas.map((s) => {
+                                    const idSuc = s.ID_Sucursales || s.id;
+                                    const nombreSuc = s.Nombre || s.nombre;
+                                    return (
+                                        <option key={idSuc} value={idSuc}>{nombreSuc}</option>
+                                    );
+                                })}
                             </select>
                         </div>
 

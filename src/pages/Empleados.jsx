@@ -15,7 +15,7 @@ import { usePagination } from '../hooks/usePagination.js';
 import { empleados as datosEmpleados, roles, sucursales } from '../data/mock.js';
 import '../styles/Empleados.css';
 
-const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+const iniciales = (nombre = '') => nombre.split(' ').slice(0, 2).map((p) => p[0] || '').join('').toUpperCase();
 
 const separarNombre = (completo = '') => {
   const [primero = '', ...resto] = completo.trim().split(' ');
@@ -28,7 +28,8 @@ export default function Empleados() {
       ...e,
       hora_entrada: e.hora_entrada || '',
       hora_salida: e.hora_salida || '',
-      detalleBaja: e.detalleBaja || ''
+      detalleBaja: e.detalleBaja || '',
+      id_sucursal: e.id_sucursal || sucursales[0]?.ID_Sucursales || 1
     }))
   );
   const [busqueda, setBusqueda] = useState('');
@@ -38,15 +39,15 @@ export default function Empleados() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [empleadoEditando, setEmpleadoEditando] = useState(null);
 
-  // Mappers dinámicos relacionales
+  // Mappers dinámicos relacionales corregidos a ID_Sucursales y Nombre
   const getNombreRol = (id_rol) => roles.find(r => r.id === Number(id_rol))?.ocupacion || 'Sin Rol';
-  const getNombreSucursal = (id_sucursal) => sucursales.find(s => s.id === Number(id_sucursal))?.nombre || 'Sin Sucursal';
+  const getNombreSucursal = (id_sucursal) => sucursales.find(s => s.ID_Sucursales === Number(id_sucursal))?.Nombre || 'Sin Sucursal';
 
   const activos = empleados.filter((e) => e.activo).length;
   const inactivos = empleados.filter((e) => !e.activo).length;
 
   const rolesDisponibles = roles.map(r => r.ocupacion);
-  const sucursalesDisponibles = sucursales.map(s => s.nombre);
+  const sucursalesDisponibles = sucursales.map(s => s.Nombre);
 
   const ultimoLegajo = empleados.length > 0 ? empleados[empleados.length - 1].legajo : '0218';
   const siguienteLegajo = String(Number(ultimoLegajo) + 1).padStart(4, '0');
@@ -56,13 +57,16 @@ export default function Empleados() {
       return { 
         legajo: siguienteLegajo,
         hora_entrada: '',
-        hora_salida: ''
+        hora_salida: '',
+        sucursal: sucursales[0]?.Nombre || ''
       };
     }
 
     const { nombre, apellido } = empleadoEditando.apellido
       ? { nombre: empleadoEditando.nombre, apellido: empleadoEditando.apellido }
       : separarNombre(empleadoEditando.nombre);
+
+    const sucObj = sucursales.find(s => s.ID_Sucursales === empleadoEditando.id_sucursal);
 
     return {
       legajo: empleadoEditando.legajo,
@@ -72,7 +76,7 @@ export default function Empleados() {
       telefono: empleadoEditando.telefono || '',
       email: empleadoEditando.email || '',
       rol: getNombreRol(empleadoEditando.id_rol),
-      sucursal: getNombreSucursal(empleadoEditando.id_sucursal),
+      sucursal: sucObj ? sucObj.Nombre : sucursales[0]?.Nombre || '',
       hora_entrada: empleadoEditando.hora_entrada || '',
       hora_salida: empleadoEditando.hora_salida || '',
     };
@@ -207,10 +211,10 @@ export default function Empleados() {
 
   const handleGuardarEmpleado = (data) => {
     const rolObj = roles.find(r => r.ocupacion === data.rol);
-    const sucursalObj = sucursales.find(s => s.nombre === data.sucursal);
+    const sucursalObj = sucursales.find(s => s.Nombre === data.sucursal);
 
     const id_rol = rolObj ? rolObj.id : 1;
-    const id_sucursal = sucursalObj ? sucursalObj.id : 1;
+    const id_sucursal = sucursalObj ? sucursalObj.ID_Sucursales : 1;
     const nombreCompleto = `${data.nombre} ${data.apellido}`;
 
     if (empleadoEditando) {

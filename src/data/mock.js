@@ -4,6 +4,216 @@ import {
   IconBuildingWarehouse, IconFileDescription, IconUserCheck, IconUserX,
 } from '@tabler/icons-react'
 
+// 1. PAISES
+export const paises = [
+  { ID_Paises: 1, Nombre_Pais: 'Argentina' }
+];
+
+// 2. PROVINCIAS
+export const provincias = [
+  { ID_Provincias: 1, ID_Paises: 1, Nombre_Prov: 'Salta' }
+];
+
+// 3. LOCALIDADES
+export const localidades = [
+  { ID_Localidades: 1, ID_Provincias: 1, Codigo_Postal: '4400', Nombre_Localidad: 'Salta Capital' },
+  { ID_Localidades: 2, ID_Provincias: 1, Codigo_Postal: '4405', Nombre_Localidad: 'San Lorenzo' },
+  { ID_Localidades: 3, ID_Provincias: 1, Codigo_Postal: '4401', Nombre_Localidad: 'Vaqueros' }
+];
+
+// 4. UBICACIONES
+export const ubicaciones = [
+  { ID_Ubicaciones: 1, ID_Localidades: 1, Latitud: -24.782120, Longitud: -65.412320, Calle: 'Av. Belgrano', Nro_Calle: 1234 },
+  { ID_Ubicaciones: 2, ID_Localidades: 1, Latitud: -24.810500, Longitud: -65.405200, Calle: 'Av. Tavella', Nro_Calle: 800 },
+  { ID_Ubicaciones: 3, ID_Localidades: 1, Latitud: -24.765400, Longitud: -65.441200, Calle: 'Parque Industrial', Nro_Calle: 100 },
+  { ID_Ubicaciones: 4, ID_Localidades: 1, Latitud: -24.790000, Longitud: -65.410000, Calle: 'Av. Chile', Nro_Calle: 1450 },
+  { ID_Ubicaciones: 5, ID_Localidades: 1, Latitud: -24.820000, Longitud: -65.420000, Calle: 'Av. Ex Combatientes de Malvinas', Nro_Calle: 3200 },
+  { ID_Ubicaciones: 6, ID_Localidades: 1, Latitud: -24.770000, Longitud: -65.420000, Calle: 'Av. Reyes Católicos', Nro_Calle: 1550 },
+  { ID_Ubicaciones: 7, ID_Localidades: 1, Latitud: -24.785000, Longitud: -65.405000, Calle: 'Av. Entre Ríos', Nro_Calle: 920 },
+  { ID_Ubicaciones: 8, ID_Localidades: 2, Latitud: -24.740000, Longitud: -65.480000, Calle: 'Av. San Martin', Nro_Calle: 450 },
+  { ID_Ubicaciones: 9, ID_Localidades: 1, Latitud: -24.815000, Longitud: -65.390000, Calle: 'Av. Discépolo', Nro_Calle: 600 },
+  { ID_Ubicaciones: 10, ID_Localidades: 1, Latitud: -24.795000, Longitud: -65.430000, Calle: 'Av. Perón', Nro_Calle: 2100 },
+  { ID_Ubicaciones: 11, ID_Localidades: 1, Latitud: -24.780000, Longitud: -65.415000, Calle: 'España', Nro_Calle: 740 },
+  { ID_Ubicaciones: 12, ID_Localidades: 3, Latitud: -24.720000, Longitud: -65.410000, Calle: 'Av. San Martin', Nro_Calle: 120 },
+  { ID_Ubicaciones: 13, ID_Localidades: 1, Latitud: -24.830000, Longitud: -65.410000, Calle: 'Av. Banchik', Nro_Calle: 500 }
+];
+
+// 5. EMPRESAS
+export const empresas = [
+  {
+    ID_Empresas: 1,
+    CUIT: '30-71234567-8',
+    Nombre_Emp: 'Fer-Cons S.A.',
+    Razon_Social: 'Fer-Cons Materiales S.A.',
+    Email: 'contacto@fercons.com',
+    Telefono: '3874222222',
+    Ingresos_Brutos: '30-71234567-8',
+    Fecha_Inicio_Act: '2020-01-15',
+    Dir_Fiscal: 'Av. Belgrano 1234, Salta',
+    Condicion_IVA: 'Responsable Inscripto'
+  }
+];
+
+// 6. SUCURSALES (13 sucursales, incluyendo inactividades)
+export const sucursales = [
+  {
+    ID_Sucursales: 1,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 1,
+    Nombre: 'Casa Central',
+    Hora_Ap: '08:00:00',
+    Hora_C: '18:00:00',
+    Contacto: '3874000001',
+    Email_Suc: 'casacentral@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 2,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 2,
+    Nombre: 'Sucursal Sur',
+    Hora_Ap: '08:30:00',
+    Hora_C: '18:30:00',
+    Contacto: '3874000002',
+    Email_Suc: 'sucursalsur@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 3,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 3,
+    Nombre: 'Depósito Norte',
+    Hora_Ap: '07:00:00',
+    Hora_C: '17:00:00',
+    Contacto: '3874000003',
+    Email_Suc: 'depositonorte@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 4,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 4,
+    Nombre: 'Sucursal Chile',
+    Hora_Ap: '08:00:00',
+    Hora_C: '18:00:00',
+    Contacto: '3874000004',
+    Email_Suc: 'chile@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 5,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 5,
+    Nombre: 'Sucursal Intersatambres',
+    Hora_Ap: '08:00:00',
+    Hora_C: '17:30:00',
+    Contacto: '3874000005',
+    Email_Suc: 'intersatambres@fercons.com',
+    activo: false,
+    detalleBaja: 'Cerrada temporalmente por remodelación de depósito e instalaciones eléctricas.'
+  },
+  {
+    ID_Sucursales: 6,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 6,
+    Nombre: 'Sucursal Tres Cerritos',
+    Hora_Ap: '08:30:00',
+    Hora_C: '19:00:00',
+    Contacto: '3874000006',
+    Email_Suc: 'trescerritos@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 7,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 7,
+    Nombre: 'Sucursal Macrocentro',
+    Hora_Ap: '08:00:00',
+    Hora_C: '18:00:00',
+    Contacto: '3874000007',
+    Email_Suc: 'macrocentro@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 8,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 8,
+    Nombre: 'Sucursal San Lorenzo',
+    Hora_Ap: '09:00:00',
+    Hora_C: '17:00:00',
+    Contacto: '3874000008',
+    Email_Suc: 'sanlorenzo@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 9,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 9,
+    Nombre: 'Depósito San Antonio',
+    Hora_Ap: '07:30:00',
+    Hora_C: '16:30:00',
+    Contacto: '3874000009',
+    Email_Suc: 'sanantonio@fercons.com',
+    activo: false,
+    detalleBaja: 'Unificación de stock en el Depósito Norte.'
+  },
+  {
+    ID_Sucursales: 10,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 10,
+    Nombre: 'Sucursal Grand Bourg',
+    Hora_Ap: '08:00:00',
+    Hora_C: '18:00:00',
+    Contacto: '3874000010',
+    Email_Suc: 'grandbourg@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 11,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 11,
+    Nombre: 'Sucursal Centro Peatonal',
+    Hora_Ap: '08:30:00',
+    Hora_C: '19:30:00',
+    Contacto: '3874000011',
+    Email_Suc: 'peatonal@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 12,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 12,
+    Nombre: 'Sucursal Vaqueros',
+    Hora_Ap: '08:00:00',
+    Hora_C: '17:00:00',
+    Contacto: '3874000012',
+    Email_Suc: 'vaqueros@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  },
+  {
+    ID_Sucursales: 13,
+    ID_Empresas: 1,
+    ID_Ubicaciones: 13,
+    Nombre: 'Depósito Aeropuerto',
+    Hora_Ap: '07:00:00',
+    Hora_C: '16:00:00',
+    Contacto: '3874000013',
+    Email_Suc: 'aeropuerto@fercons.com',
+    activo: true,
+    detalleBaja: ''
+  }
+];
+
 export const usuarioDemo = { 
   legajo: '45974444', 
   correo: 'alejandro@fercons.com', 
@@ -24,12 +234,6 @@ export const roles = [
   { id: 5, ocupacion: 'Vendedor', descripcion: 'Atención al cliente y ventas en salón' },
   { id: 6, ocupacion: 'Repositor', descripcion: 'Reposición de mercadería en góndolas' },
   { id: 7, ocupacion: 'Administrativo', descripcion: 'Tareas administrativas generales' }
-];
-
-export const sucursales = [
-  { id: 1, nombre: 'Casa Central', direccion: 'Av. Belgrano 1234, Salta' },
-  { id: 2, nombre: 'Sucursal Sur', direccion: 'Av. Tavella 800, Salta' },
-  { id: 3, nombre: 'Depósito Norte', direccion: 'Parque Industrial, Salta' }
 ];
 
 export const empleados = [
@@ -411,41 +615,41 @@ export const empleados = [
 ];
 
 export const proveedores = [
-  { id: 1, codigo: '001', nombreFantasia: 'Ceramica Norte', razonSocial: 'Ceramica Norte S.A', cuit: '30-7623345-7', telefono: '+54 387 435-3422', email: 'contacto@ceramicanorte.com', sucursal: 'Casa Central', activo: true },
-  { id: 2, codigo: '002', nombreFantasia: 'Hierros del NOA', razonSocial: 'Hierros del NOA S.R.L', cuit: '30-7346345-7', telefono: '+54 387 345-3422', email: 'ventas@hierrosdelnoa.com.ar', sucursal: 'Casa Central', activo: false },
-  { id: 3, codigo: '003', nombreFantasia: 'Cementos Salta', razonSocial: 'Cementos Salta S.A', cuit: '30-734575-9', telefono: '+54 388 465-7457', email: 'info@cementossalta.com', sucursal: 'Casa Central', activo: true },
-  { id: 4, codigo: '004', nombreFantasia: 'Distribuidora Cuyo', razonSocial: 'Distribuidora Cuyo S.R.L', cuit: '30-6812345-8', telefono: '+54 387 421-8899', email: 'pedidos@distribuidoracuyo.com', sucursal: 'Sucursal Sur', activo: true },
-  { id: 5, codigo: '005', nombreFantasia: 'Pinturas del Norte', razonSocial: 'Pinturas del Norte S.A', cuit: '30-7112233-4', telefono: '+54 387 498-1122', email: 'administracion@pinturasdelnorte.com', sucursal: 'Depósito Norte', activo: false },
-  { id: 6, codigo: '006', nombreFantasia: 'Bulonera Salta', razonSocial: 'Bulonera Salta S.R.L', cuit: '30-7145678-9', telefono: '+54 387 423-5566', email: 'ventas@bulonerasalta.com.ar', sucursal: 'Sucursal Sur', activo: true },
-  { id: 7, codigo: '007', nombreFantasia: 'Sanitarios del Valle', razonSocial: 'Sanitarios del Valle S.A', cuit: '30-7234112-3', telefono: '+54 388 471-9988', email: 'info@sanitariosdelvalle.com', sucursal: 'Casa Central', activo: true },
-  { id: 8, codigo: '008', nombreFantasia: 'Electricidad Andina', razonSocial: 'Electricidad Andina S.R.L', cuit: '30-6987412-5', telefono: '+54 387 409-3322', email: 'contacto@electricidadandina.com.ar', sucursal: 'Depósito Norte', activo: false },
-  { id: 9, codigo: '009', nombreFantasia: 'Maderas del Norte', razonSocial: 'Maderas del Norte S.A', cuit: '30-7055441-2', telefono: '+54 387 455-7890', email: 'pedidos@maderasdelnorte.com', sucursal: 'Sucursal Sur', activo: true },
-  { id: 10, codigo: '010', nombreFantasia: 'Ferretería Industrial Güemes', razonSocial: 'Ferretería Güemes S.R.L', cuit: '30-7412389-1', telefono: '+54 388 488-2233', email: 'administracion@ferreteria-guemes.com.ar', sucursal: 'Casa Central', activo: true },
-  { id: 11, codigo: '011', nombreFantasia: 'Áridos del Sur', razonSocial: 'Áridos del Sur S.A', cuit: '30-7198822-4', telefono: '+54 387 444-1122', email: 'ventas@aridosdelsur.com', sucursal: 'Sucursal Sur', activo: true },
-  { id: 12, codigo: '012', nombreFantasia: 'Yesos y Cielorrasos NOA', razonSocial: 'Yesos NOA S.R.L', cuit: '30-7331199-8', telefono: '+54 387 477-3344', email: 'contacto@yesosnoa.com.ar', sucursal: 'Depósito Norte', activo: true },
-  { id: 13, codigo: '013', nombreFantasia: 'Herramientas Profesionales Salta', razonSocial: 'Herramientas Salta S.A', cuit: '30-7044556-3', telefono: '+54 388 422-9900', email: 'info@herramientassalta.com', sucursal: 'Casa Central', activo: false },
-  { id: 14, codigo: '014', nombreFantasia: 'Aberturas de Aluminio Norte', razonSocial: 'Aluminio Norte S.R.L', cuit: '30-7266778-1', telefono: '+54 387 466-5533', email: 'pedidos@aluminionorte.com.ar', sucursal: 'Sucursal Sur', activo: true },
-  { id: 15, codigo: '015', nombreFantasia: 'Caños y Conexiones del Valle', razonSocial: 'Caños Valle S.A', cuit: '30-7155443-9', telefono: '+54 387 411-2244', email: 'ventas@canosvalle.com', sucursal: 'Depósito Norte', activo: true },
-  { id: 16, codigo: '016', nombreFantasia: 'Impermeabilizantes Cuyo', razonSocial: 'Impermeabilizantes S.R.L', cuit: '30-6922334-5', telefono: '+54 388 433-7788', email: 'contacto@impercuyo.com', sucursal: 'Casa Central', activo: true },
-  { id: 17, codigo: '017', nombreFantasia: 'Mallas y Metales Güemes', razonSocial: 'Metales Güemes S.A', cuit: '30-7488991-2', telefono: '+54 387 488-6655', email: 'info@metalesguemes.com.ar', sucursal: 'Sucursal Sur', activo: false },
-  { id: 18, codigo: '018', nombreFantasia: 'Ladrillos Cerámicos San Cayetano', razonSocial: 'Cerámica San Cayetano S.R.L', cuit: '30-7211223-6', telefono: '+54 387 499-4411', email: 'pedidos@sancayetano.com', sucursal: 'Casa Central', activo: true },
-  { id: 19, codigo: '019', nombreFantasia: 'Pinturería Industrial Centro', razonSocial: 'Pinturas Centro S.A', cuit: '30-7399884-7', telefono: '+54 388 455-1199', email: 'ventas@pinturascentro.com.ar', sucursal: 'Depósito Norte', activo: true },
-  { id: 20, codigo: '020', nombreFantasia: 'Techitos y Chapas del Norte', razonSocial: 'Chapas Norte S.R.L', cuit: '30-7133445-0', telefono: '+54 387 422-7766', email: 'contacto@chapasnorte.com', sucursal: 'Sucursal Sur', activo: true },
-  { id: 21, codigo: '021', nombreFantasia: 'Adhesivos y Pegamentos Salta', razonSocial: 'Pegamentos Salta S.A', cuit: '30-7088776-4', telefono: '+54 387 433-8899', email: 'info@pegamentosalta.com', sucursal: 'Casa Central', activo: true },
-  { id: 22, codigo: '022', nombreFantasia: 'Ferretería Mayorista Andina', razonSocial: 'Andina Mayorista S.R.L', cuit: '30-7455667-8', telefono: '+54 388 411-3322', email: 'ventas@andinamayorista.com.ar', sucursal: 'Depósito Norte', activo: false },
-  { id: 23, codigo: '023', nombreFantasia: 'Construcciones Secundarias SRL', razonSocial: 'Secundarias S.R.L', cuit: '30-7244332-1', telefono: '+54 387 466-9900', email: 'pedidos@secundarias.com', sucursal: 'Sucursal Sur', activo: true },
-  { id: 24, codigo: '024', nombreFantasia: 'Equipamientos para Obra', razonSocial: 'Equipamientos Obra S.A', cuit: '30-7311225-9', telefono: '+54 387 477-1133', email: 'contacto@equipamientosobra.com', sucursal: 'Casa Central', activo: true },
-  { id: 25, codigo: '025', nombreFantasia: 'Maderas y Derivados del Litoral', razonSocial: 'Derivados Litoral S.R.L', cuit: '30-6899443-2', telefono: '+54 388 499-2244', email: 'info@litoralmaderas.com.ar', sucursal: 'Depósito Norte', activo: true },
-  { id: 26, codigo: '026', nombreFantasia: 'Cerrajería y Herrajes Salta', razonSocial: 'Herrajes Salta S.A', cuit: '30-7166554-3', telefono: '+54 387 444-5566', email: 'ventas@herrajessalta.com', sucursal: 'Casa Central', activo: true },
-  { id: 27, codigo: '027', nombreFantasia: 'Grifería y Sanitarios del Norte', razonSocial: 'Sanitarios Norte S.R.L', cuit: '30-7299881-6', telefono: '+54 387 411-7788', email: 'contacto@sanitariosnorte.com.ar', sucursal: 'Sucursal Sur', activo: false },
-  { id: 28, codigo: '028', nombreFantasia: 'Cables y Materiales Eléctricos', razonSocial: 'Materiales Eléctricos S.A', cuit: '30-7377665-2', telefono: '+54 388 422-3344', email: 'pedidos@matelectricos.com', sucursal: 'Depósito Norte', activo: true },
-  { id: 29, codigo: '029', nombreFantasia: 'Placas de Yeso Durlock Salta', razonSocial: 'Durlock Salta S.R.L', cuit: '30-7422119-5', telefono: '+54 387 455-6677', email: 'info@durlocksalta.com.ar', sucursal: 'Casa Central', activo: true },
-  { id: 30, codigo: '030', nombreFantasia: 'Estructuras Metálicas del NOA', razonSocial: 'Estructuras NOA S.A', cuit: '30-7033221-8', telefono: '+54 387 488-9900', email: 'ventas@estructurasnoa.com', sucursal: 'Sucursal Sur', activo: true },
-  { id: 31, codigo: '031', nombreFantasia: 'Áridos y Cementos Güemes', razonSocial: 'Güemes Materiales S.R.L', cuit: '30-7188774-1', telefono: '+54 388 433-2211', email: 'contacto@guemesmateriales.com.ar', sucursal: 'Depósito Norte', activo: true },
-  { id: 32, codigo: '032', nombreFantasia: 'Pisos y Revestimientos Cerámicos', razonSocial: 'Pisos Cerámicos S.A', cuit: '30-7255446-7', telefono: '+54 387 466-1122', email: 'pedidos@pisosceramicos.com', sucursal: 'Casa Central', activo: false },
-  { id: 33, codigo: '033', nombreFantasia: 'Aislaciones Térmicas y Acústicas', razonSocial: 'Aislaciones Salta S.R.L', cuit: '30-7322114-9', telefono: '+54 387 499-5566', email: 'info@aislacionsalta.com.ar', sucursal: 'Sucursal Sur', activo: true },
-  { id: 34, codigo: '034', nombreFantasia: 'Herramientas Eléctricas del Valle', razonSocial: 'Herramientas Valle S.A', cuit: '30-7411993-2', telefono: '+54 388 477-8899', email: 'ventas@herramientasvalle.com', sucursal: 'Depósito Norte', activo: true },
-  { id: 35, codigo: '035', nombreFantasia: 'Distribuidora General Ferretera', razonSocial: 'Distri Ferretera S.R.L', cuit: '30-7099221-5', telefono: '+54 387 422-1144', email: 'contacto@distriferretera.com.ar', sucursal: 'Casa Central', activo: true }
+  { id: 1, codigo: '001', nombreFantasia: 'Ceramica Norte', razonSocial: 'Ceramica Norte S.A', cuit: '30-7623345-7', telefono: '+54 387 435-3422', email: 'contacto@ceramicanorte.com', id_sucursal: 1, activo: true },
+  { id: 2, codigo: '002', nombreFantasia: 'Hierros del NOA', razonSocial: 'Hierros del NOA S.R.L', cuit: '30-7346345-7', telefono: '+54 387 345-3422', email: 'ventas@hierrosdelnoa.com.ar', id_sucursal: 1, activo: false },
+  { id: 3, codigo: '003', nombreFantasia: 'Cementos Salta', razonSocial: 'Cementos Salta S.A', cuit: '30-734575-9', telefono: '+54 388 465-7457', email: 'info@cementossalta.com', id_sucursal: 1, activo: true },
+  { id: 4, codigo: '004', nombreFantasia: 'Distribuidora Cuyo', razonSocial: 'Distribuidora Cuyo S.R.L', cuit: '30-6812345-8', telefono: '+54 387 421-8899', email: 'pedidos@distribuidoracuyo.com', id_sucursal: 2, activo: true },
+  { id: 5, codigo: '005', nombreFantasia: 'Pinturas del Norte', razonSocial: 'Pinturas del Norte S.A', cuit: '30-7112233-4', telefono: '+54 387 498-1122', email: 'administracion@pinturasdelnorte.com', id_sucursal: 3, activo: false },
+  { id: 6, codigo: '006', nombreFantasia: 'Bulonera Salta', razonSocial: 'Bulonera Salta S.R.L', cuit: '30-7145678-9', telefono: '+54 387 423-5566', email: 'ventas@bulonerasalta.com.ar', id_sucursal: 2, activo: true },
+  { id: 7, codigo: '007', nombreFantasia: 'Sanitarios del Valle', razonSocial: 'Sanitarios del Valle S.A', cuit: '30-7234112-3', telefono: '+54 388 471-9988', email: 'info@sanitariosdelvalle.com', id_sucursal: 1, activo: true },
+  { id: 8, codigo: '008', nombreFantasia: 'Electricidad Andina', razonSocial: 'Electricidad Andina S.R.L', cuit: '30-6987412-5', telefono: '+54 387 409-3322', email: 'contacto@electricidadandina.com.ar', id_sucursal: 3, activo: false },
+  { id: 9, codigo: '009', nombreFantasia: 'Maderas del Norte', razonSocial: 'Maderas del Norte S.A', cuit: '30-7055441-2', telefono: '+54 387 455-7890', email: 'pedidos@maderasdelnorte.com', id_sucursal: 2, activo: true },
+  { id: 10, codigo: '010', nombreFantasia: 'Ferretería Industrial Güemes', razonSocial: 'Ferretería Güemes S.R.L', cuit: '30-7412389-1', telefono: '+54 388 488-2233', email: 'administracion@ferreteria-guemes.com.ar', id_sucursal: 1, activo: true },
+  { id: 11, codigo: '011', nombreFantasia: 'Áridos del Sur', razonSocial: 'Áridos del Sur S.A', cuit: '30-7198822-4', telefono: '+54 387 444-1122', email: 'ventas@aridosdelsur.com', id_sucursal: 2, activo: true },
+  { id: 12, codigo: '012', nombreFantasia: 'Yesos y Cielorrasos NOA', razonSocial: 'Yesos NOA S.R.L', cuit: '30-7331199-8', telefono: '+54 387 477-3344', email: 'contacto@yesosnoa.com.ar', id_sucursal: 3, activo: true },
+  { id: 13, codigo: '013', nombreFantasia: 'Herramientas Profesionales Salta', razonSocial: 'Herramientas Salta S.A', cuit: '30-7044556-3', telefono: '+54 388 422-9900', email: 'info@herramientassalta.com', id_sucursal: 1, activo: false },
+  { id: 14, codigo: '014', nombreFantasia: 'Aberturas de Aluminio Norte', razonSocial: 'Aluminio Norte S.R.L', cuit: '30-7266778-1', telefono: '+54 387 466-5533', email: 'pedidos@aluminionorte.com.ar', id_sucursal: 2, activo: true },
+  { id: 15, codigo: '015', nombreFantasia: 'Caños y Conexiones del Valle', razonSocial: 'Caños Valle S.A', cuit: '30-7155443-9', telefono: '+54 387 411-2244', email: 'ventas@canosvalle.com', id_sucursal: 3, activo: true },
+  { id: 16, codigo: '016', nombreFantasia: 'Impermeabilizantes Cuyo', razonSocial: 'Impermeabilizantes S.R.L', cuit: '30-6922334-5', telefono: '+54 388 433-7788', email: 'contacto@impercuyo.com', id_sucursal: 1, activo: true },
+  { id: 17, codigo: '017', nombreFantasia: 'Mallas y Metales Güemes', razonSocial: 'Metales Güemes S.A', cuit: '30-7488991-2', telefono: '+54 387 488-6655', email: 'info@metalesguemes.com.ar', id_sucursal: 2, activo: false },
+  { id: 18, codigo: '018', nombreFantasia: 'Ladrillos Cerámicos San Cayetano', razonSocial: 'Cerámica San Cayetano S.R.L', cuit: '30-7211223-6', telefono: '+54 387 499-4411', email: 'pedidos@sancayetano.com', id_sucursal: 1, activo: true },
+  { id: 19, codigo: '019', nombreFantasia: 'Pinturería Industrial Centro', razonSocial: 'Pinturas Centro S.A', cuit: '30-7399884-7', telefono: '+54 388 455-1199', email: 'ventas@pinturascentro.com.ar', id_sucursal: 3, activo: true },
+  { id: 20, codigo: '020', nombreFantasia: 'Techitos y Chapas del Norte', razonSocial: 'Chapas Norte S.R.L', cuit: '30-7133445-0', telefono: '+54 387 422-7766', email: 'contacto@chapasnorte.com', id_sucursal: 2, activo: true },
+  { id: 21, codigo: '021', nombreFantasia: 'Adhesivos y Pegamentos Salta', razonSocial: 'Pegamentos Salta S.A', cuit: '30-7088776-4', telefono: '+54 387 433-8899', email: 'info@pegamentosalta.com', id_sucursal: 1, activo: true },
+  { id: 22, codigo: '022', nombreFantasia: 'Ferretería Mayorista Andina', razonSocial: 'Andina Mayorista S.R.L', cuit: '30-7455667-8', telefono: '+54 388 411-3322', email: 'ventas@andinamayorista.com.ar', id_sucursal: 3, activo: false },
+  { id: 23, codigo: '023', nombreFantasia: 'Construcciones Secundarias SRL', razonSocial: 'Secundarias S.R.L', cuit: '30-7244332-1', telefono: '+54 387 466-9900', email: 'pedidos@secundarias.com', id_sucursal: 2, activo: true },
+  { id: 24, codigo: '024', nombreFantasia: 'Equipamientos para Obra', razonSocial: 'Equipamientos Obra S.A', cuit: '30-7311225-9', telefono: '+54 387 477-1133', email: 'contacto@equipamientosobra.com', id_sucursal: 1, activo: true },
+  { id: 25, codigo: '025', nombreFantasia: 'Maderas y Derivados del Litoral', razonSocial: 'Derivados Litoral S.R.L', cuit: '30-6899443-2', telefono: '+54 388 499-2244', email: 'info@litoralmaderas.com.ar', id_sucursal: 3, activo: true },
+  { id: 26, codigo: '026', nombreFantasia: 'Cerrajería y Herrajes Salta', razonSocial: 'Herrajes Salta S.A', cuit: '30-7166554-3', telefono: '+54 387 444-5566', email: 'ventas@herrajessalta.com', id_sucursal: 1, activo: true },
+  { id: 27, codigo: '027', nombreFantasia: 'Grifería y Sanitarios del Norte', razonSocial: 'Sanitarios Norte S.R.L', cuit: '30-7299881-6', telefono: '+54 387 411-7788', email: 'contacto@sanitariosnorte.com.ar', id_sucursal: 2, activo: false },
+  { id: 28, codigo: '028', nombreFantasia: 'Cables y Materiales Eléctricos', razonSocial: 'Materiales Eléctricos S.A', cuit: '30-7377665-2', telefono: '+54 388 422-3344', email: 'pedidos@matelectricos.com', id_sucursal: 3, activo: true },
+  { id: 29, codigo: '029', nombreFantasia: 'Placas de Yeso Durlock Salta', razonSocial: 'Durlock Salta S.R.L', cuit: '30-7422119-5', telefono: '+54 387 455-6677', email: 'info@durlocksalta.com.ar', id_sucursal: 1, activo: true },
+  { id: 30, codigo: '030', nombreFantasia: 'Estructuras Metálicas del NOA', razonSocial: 'Estructuras NOA S.A', cuit: '30-7033221-8', telefono: '+54 387 488-9900', email: 'ventas@estructurasnoa.com', id_sucursal: 2, activo: true },
+  { id: 31, codigo: '031', nombreFantasia: 'Áridos y Cementos Güemes', razonSocial: 'Güemes Materiales S.R.L', cuit: '30-7188774-1', telefono: '+54 388 433-2211', email: 'contacto@guemesmateriales.com.ar', id_sucursal: 3, activo: true },
+  { id: 32, codigo: '032', nombreFantasia: 'Pisos y Revestimientos Cerámicos', razonSocial: 'Pisos Cerámicos S.A', cuit: '30-7255446-7', telefono: '+54 387 466-1122', email: 'pedidos@pisosceramicos.com', id_sucursal: 1, activo: false },
+  { id: 33, codigo: '033', nombreFantasia: 'Aislaciones Térmicas y Acústicas', razonSocial: 'Aislaciones Salta S.R.L', cuit: '30-7322114-9', telefono: '+54 387 499-5566', email: 'info@aislacionsalta.com.ar', id_sucursal: 2, activo: true },
+  { id: 34, codigo: '034', nombreFantasia: 'Herramientas Eléctricas del Valle', razonSocial: 'Herramientas Valle S.A', cuit: '30-7411993-2', telefono: '+54 388 477-8899', email: 'ventas@herramientasvalle.com', id_sucursal: 3, activo: true },
+  { id: 35, codigo: '035', nombreFantasia: 'Distribuidora General Ferretera', razonSocial: 'Distri Ferretera S.R.L', cuit: '30-7099221-5', telefono: '+54 387 422-1144', email: 'contacto@distriferretera.com.ar', id_sucursal: 1, activo: true }
 ];
 
 export const metodosPago = [
@@ -476,7 +680,6 @@ export const unidadesOpciones = [
     { id: 5, label: 'Bolsón / m³' }
 ];
 
-// Funciones auxiliares opcionales para consultar marcas o unidades de forma limpia
 export const getMarcaNombre = (idMarca) => {
     return marcasOpciones[idMarca - 1] || 'Genérica';
 };
@@ -491,6 +694,58 @@ export const categorias = [
     { id: 2, nombre: 'Hierros y Aceros' },
     { id: 3, nombre: 'Cementos, Cales y Áridos' },
     { id: 4, nombre: 'Sanitarios y Plomería' }
+];
+
+// Tabla intermedia simulada: PRODUCTOS_X_PROVEEDORES
+// Relaciona cada producto con su(s) proveedor(es), código de proveedor y precio de lista correspondiente[cite: 7].
+export const productosXProveedores = [
+  // --- Cerámicos y Revestimientos (Cat 1) ---
+  { id: 1, id_Productos: 101, id_Proveedores: 1, codigo_Producto_Proveedor: '001-CER-6060-MB', precio_Lista: 35000, estado: true },
+  { id: 2, id_Productos: 102, id_Proveedores: 1, codigo_Producto_Proveedor: '001-CER-4545-COR', precio_Lista: 17500, estado: true },
+  { id: 3, id_Productos: 103, id_Proveedores: 1, codigo_Producto_Proveedor: '001-REV-3060-GRIS', precio_Lista: 23000, estado: true },
+  { id: 4, id_Productos: 104, id_Proveedores: 1, codigo_Producto_Proveedor: '001-POR-20120-MAD', precio_Lista: 40000, estado: true },
+  { id: 5, id_Productos: 105, id_Proveedores: 1, codigo_Producto_Proveedor: '001-ZOC-1045', precio_Lista: 3800, estado: false },
+  { id: 6, id_Productos: 106, id_Proveedores: 10, codigo_Producto_Proveedor: '010-PEG-WEB-25', precio_Lista: 15500, estado: true },
+  { id: 7, id_Productos: 107, id_Proveedores: 21, codigo_Producto_Proveedor: '021-PAS-IMP-1KG', precio_Lista: 3400, estado: true },
+  { id: 8, id_Productos: 108, id_Proveedores: 14, codigo_Producto_Proveedor: '014-LIS-ALU-25', precio_Lista: 11000, estado: true },
+  { id: 9, id_Productos: 109, id_Proveedores: 7, codigo_Producto_Proveedor: '007-MOS-VEN-3030', precio_Lista: 11800, estado: true },
+  { id: 10, id_Productos: 110, id_Proveedores: 14, codigo_Producto_Proveedor: '014-GUA-CUR-10', precio_Lista: 9200, estado: true },
+
+  // --- Hierros y Aceros (Cat 2) ---
+  { id: 11, id_Productos: 201, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-6', precio_Lista: 6700, estado: true },
+  { id: 12, id_Productos: 202, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-8', precio_Lista: 10500, estado: true },
+  { id: 13, id_Productos: 203, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-10', precio_Lista: 16500, estado: true },
+  { id: 14, id_Productos: 204, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-12', precio_Lista: 23500, estado: true },
+  { id: 15, id_Productos: 205, id_Proveedores: 17, codigo_Producto_Proveedor: '017-MAL-CIM-42', precio_Lista: 30000, estado: true },
+  { id: 16, id_Productos: 206, id_Proveedores: 17, codigo_Producto_Proveedor: '017-MAL-CIM-55', precio_Lista: 45000, estado: true },
+  { id: 17, id_Productos: 207, id_Proveedores: 6, codigo_Producto_Proveedor: '006-ALA-REC-16', precio_Lista: 4700, estado: false },
+  { id: 18, id_Productos: 208, id_Proveedores: 30, codigo_Producto_Proveedor: '030-PER-C-100', precio_Lista: 52000, estado: true },
+  { id: 19, id_Productos: 209, id_Proveedores: 30, codigo_Producto_Proveedor: '030-PER-C-120', precio_Lista: 61000, estado: true },
+  { id: 20, id_Productos: 210, id_Proveedores: 20, codigo_Producto_Proveedor: '020-CHA-NEG-18', precio_Lista: 38500, estado: true },
+
+  // --- Cementos, Cales y Áridos (Cat 3) ---
+  { id: 21, id_Productos: 301, id_Proveedores: 3, codigo_Producto_Proveedor: '003-CEM-HOL-25', precio_Lista: 18500, estado: true },
+  { id: 22, id_Productos: 302, id_Proveedores: 31, codigo_Producto_Proveedor: '031-CAL-VIV-25', precio_Lista: 14800, estado: true },
+  { id: 23, id_Productos: 303, id_Proveedores: 3, codigo_Producto_Proveedor: '003-CAL-APA-30', precio_Lista: 14800, estado: true },
+  { id: 24, id_Productos: 304, id_Proveedores: 11, codigo_Producto_Proveedor: '011-ARE-FIN-25', precio_Lista: 7400, estado: false },
+  { id: 25, id_Productos: 305, id_Proveedores: 11, codigo_Producto_Proveedor: '011-CAN-ROD-25', precio_Lista: 8000, estado: true },
+  { id: 26, id_Productos: 306, id_Proveedores: 3, codigo_Producto_Proveedor: '003-CEM-PLA-40', precio_Lista: 17000, estado: true },
+  { id: 27, id_Productos: 307, id_Proveedores: 11, codigo_Producto_Proveedor: '011-CAS-MOL-1M3', precio_Lista: 35000, estado: true },
+  { id: 28, id_Productos: 308, id_Proveedores: 11, codigo_Producto_Proveedor: '011-ARE-GRU-1M3', precio_Lista: 42000, estado: true },
+  { id: 29, id_Productos: 309, id_Proveedores: 16, codigo_Producto_Proveedor: '016-ACE-SIK-5L', precio_Lista: 23000, estado: true },
+  { id: 30, id_Productos: 310, id_Proveedores: 16, codigo_Producto_Proveedor: '016-HID-SIK-4K', precio_Lista: 11400, estado: true },
+
+  // --- Sanitarios y Plomería (Cat 4) ---
+  { id: 31, id_Productos: 701, id_Proveedores: 15, codigo_Producto_Proveedor: '015-CAN-PVC-110', precio_Lista: 20500, estado: true },
+  { id: 32, id_Productos: 702, id_Proveedores: 15, codigo_Producto_Proveedor: '015-CAN-TER-20', precio_Lista: 7700, estado: true },
+  { id: 33, id_Productos: 703, id_Proveedores: 15, codigo_Producto_Proveedor: '015-CAN-TER-25', precio_Lista: 11100, estado: true },
+  { id: 34, id_Productos: 704, id_Proveedores: 15, codigo_Producto_Proveedor: '015-COD-PVC-110', precio_Lista: 4200, estado: true },
+  { id: 35, id_Productos: 705, id_Proveedores: 7, codigo_Producto_Proveedor: '007-INO-FER-BAR', precio_Lista: 230000, estado: true },
+  { id: 36, id_Productos: 706, id_Proveedores: 7, codigo_Producto_Proveedor: '007-BID-FER-BAR', precio_Lista: 114000, estado: true },
+  { id: 37, id_Productos: 707, id_Proveedores: 27, codigo_Producto_Proveedor: '027-GRI-MON-FV', precio_Lista: 80000, estado: true },
+  { id: 38, id_Productos: 708, id_Proveedores: 27, codigo_Producto_Proveedor: '027-SIF-DOB-COC', precio_Lista: 10800, estado: false },
+  { id: 39, id_Productos: 709, id_Proveedores: 27, codigo_Producto_Proveedor: '027-VAL-DES-INO', precio_Lista: 51000, estado: true },
+  { id: 40, id_Productos: 710, id_Proveedores: 28, codigo_Producto_Proveedor: '028-TAN-AGU-1000', precio_Lista: 245000, estado: true }
 ];
 
 export const productos = [

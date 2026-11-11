@@ -14,7 +14,8 @@ import {
   IconReceipt,
   IconForms,
   IconUser,
-  IconTags // 1. Importamos IconTags (o el ícono que prefieras para productos)
+  IconTags,
+  IconBuildingStore 
 } from '@tabler/icons-react';
 
 export const menuCategories = [
@@ -41,7 +42,7 @@ export const menuCategories = [
     title: 'Inventario',
     icono: IconPackage,
     modules: [
-      { name: 'Productos', path: '/productos', detalle: 'Gestionar inventario, precios y artículos', icono: IconTags, roles: ['Administrador', 'Empleado'] }, // 2. Añadido el módulo de Productos
+      { name: 'Productos', path: '/productos', detalle: 'Gestionar inventario, precios y artículos', icono: IconTags, roles: ['Administrador', 'Empleado'] },
       { name: 'Stock', path: '/stock', detalle: 'Controlar stock y depósitos', icono: IconBuildingWarehouse, roles: ['Administrador', 'Empleado'] },
       { name: 'Proveedores', path: '/proveedores', detalle: 'Gestionar información y estado de proveedores', icono: IconTruck, roles: ['Administrador'] }
     ]
@@ -53,7 +54,8 @@ export const menuCategories = [
     modules: [
       { name: 'Facturación', path: '/facturacion', detalle: 'Seguimiento de facturas', icono: IconFileText, roles: ['Administrador'] },
       { name: 'Caja', path: '/caja', detalle: 'Seguimiento de caja', icono: IconCash, roles: ['Administrador', 'Empleado'] },
-      { name: 'Empleados', path: '/empleados', detalle: 'Gestionar usuarios y permisos', icono: IconUser, roles: ['Administrador'] }
+      { name: 'Empleados', path: '/empleados', detalle: 'Gestionar usuarios y permisos', icono: IconUser, roles: ['Administrador'] },
+      { name: 'Sucursales', path: '/sucursales', detalle: 'Gestionar información y estado de las sucursales', icono: IconBuildingStore, roles: ['Administrador'] }
     ]
   },
   {

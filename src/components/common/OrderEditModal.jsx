@@ -3,9 +3,12 @@ import { IconX, IconTrash, IconPlus, IconMinus, IconSearch, IconBox, IconCreditC
 import { categorias, metodosPago, sucursales, cajas } from '../../data/mock.js';
 import '../../styles/OrderEditModal.css';
 
+// Filtrar únicamente sucursales activas
+const sucursalesActivas = sucursales.filter((s) => s.activo === true || s.activo === undefined);
+
 // Cajas activas de una sucursal
 const getCajasActivas = (idSucursal) =>
-    cajas.filter((c) => c.id_sucursales === Number(idSucursal) && c.estado === 'Activo');
+    cajas.filter((c) => (c.id_sucursales === Number(idSucursal) || c.ID_Sucursales === Number(idSucursal)) && (c.estado === 'Activo' || c.estado === 'activo'));
 
 export default function OrderEditModal({ isOpen, onClose, order, catalog = [], onSave }) {
     const [items, setItems] = useState([]);
@@ -30,7 +33,7 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
             }
 
             const cajaActual = cajas.find((c) => c.id_cajas === order.id_cajas);
-            const idSucursal = cajaActual ? cajaActual.id_sucursales : order.id_sucursal;
+            const idSucursal = cajaActual ? (cajaActual.ID_Sucursales || cajaActual.id_sucursales) : (order.ID_Sucursales || order.id_sucursal);
             setSucursalSeleccionada(idSucursal ? String(idSucursal) : '');
             setCajaSeleccionada(order.id_cajas ? String(order.id_cajas) : '');
         }
@@ -40,7 +43,7 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
 
     if (!isOpen || !order) return null;
 
-    const sucursalObj = sucursales.find((s) => s.id === Number(sucursalSeleccionada));
+    const sucursalObj = sucursalesActivas.find((s) => String(s.ID_Sucursales || s.id) === String(sucursalSeleccionada));
 
     // Cajas activas de la sucursal elegida; si la caja actual de la compra está inactiva
     // y pertenece a esa sucursal, se mantiene en la lista para que no desaparezca
@@ -48,7 +51,7 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
     const cajaActual = cajas.find((c) => c.id_cajas === order.id_cajas);
     const cajasOpciones =
         cajaActual &&
-        cajaActual.id_sucursales === Number(sucursalSeleccionada) &&
+        (cajaActual.id_sucursales === Number(sucursalSeleccionada) || cajaActual.ID_Sucursales === Number(sucursalSeleccionada)) &&
         !cajasActivas.some((c) => c.id_cajas === cajaActual.id_cajas)
             ? [cajaActual, ...cajasActivas]
             : cajasActivas;
@@ -190,7 +193,7 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
             ...order,
             id_cajas: Number(cajaSeleccionada),
             id_sucursal: Number(sucursalSeleccionada),
-            destino: sucursalObj ? sucursalObj.nombre : order.destino,
+            destino: sucursalObj ? (sucursalObj.Nombre || sucursalObj.nombre) : order.destino,
             detalles: items,
             pagos: pagos
         };
@@ -221,9 +224,13 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
                                 onChange={(e) => handleSucursalChange(e.target.value)}
                                 className="order-select-categoria"
                             >
-                                {sucursales.map((s) => (
-                                    <option key={s.id} value={s.id}>{s.nombre}</option>
-                                ))}
+                                {sucursalesActivas.map((s) => {
+                                    const idSuc = s.ID_Sucursales || s.id;
+                                    const nombreSuc = s.Nombre || s.nombre;
+                                    return (
+                                        <option key={idSuc} value={idSuc}>{nombreSuc}</option>
+                                    );
+                                })}
                             </select>
                         </div>
 
@@ -240,7 +247,7 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
                                 )}
                                 {cajasOpciones.map((c) => (
                                     <option key={c.id_cajas} value={c.id_cajas}>
-                                        Caja {c.id_cajas}{c.estado !== 'Activo' ? ` (${c.estado})` : ''}
+                                        Caja {c.id_cajas}{c.estado !== 'Activo' && c.estado !== 'activo' ? ` (${c.estado})` : ''}
                                     </option>
                                 ))}
                             </select>
@@ -282,7 +289,7 @@ export default function OrderEditModal({ isOpen, onClose, order, catalog = [], o
                                 {productosFiltrados.length > 0 ? (
                                     productosFiltrados.map((prod) => (
                                         <div
-                                            key={prod.id}
+                                            key={prod.id || prod.codigo}
                                             className="order-sugerencia-item"
                                             onClick={() => agregarProducto(prod)}
                                         >

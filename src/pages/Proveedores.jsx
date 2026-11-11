@@ -12,14 +12,18 @@ import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js';
 import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
-import { proveedores as datos } from '../data/mock.js';
+import { proveedores as datos, sucursales } from '../data/mock.js';
 import '../styles/Proveedores.css';
 
-const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
+const iniciales = (nombre = '') => nombre.split(' ').slice(0, 2).map((p) => p[0] || '').join('').toUpperCase();
 
 export default function Proveedores() {
     const [proveedores, setProveedores] = useState(
-        datos.map(p => ({ ...p, detalleBaja: p.detalleBaja || '' }))
+        datos.map(p => ({ 
+            ...p, 
+            detalleBaja: p.detalleBaja || '',
+            id_sucursal: p.id_sucursal || sucursales[0]?.ID_Sucursales || 1 
+        }))
     );
     const [busqueda, setBusqueda] = useState('');
     const [tabActiva, setTabActiva] = useState('todos');
@@ -30,15 +34,27 @@ export default function Proveedores() {
     const activos = proveedores.filter((p) => p.activo).length;
     const inactivos = proveedores.filter((p) => !p.activo).length;
 
-    const sucursalesDisponibles = [...new Set(proveedores.map((p) => p.sucursal))];
+    // Obtener nombres de sucursales únicas basadas en su Nombre para el filtro
+    const sucursalesDisponibles = useMemo(() => {
+        return sucursales.map((s) => s.Nombre);
+    }, []);
 
     const ultimoCodigo = proveedores.length > 0 ? proveedores[proveedores.length - 1].codigo : '003';
     const siguienteCodigo = String(Number(ultimoCodigo) + 1).padStart(3, '0');
 
     const valoresIniciales = useMemo(() => {
-        if (!proveedorEditando) return { codigo: siguienteCodigo };
-        const { codigo, nombreFantasia, razonSocial, cuit, telefono, email, sucursal } = proveedorEditando;
-        return { codigo, nombreFantasia, razonSocial, cuit, telefono, email: email || '', sucursal };
+        if (!proveedorEditando) return { codigo: siguienteCodigo, id_sucursal: sucursales[0]?.Nombre || '' };
+        const { codigo, nombreFantasia, razonSocial, cuit, telefono, email, id_sucursal } = proveedorEditando;
+        const sucObj = sucursales.find(s => s.ID_Sucursales === id_sucursal);
+        return { 
+            codigo, 
+            nombreFantasia, 
+            razonSocial, 
+            cuit, 
+            telefono, 
+            email: email || '', 
+            id_sucursal: sucObj ? sucObj.Nombre : sucursales[0]?.Nombre || '' 
+        };
     }, [proveedorEditando, siguienteCodigo]);
 
     const abrirNuevo = () => {
@@ -67,6 +83,7 @@ export default function Proveedores() {
         });
     };
 
+    // Configuración de campos del formulario adaptada a select de opciones con nombres de sucursales
     const camposProveedor = [
         { name: 'codigo', label: 'Código', disabled: true, badge: 'AUTOGENERADO' },
         { name: 'nombreFantasia', label: 'Nombre de Fantasía', placeholder: 'Ej: Ceramica Norte', required: true },
@@ -75,10 +92,10 @@ export default function Proveedores() {
         { name: 'telefono', label: 'Teléfono', placeholder: '+54 387 000-0000', required: true },
         { name: 'email', label: 'Email', type: 'email', placeholder: 'nombre@gmail.com', required: true },
         { 
-            name: 'sucursal', 
+            name: 'id_sucursal', 
             label: 'Sucursal', 
             type: 'select', 
-            options: ['Casa Central', 'Sucursal Sur', 'Depósito Norte'],
+            options: sucursales.map(s => s.Nombre),
             required: true 
         }
     ];
@@ -177,6 +194,9 @@ export default function Proveedores() {
     };
 
     const handleGuardarProveedor = (data) => {
+        const sucEncontrada = sucursales.find(s => s.Nombre === data.id_sucursal);
+        const idSucursalNum = sucEncontrada ? sucEncontrada.ID_Sucursales : 1;
+
         if (proveedorEditando) {
             const actualizado = {
                 ...proveedorEditando,
@@ -185,7 +205,7 @@ export default function Proveedores() {
                 cuit: data.cuit,
                 telefono: data.telefono,
                 email: data.email,
-                sucursal: data.sucursal,
+                id_sucursal: idSucursalNum,
             };
             setProveedores((prev) => prev.map((prov) => (prov.id === actualizado.id ? actualizado : prov)));
             Swal.fire({
@@ -206,7 +226,7 @@ export default function Proveedores() {
             cuit: data.cuit,
             telefono: data.telefono,
             email: data.email,
-            sucursal: data.sucursal,
+            id_sucursal: idSucursalNum,
             activo: true,
             detalleBaja: ''
         };
@@ -229,13 +249,16 @@ export default function Proveedores() {
     ];
 
     const proveedoresFiltrados = proveedores.filter((p) => {
+        const sucursalObj = sucursales.find(s => s.ID_Sucursales === p.id_sucursal);
+        const nombreSucursal = sucursalObj ? sucursalObj.Nombre : '';
+
         let cumpleTab = true;
         if (tabActiva === 'activos') {
             cumpleTab = p.activo;
         } else if (tabActiva === 'inactivos') {
             cumpleTab = !p.activo;
         } else if (tabActiva === 'sucursal') {
-            cumpleTab = sucursalSeleccionada ? p.sucursal === sucursalSeleccionada : true;
+            cumpleTab = sucursalSeleccionada ? nombreSucursal === sucursalSeleccionada : true;
         }
 
         const query = busqueda.toLowerCase().trim();
@@ -246,7 +269,7 @@ export default function Proveedores() {
             p.razonSocial.toLowerCase().includes(query) ||
             p.cuit.toLowerCase().includes(query) ||
             (p.email && p.email.toLowerCase().includes(query)) ||
-            p.sucursal.toLowerCase().includes(query);
+            nombreSucursal.toLowerCase().includes(query);
 
         return cumpleTab && cumpleBusqueda;
     });
@@ -303,67 +326,72 @@ export default function Proveedores() {
         <GenericTable
             columnas={columnas}
             datos={datosVisibles}
-            renderFila={(p) => (
-                <tr key={p.id} className="fila-empleado">
-                    <td className="celda-tabla-legajo">N.° {p.codigo}</td>
-                    <td className="celda-tabla-info">
-                        <span className="info-empleado-flex">
-                            <span className="avatar-iniciales">{iniciales(p.nombreFantasia)}</span>
-                            <div className="proveedor-info-detalles">
-                                <strong>{p.nombreFantasia}</strong>
-                                <div className="proveedor-razon-social">{p.razonSocial}</div>
-                            </div>
-                        </span>
-                    </td>
-                    <td className="celda-tabla-texto">{p.cuit}</td>
-                    <td className="celda-tabla-texto">{p.telefono}</td>
-                    <td className="celda-tabla-gris">{p.email || '-'}</td>
-                    <td className="celda-tabla-gris">{p.sucursal}</td>
-                    <td className="celda-tabla-texto">
-                        <span className={`etiqueta-estado ${p.activo ? 'estado-activo' : 'estado-inactivo'}`}>
-                            {p.activo ? 'Activo' : 'Inactivo'}
-                        </span>
-                    </td>
-                    <td className="celda-tabla-info">
-                        {!p.activo ? (
-                            <button 
-                                type="button" 
-                                onClick={() => verDetalleBaja(p)} 
-                                className="boton-justificacion"
-                                title="Ver motivo de baja"
-                            >
-                                <span className="contenido-boton-justificacion">
-                                    <IconInfoCircle size={16} />Detalle
-                                </span>
-                            </button>
-                        ) : (
-                            <span className="celda-tabla-gris">-</span>
-                        )}
-                    </td>
-                    <td className="celda-tabla-info">
-                        <span className="acciones-fila">
-                            <button
-                                type="button"
-                                className="boton-accion-icono"
-                                onClick={() => abrirEdicion(p)}
-                                title="Editar proveedor"
-                                aria-label={`Editar ${p.nombreFantasia}`}
-                            >
-                                <IconEdit size={18} />
-                            </button>
-                            <button
-                                type="button"
-                                className={`boton-accion-icono ${p.activo ? 'accion-desactivar' : 'accion-activar'}`}
-                                onClick={() => cambiarEstado(p)}
-                                title={p.activo ? 'Desactivar proveedor' : 'Activar proveedor'}
-                                aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombreFantasia}`}
-                            >
-                                <IconPower size={18} />
-                            </button>
-                        </span>
-                    </td>
-                </tr>
-            )}
+            renderFila={(p) => {
+                const sucursalObj = sucursales.find(s => s.ID_Sucursales === p.id_sucursal);
+                const nombreSucursal = sucursalObj ? sucursalObj.Nombre : 'Sin Sucursal';
+
+                return (
+                    <tr key={p.id} className="fila-empleado">
+                        <td className="celda-tabla-legajo">N.° {p.codigo}</td>
+                        <td className="celda-tabla-info">
+                            <span className="info-empleado-flex">
+                                <span className="avatar-iniciales">{iniciales(p.nombreFantasia)}</span>
+                                <div className="proveedor-info-detalles">
+                                    <strong>{p.nombreFantasia}</strong>
+                                    <div className="proveedor-razon-social">{p.razonSocial}</div>
+                                </div>
+                            </span>
+                        </td>
+                        <td className="celda-tabla-texto">{p.cuit}</td>
+                        <td className="celda-tabla-texto">{p.telefono}</td>
+                        <td className="celda-tabla-gris">{p.email || '-'}</td>
+                        <td className="celda-tabla-gris">{nombreSucursal}</td>
+                        <td className="celda-tabla-texto">
+                            <span className={`etiqueta-estado ${p.activo ? 'estado-activo' : 'estado-inactivo'}`}>
+                                {p.activo ? 'Activo' : 'Inactivo'}
+                            </span>
+                        </td>
+                        <td className="celda-tabla-info">
+                            {!p.activo ? (
+                                <button 
+                                    type="button" 
+                                    onClick={() => verDetalleBaja(p)} 
+                                    className="boton-justificacion"
+                                    title="Ver motivo de baja"
+                                >
+                                    <span className="contenido-boton-justificacion">
+                                        <IconInfoCircle size={16} />Detalle
+                                    </span>
+                                </button>
+                            ) : (
+                                <span className="celda-tabla-gris">-</span>
+                            )}
+                        </td>
+                        <td className="celda-tabla-info">
+                            <span className="acciones-fila">
+                                <button
+                                    type="button"
+                                    className="boton-accion-icono"
+                                    onClick={() => abrirEdicion(p)}
+                                    title="Editar proveedor"
+                                    aria-label={`Editar ${p.nombreFantasia}`}
+                                >
+                                    <IconEdit size={18} />
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`boton-accion-icono ${p.activo ? 'accion-desactivar' : 'accion-activar'}`}
+                                    onClick={() => cambiarEstado(p)}
+                                    title={p.activo ? 'Desactivar proveedor' : 'Activar proveedor'}
+                                    aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombreFantasia}`}
+                                >
+                                    <IconPower size={18} />
+                                </button>
+                            </span>
+                        </td>
+                    </tr>
+                );
+            }}
         />
 
         {tieneMas && (

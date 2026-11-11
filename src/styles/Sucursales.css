@@ -1,0 +1,211 @@
+/* ============================================
+ESTILOS DE SUCURSALES - FER-CONS
+============================================ */
+
+.contenedor-tabla-sucursales {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    margin-top: 2rem;
+    overflow-x: auto;
+    border-radius: 1rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+    .contenedor-tabla-sucursales {
+        margin-left: 3rem;
+        margin-right: 3rem;
+    }
+}
+
+.tabla-sucursales {
+    width: 100%;
+    min-width: 800px;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.cabecera-fila-sucursales {
+    border-bottom: 1px solid rgba(15, 42, 48, 0.2);
+}
+
+.celda-cabecera-sucursales {
+    padding: 1rem;
+    font-size: 1.125rem;
+    font-weight: 400;
+    color: var(--color-oscuro);
+}
+
+.contenido-telefono-th {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.fila-sucursal {
+    border-bottom: 1px solid rgba(15, 42, 48, 0.1);
+}
+
+.fila-sucursal:last-child {
+    border-bottom: none;
+}
+
+.celda-tabla-codigo {
+    padding: 1rem;
+    color: rgba(15, 42, 48, 0.7);
+}
+
+.celda-tabla-info {
+    padding: 1rem;
+}
+
+.info-sucursal-flex {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.sucursal-info-detalles {
+    text-align: left;
+}
+
+.sucursal-direccion-secundaria {
+    font-size: 0.8rem;
+    color: rgba(15, 42, 48, 0.6);
+}
+
+.avatar-iniciales {
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border-radius: 0.5rem;
+    background-color: var(--color-sidebar);
+    font-size: 0.875rem;
+    color: #ffffff;
+}
+
+.celda-tabla-texto {
+    padding: 1rem;
+    color: var(--color-oscuro);
+}
+
+.celda-tabla-gris {
+    padding: 1rem;
+    color: rgba(15, 42, 48, 0.7);
+}
+
+.etiqueta-estado {
+    border-radius: 9999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.estado-activo {
+    background-color: #bbf7d0;
+    color: #166534;
+}
+
+.estado-inactivo {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+.boton-justificacion {
+    width: 100%;
+    border-radius: 0.5rem;
+    background-color: var(--color-tarjeta);
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.boton-justificacion:hover {
+    background-color: var(--color-circulo);
+}
+
+.contenido-boton-justificacion {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--color-oscuro);
+}
+
+/* Botones de acciones por fila (editar / activar-desactivar) */
+.acciones-fila {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.boton-accion-icono {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: var(--color-tarjeta);
+    color: var(--color-oscuro);
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.boton-accion-icono:hover {
+    background-color: var(--color-circulo);
+    transform: scale(1.05);
+}
+
+/* Sucursal Activa -> Botón de acción rápido en fondo rojo */
+.accion-desactivar {
+    background-color: #fee2e2 !important;
+    color: #991b1b !important;
+}
+.accion-desactivar:hover {
+    background-color: #fecaca !important;
+}
+
+/* Sucursal Inactiva -> Botón de acción rápido en fondo verde */
+.accion-activar {
+    background-color: #bbf7d0 !important;
+    color: #166534 !important;
+}
+.accion-activar:hover {
+    background-color: #a7f3d0 !important;
+}
+
+/* Estilos para el popup de confirmación de reactivación (SweetAlert2) */
+.swal-reactivacion-wrapper {
+    text-align: center;
+    font-family: inherit;
+    padding: 0.5rem 0;
+}
+
+.swal-reactivacion-sub {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.swal-reactivacion-titulo {
+    margin: 0 0 0.75rem 0;
+    color: #0f2a30;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.swal-reactivacion-texto {
+    margin: 0;
+    color: #475569;
+    font-size: 0.95rem;
+}

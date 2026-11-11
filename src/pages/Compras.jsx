@@ -15,14 +15,18 @@ import '../styles/Compras.css';
 
 const iniciales = (nombre) => nombre.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase();
 
-// Caja que realizó la compra y sucursal a la que pertenece esa caja
+// Caja que realizó la compra y sucursal a la que pertenece esa caja (adaptado a ID_Sucursales o id_sucursales)
 const getCaja = (c) => cajas.find((x) => x.id_cajas === c.id_cajas);
 const getSucursal = (c) => {
     const caja = getCaja(c);
-    return sucursales.find((s) => s.id === (caja ? caja.id_sucursales : c.id_sucursal));
+    const idSuc = caja ? (caja.ID_Sucursales || caja.id_sucursales) : (c.ID_Sucursales || c.id_sucursal);
+    return sucursales.find((s) => (s.ID_Sucursales || s.id) === idSuc);
 };
 
-const opcionesSucursales = sucursales.map((s) => ({ value: String(s.id), label: s.nombre }));
+const opcionesSucursales = sucursales.map((s) => ({ 
+    value: String(s.ID_Sucursales || s.id), 
+    label: s.Nombre || s.nombre 
+}));
 
 export default function Compras() {
     const [compras, setCompras] = useState(
@@ -74,7 +78,8 @@ export default function Compras() {
             cumpleTab = fechaFiltro ? c.fecha === fechaFiltro : true;
         } else if (tabActiva === 'por_sucursal') {
             const suc = getSucursal(c);
-            cumpleTab = sucursalFiltro ? String(suc ? suc.id : '') === sucursalFiltro : true;
+            const sucId = suc ? (suc.ID_Sucursales || suc.id) : '';
+            cumpleTab = sucursalFiltro ? String(sucId) === sucursalFiltro : true;
         }
 
         const query = busqueda.toLowerCase().trim();
@@ -333,7 +338,7 @@ export default function Compras() {
                                 <div className="detalle-dato">
                                     <span className="detalle-label">Sucursal</span>
                                     <span className="detalle-valor">
-                                        {sucursalDetalle ? sucursalDetalle.nombre : compraSeleccionada.destino}
+                                        {sucursalDetalle ? (sucursalDetalle.Nombre || sucursalDetalle.nombre) : compraSeleccionada.destino}
                                     </span>
                                 </div>
                                 <div className="detalle-dato">
