@@ -176,74 +176,11 @@ ESTILOS DE PRODUCTOS - FER-CONS
     background-color: #a7f3d0 !important;
 }
 
-/* Estilos personalizados para el popup de confirmación de reactivación y bajas (SweetAlert2) */
-.swal-reactivacion-wrapper {
-    text-align: center;
-    font-family: inherit;
-    padding: 0.5rem 0;
-}
-
-.swal-reactivacion-sub {
-    font-size: 0.75rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 700;
-    display: block;
-    margin-bottom: 0.25rem;
-}
-
-.swal-reactivacion-titulo {
-    margin: 0 0 0.75rem 0;
-    color: #0f2a30;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.swal-reactivacion-texto {
-    margin: 0;
-    color: #475569;
-    font-size: 0.95rem;
-}
-
+/* Contenedor de botones del popup de baja (lo usa showConfirmInputAlert como customClass) */
 .swal-actions-custom {
     display: flex;
     gap: 0.75rem;
     margin-top: 1.5rem;
     justify-content: center;
     width: 100%;
-}
-
-.swal-btn-confirm-custom {
-    background-color: var(--color-primario, #0f2a30) !important;
-    color: #ffffff !important;
-    border: none !important;
-    border-radius: 0.5rem !important;
-    padding: 0.65rem 1.25rem !important;
-    font-size: 0.9rem !important;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-    box-shadow: none !important;
-    transition: opacity 0.2s;
-}
-
-.swal-btn-confirm-custom:hover {
-    opacity: 0.9;
-}
-
-.swal-btn-cancel-custom {
-    background-color: #f1f5f9 !important;
-    color: #334155 !important;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 0.5rem !important;
-    padding: 0.65rem 1.25rem !important;
-    font-size: 0.9rem !important;
-    font-weight: 600 !important;
-    cursor: pointer !important;
-    box-shadow: none !important;
-    transition: background-color 0.2s;
-}
-
-.swal-btn-cancel-custom:hover {
-    background-color: #e2e8f0 !important;
 }

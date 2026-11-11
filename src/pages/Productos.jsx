@@ -11,6 +11,7 @@ import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js';
 import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
+import { showReactivateAlert } from '../components/common/showReactivateAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
 import { 
     productos as datosMock, 
@@ -148,24 +149,11 @@ export default function Productos() {
             if (!motivo) return;
             motivoBaja = motivo;
         } else {
-            const { isConfirmed } = await Swal.fire({
-                title: '',
-                html: `
-                    <div class="swal-reactivacion-wrapper">
-                        <span class="swal-reactivacion-sub">Reactivación</span>
-                        <h2 class="swal-reactivacion-titulo">¿Activar producto?</h2>
-                        <p class="swal-reactivacion-texto"><strong>${p.nombre}</strong> pasará a estar activo nuevamente.</p>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Activar',
-                cancelButtonText: 'Cancelar',
-                buttonsStyling: false,
-                width: '460px',
-                padding: '2rem',
-                backdrop: 'rgba(15, 42, 48, 0.65)',
+            const confirmado = await showReactivateAlert({
+                entity: 'producto',
+                name: p.nombre
             });
-            if (!isConfirmed) return;
+            if (!confirmado) return;
         }
 
         setProductos((prev) => 

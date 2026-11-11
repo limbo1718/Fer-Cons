@@ -11,6 +11,7 @@ import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js';
 import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
+import { showReactivateAlert } from '../components/common/showReactivateAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
 import { proveedores as datos, sucursales } from '../data/mock.js';
 import '../styles/Proveedores.css';
@@ -115,65 +116,11 @@ export default function Proveedores() {
             if (!motivo) return;
             motivoBaja = motivo;
         } else {
-            const { isConfirmed } = await Swal.fire({
-                title: '',
-                html: `
-                    <div class="swal-reactivacion-wrapper">
-                        <span class="swal-reactivacion-sub">
-                            Reactivación
-                        </span>
-                        <h2 class="swal-reactivacion-titulo">
-                            ¿Activar proveedor?
-                        </h2>
-                        <p class="swal-reactivacion-texto">
-                            <strong>${p.nombreFantasia}</strong> pasará a estar activo nuevamente en el sistema.
-                        </p>
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Activar',
-                cancelButtonText: 'Cancelar',
-                buttonsStyling: false,
-                width: '460px',
-                padding: '2rem',
-                backdrop: 'rgba(15, 42, 48, 0.65)',
-                didOpen: () => {
-                    const confirmBtn = Swal.getConfirmButton();
-                    const cancelBtn = Swal.getCancelButton();
-                    const actions = Swal.getActions();
-
-                    if (actions) {
-                        actions.style.display = 'flex';
-                        actions.style.gap = '0.75rem';
-                        actions.style.marginTop = '1rem';
-                    }
-
-                    if (confirmBtn) {
-                        confirmBtn.style.backgroundColor = '#0d9488';
-                        confirmBtn.style.color = '#ffffff';
-                        confirmBtn.style.border = 'none';
-                        confirmBtn.style.borderRadius = '0.5rem';
-                        confirmBtn.style.padding = '0.65rem 1.25rem';
-                        confirmBtn.style.fontSize = '0.9rem';
-                        confirmBtn.style.fontWeight = '600';
-                        confirmBtn.style.cursor = 'pointer';
-                        confirmBtn.style.boxShadow = 'none';
-                    }
-
-                    if (cancelBtn) {
-                        cancelBtn.style.backgroundColor = '#f1f5f9';
-                        cancelBtn.style.color = '#334155';
-                        cancelBtn.style.border = '1px solid #cbd5e1';
-                        cancelBtn.style.borderRadius = '0.5rem';
-                        cancelBtn.style.padding = '0.65rem 1.25rem';
-                        cancelBtn.style.fontSize = '0.9rem';
-                        cancelBtn.style.fontWeight = '600';
-                        cancelBtn.style.cursor = 'pointer';
-                        cancelBtn.style.boxShadow = 'none';
-                    }
-                }
+            const confirmado = await showReactivateAlert({
+                entity: 'proveedor',
+                name: p.nombreFantasia
             });
-            if (!isConfirmed) return;
+            if (!confirmado) return;
         }
 
         setProveedores((prev) => 

@@ -179,33 +179,3 @@ ESTILOS DE PROVEEDORES - FER-CONS
 .accion-activar:hover {
     background-color: #a7f3d0 !important;
 }
-
-/* Estilos para el popup de confirmación de reactivación (SweetAlert2) */
-.swal-reactivacion-wrapper {
-    text-align: center;
-    font-family: inherit;
-    padding: 0.5rem 0;
-}
-
-.swal-reactivacion-sub {
-    font-size: 0.75rem;
-    color: #64748b;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    font-weight: 700;
-    display: block;
-    margin-bottom: 0.25rem;
-}
-
-.swal-reactivacion-titulo {
-    margin: 0 0 0.75rem 0;
-    color: #0f2a30;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.swal-reactivacion-texto {
-    margin: 0;
-    color: #475569;
-    font-size: 0.95rem;
-}
