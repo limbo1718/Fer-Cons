@@ -63,7 +63,8 @@ ESTILOS DE EMPLEADOS - FER-CONS
 
 .tabla-empleados {
     width: 100%;
-    min-width: 950px; 
+    /* MODIFICADO: Aumentado de 950px a 1200px para dar espacio a la nueva columna de Email */
+    min-width: 1200px; 
     text-align: center;
     border-collapse: collapse;
 }
@@ -96,6 +97,8 @@ ESTILOS DE EMPLEADOS - FER-CONS
 .celda-tabla-legajo {
     padding: 1rem;
     color: rgba(15, 42, 48, 0.7);
+    /* NUEVO: Evita que el "N.° 0214" se corte en dos líneas */
+    white-space: nowrap; 
 }
 
 .celda-tabla-info {
@@ -106,6 +109,8 @@ ESTILOS DE EMPLEADOS - FER-CONS
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    /* NUEVO: Evita que el nombre del empleado se corte en dos líneas */
+    white-space: nowrap; 
 }
 
 .avatar-iniciales {
@@ -117,6 +122,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
     background-color: var(--color-sidebar);
     font-size: 0.875rem;
     color: #ffffff;
+    flex-shrink: 0; /* Evita que el avatar se aplaste si el texto es largo */
 }
 
 .celda-tabla-texto {
@@ -128,6 +134,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
 .celda-tabla-gris {
     padding: 1rem;
     color: rgba(15, 42, 48, 0.7);
+    white-space: nowrap; /* Aplicamos nowrap también a la columna gris (Rol) */
 }
 
 /* --- ETIQUETAS DE ESTADO --- */
@@ -136,6 +143,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
     font-weight: 600;
+    white-space: nowrap; /* Evita que "Activo/Inactivo" se corte */
 }
 
 .estado-activo {
@@ -157,6 +165,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
     border: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
+    white-space: nowrap; /* Evita que el texto del botón se rompa */
 }
 
 .boton-justificacion:hover {
@@ -216,14 +225,12 @@ ESTILOS DE EMPLEADOS - FER-CONS
 }
 
 /* --- CLASES UTILITARIAS DE SWEETALERT --- */
-/* Contenedor de botones del popup de baja (lo usa showConfirmInputAlert como customClass) */
 .swal-actions-custom {
     display: flex;
     gap: 0.75rem;
     margin-top: 1rem;
 }
 
-/* Fuerza al SweetAlert a mostrarse por encima de cualquier modal */
 .swal-alto-z-index {
     z-index: 99999 !important;
 }

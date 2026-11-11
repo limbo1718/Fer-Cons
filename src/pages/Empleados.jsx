@@ -7,7 +7,7 @@ import SearchBar from '../components/common/SearchBar.jsx';
 import FilterTabs from '../components/common/FilterTabs.jsx';
 import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericModalForm from '../components/common/GenericModalForm.jsx';
-import ChangePasswordModal from '../components/common/ChangePasswordModal.jsx'; // NUEVO
+import ChangePasswordModal from '../components/common/ChangePasswordModal.jsx';
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js';
@@ -77,10 +77,12 @@ const mapearUsuariosRelacionales = () => {
   });
 };
 
+// NUEVO: Se agregó la columna 'Email'
 const COLUMNAS_TABLA = [
   'Legajo', 
   'DNI',
   'Empleado', 
+  'Email',
   <span key="tel" className="columna-con-icono"><IconPhone size={16} />Teléfono</span>, 
   'Rol', 
   'Sucursal', 
@@ -108,7 +110,7 @@ export default function Empleados() {
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
-  const [usuarioClave, setUsuarioClave] = useState(null); // NUEVO
+  const [usuarioClave, setUsuarioClave] = useState(null); 
   
   const bloquearCierreRef = useRef(false);
 
@@ -148,10 +150,12 @@ export default function Empleados() {
         }
       }
 
+      // Se agregó la búsqueda por email
       const cumpleBusqueda = !query ||
         String(usuario.legajo).toLowerCase().includes(query) ||
         nombreCompleto.includes(query) ||
         nombreSucursal.includes(query) ||
+        (usuario.email && usuario.email.toLowerCase().includes(query)) ||
         (usuario.dni && String(usuario.dni).toLowerCase().includes(query));
 
       return cumpleTab && cumpleBusqueda;
@@ -257,7 +261,6 @@ export default function Empleados() {
     setUsuarioEditando(null);
   };
 
-  // NUEVO: Abre el modal de contraseña
   const abrirCambioContrasena = (usuario) => setUsuarioClave(usuario);
 
   const verDetalleBaja = (usuario) => {
@@ -371,7 +374,6 @@ export default function Empleados() {
   };
 
   const handleGuardarUsuario = (data) => {
-    // VALIDACIÓN DE CONTRASEÑA CORTA CON SWEETALERT
     if (!usuarioEditando && data.contrasena && data.contrasena.length < 4) {
       bloquearCierreRef.current = true; 
       
@@ -404,7 +406,7 @@ export default function Empleados() {
       <SearchBar 
         value={busqueda} 
         onChange={setBusqueda} 
-        placeholder="Buscar por legajo, DNI, nombre o sucursal..." 
+        placeholder="Buscar por legajo, DNI, nombre, correo o sucursal..." 
       />
 
       <FilterTabs 
@@ -467,6 +469,8 @@ export default function Empleados() {
                   {nombreCompleto}
                 </span>
               </td>
+              {/* NUEVO: Celda del Email */}
+              <td className="celda-tabla-texto">{usuario.email}</td>
               <td className="celda-tabla-texto">{usuario.telefono}</td>
               <td className="celda-tabla-gris">{obtenerNombreRol(usuario.id_rol)}</td>
               <td className="celda-tabla-texto">{obtenerNombreSucursal(usuario.id_sucursal)}</td>
@@ -499,7 +503,6 @@ export default function Empleados() {
                     <button
                       type="button"
                       className="boton-accion-icono"
-                      // NUEVO: Llama a la función del modal
                       onClick={() => abrirCambioContrasena(usuario)}
                       title="Cambiar contraseña"
                       aria-label={`Cambiar contraseña de ${nombreCompleto}`}
@@ -547,7 +550,6 @@ export default function Empleados() {
         submitText={usuarioEditando ? 'Guardar cambios' : 'Guardar empleado'}
       />
 
-      {/* NUEVO: Modal de Cambiar Contraseña */}
       <ChangePasswordModal
         isOpen={!!usuarioClave}
         onClose={() => setUsuarioClave(null)}
