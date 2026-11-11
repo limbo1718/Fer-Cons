@@ -1,5 +1,4 @@
 import { useState, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconPhone, IconEdit, IconPower, IconInfoCircle, IconClock, IconKey } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
@@ -8,6 +7,7 @@ import SearchBar from '../components/common/SearchBar.jsx';
 import FilterTabs from '../components/common/FilterTabs.jsx';
 import FilterSelect from '../components/common/FilterSelect.jsx';
 import GenericModalForm from '../components/common/GenericModalForm.jsx';
+import ChangePasswordModal from '../components/common/ChangePasswordModal.jsx'; // NUEVO
 import GenericFab from '../components/common/GenericFab.jsx';
 import LoadMoreButton from '../components/common/LoadMoreButton.jsx';
 import { showDetailAlert } from '../components/common/showDetailAlert.js';
@@ -95,7 +95,6 @@ const COLUMNAS_TABLA = [
 // COMPONENTE PRINCIPAL
 // ==========================================
 export default function Empleados() {
-  const navigate = useNavigate();
   const { user } = useAuth(); 
   
   const esAdmin = user?.rol === 'Administrador';
@@ -109,6 +108,7 @@ export default function Empleados() {
   
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [usuarioEditando, setUsuarioEditando] = useState(null);
+  const [usuarioClave, setUsuarioClave] = useState(null); // NUEVO
   
   const bloquearCierreRef = useRef(false);
 
@@ -118,8 +118,6 @@ export default function Empleados() {
   
   const rolesDisponibles = useMemo(() => roles.map(r => r.Ocupacion), []);
   const sucursalesDisponibles = useMemo(() => sucursales.map(s => s.Nombre), []);
-  
-  // NOTA: Eliminamos fechasDisponibles porque ya no usamos el desplegable
 
   const siguienteLegajo = useMemo(() => {
     const maxLegajo = usuarios.length > 0 
@@ -142,7 +140,6 @@ export default function Empleados() {
       else if (tabActiva === 'sucursal') cumpleTab = sucursalSeleccionada ? nombreSucursal === sucursalSeleccionada.toLowerCase() : true;
       else if (tabActiva === 'fecha') {
         if (fechaSeleccionada) {
-          // TRUCO: Convertimos el formato YYYY-MM-DD del input a DD/MM/YYYY del mock
           const [year, month, day] = fechaSeleccionada.split('-');
           const fechaFormateada = `${day}/${month}/${year}`;
           cumpleTab = usuario.fechaAsociacion === fechaFormateada;
@@ -260,9 +257,8 @@ export default function Empleados() {
     setUsuarioEditando(null);
   };
 
-  const irACambiarContrasena = (usuario) => {
-    navigate('/cambiar-contrasena', { state: { email: usuario.email } });
-  };
+  // NUEVO: Abre el modal de contraseña
+  const abrirCambioContrasena = (usuario) => setUsuarioClave(usuario);
 
   const verDetalleBaja = (usuario) => {
     showDetailAlert({
@@ -440,7 +436,6 @@ export default function Empleados() {
         />
       )}
 
-      {/* NUEVO FILTRO DE FECHA IGUAL A COMPRAS */}
       {tabActiva === 'fecha' && (
         <div className="filtro-fecha-container">
           <span className="label-filtro-fecha">Filtrar por fecha específica:</span>
@@ -504,7 +499,8 @@ export default function Empleados() {
                     <button
                       type="button"
                       className="boton-accion-icono"
-                      onClick={() => irACambiarContrasena(usuario)}
+                      // NUEVO: Llama a la función del modal
+                      onClick={() => abrirCambioContrasena(usuario)}
                       title="Cambiar contraseña"
                       aria-label={`Cambiar contraseña de ${nombreCompleto}`}
                     >
@@ -549,6 +545,14 @@ export default function Empleados() {
         initialValues={valoresIniciales}
         onSubmit={handleGuardarUsuario}
         submitText={usuarioEditando ? 'Guardar cambios' : 'Guardar empleado'}
+      />
+
+      {/* NUEVO: Modal de Cambiar Contraseña */}
+      <ChangePasswordModal
+        isOpen={!!usuarioClave}
+        onClose={() => setUsuarioClave(null)}
+        email={usuarioClave?.email || ''}
+        nombre={usuarioClave ? `${usuarioClave.nombre} ${usuarioClave.apellido}` : ''}
       />
     </>
   );

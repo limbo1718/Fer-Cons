@@ -2,7 +2,6 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext.jsx';
 import MenuDesplegable from './components/MenuDesplegable.jsx';
 import Login from './pages/Login.jsx';
-import CambiarContrasena from './pages/CambiarContrasena.jsx';
 import Inicio from './pages/Inicio.jsx';
 import Actividad from './pages/Actividad.jsx';
 import Empleados from './pages/Empleados.jsx';
@@ -31,7 +30,6 @@ export default function App() {
         <Route path="sucursales" element={<Sucursales />} />
         <Route path="compras" element={<Compras />} />
         <Route path="perfil" element={<Perfil />} />
-        <Route path="cambiar-contrasena" element={<CambiarContrasena />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" replace />} />
