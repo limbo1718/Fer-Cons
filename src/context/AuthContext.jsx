@@ -42,6 +42,8 @@ export function AuthProvider({ children }) {
 
   const login = useCallback((datos) => {
     console.log("¡Login exitoso! Guardando sesión para:", datos);
+    
+    // 1. Guardamos los datos en el estado y en el localStorage
     setUser(datos);
     ultimoUsuarioRef.current = datos;
     const sessionData = {
@@ -49,6 +51,13 @@ export function AuthProvider({ children }) {
       expiresAt: Date.now() + EXPIRATION_TIME,
     };
     localStorage.setItem('user_session', JSON.stringify(sessionData));
+
+    // 2. SOLUCIÓN: Forzamos la recarga de la página para evitar el conflicto con el Swal
+    // Usamos un pequeñísimo delay para que el Swal alcance a mostrarse
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 150);
+    
   }, []);
 
   const actualizarContrasena = useCallback((email, nuevaContrasena) => {

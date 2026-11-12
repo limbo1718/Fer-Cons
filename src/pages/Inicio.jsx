@@ -8,13 +8,17 @@ import '../styles/Inicio.css';
 
 export default function Inicio() {
   const { user } = useAuth();
-  const nombre = user.nombre.split(' ')[0];
+  
+  // OPTIMIZACIÓN: Usamos ?. por si el user llega a ser null en algún momento
+  const nombreCompleto = user?.nombre || 'Usuario';
+  const nombre = nombreCompleto.split(' ')[0];
+  const rolActual = user?.rol || 'Sin Rol';
 
   return (
     <>
       <Encabezado 
         titulo={`¡Hola, ${nombre}!`} 
-        subtitulo={`Rol: ${user.rol} · ¿Qué necesitás gestionar hoy?`} 
+        subtitulo={`Rol: ${rolActual} · ¿Qué necesitás gestionar hoy?`} 
       />
 
       <section className="seccion-actividad" style={{ marginTop: '2rem' }}>

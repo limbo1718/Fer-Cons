@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { 
@@ -15,31 +15,78 @@ import {
 } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import Encabezado from '../components/Encabezado.jsx';
-import { usuarioDemo } from '../data/mock.js';
+// ADAPTACIÓN: Importamos las tablas necesarias para el JOIN
+import { usuarioDemo, empleados, usuarios, sucursales_x_empleados } from '../data/mock.js';
 import '../styles/Perfil.css';
 
 export default function Perfil() {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // 1. Cargamos prioritariamente desde el contexto de Auth o directamente desde usuarioDemo (mock.js)
-    const usuarioBase = user || usuarioDemo;
+    // 1. Cruzamos los datos reales usando el legajo de la sesión
+    const perfilData = useMemo(() => {
+        if (!user) return null;
 
-    // Estado editable para los campos modificables
+        // Si el que entró es el Admin Demo, usamos sus datos fijos
+        if (String(user.legajo) === String(usuarioDemo.Legajo)) {
+            return {
+                nombre: usuarioDemo.Nombre,
+                dni: usuarioDemo.DNI_Empleados,
+                telefono: usuarioDemo.Telefono,
+                email: usuarioDemo.Email,
+                legajo: usuarioDemo.Legajo,
+                rol: usuarioDemo.Ocupacion,
+                activo: usuarioDemo.Estado,
+                fechaAsociacion: usuarioDemo.Fecha_Asociacion
+            };
+        }
+
+        // Si es un empleado real, buscamos en la tabla EMPLEADOS por su legajo
+        const empEncontrado = empleados.find(e => String(e.Legajo) === String(user.legajo));
+        if (!empEncontrado) return null;
+
+        // Buscamos el email en USUARIOS y la fecha en SUCURSALES_X_EMPLEADOS
+        const usrEncontrado = usuarios.find(u => u.ID_Usuarios === empEncontrado.ID_Usuarios);
+        const sucursalEncontrada = sucursales_x_empleados.find(s => s.ID_Empleados === empEncontrado.ID_Empleados);
+
+        return {
+            nombre: `${empEncontrado.Nombre} ${empEncontrado.Apellido}`,
+            dni: empEncontrado.DNI_Empleados,
+            telefono: empEncontrado.Telefono,
+            email: usrEncontrado?.Email || user.correo || 'Sin email',
+            legajo: empEncontrado.Legajo,
+            rol: user.rol,
+            activo: empEncontrado.Estado,
+            fechaAsociacion: sucursalEncontrada?.Fecha_Asociacion || 'N/A'
+        };
+    }, [user]);
+
+    // 2. Estado editable para los campos
     const [formData, setFormData] = useState({
-        nombre: usuarioBase.nombre || usuarioDemo.nombre,
-        dni: usuarioBase.dni || usuarioDemo.dni,
-        telefono: usuarioBase.telefono || usuarioDemo.telefono,
-        email: usuarioBase.correo || usuarioBase.email || usuarioDemo.correo
+        nombre: '',
+        dni: '',
+        telefono: '',
+        email: ''
     });
 
-    // Datos fijos del sistema (provenientes de USUARIOS / SUCURSALES_X_USUARIOS)
-    const legajo = usuarioBase.legajo || usuarioDemo.legajo;
-    const rol = usuarioBase.rol || usuarioDemo.rol;
-    const activo = usuarioBase.activo !== undefined ? usuarioBase.activo : usuarioDemo.activo;
-    const fechaAsociacion = usuarioBase.fechaAsociacion || usuarioDemo.fechaAsociacion;
+    // Sincronizamos el formulario cuando los datos del perfil estén listos
+    useEffect(() => {
+        if (perfilData) {
+            setFormData({
+                nombre: perfilData.nombre,
+                dni: perfilData.dni,
+                telefono: perfilData.telefono,
+                email: perfilData.email
+            });
+        }
+    }, [perfilData]);
 
-    // 2. Control de permisos: Solamente el Administrador puede editar
+    // Si no hay datos (por ejemplo, mientras carga), mostramos un mensaje seguro
+    if (!perfilData) return <p>Cargando perfil...</p>;
+
+    const { legajo, rol, activo, fechaAsociacion } = perfilData;
+
+    // 3. Control de permisos
     const esAdmin = rol.toLowerCase() === 'administrador';
 
     const handleChange = (e) => {
@@ -50,12 +97,12 @@ export default function Perfil() {
     const handleGuardarCambios = (e) => {
         e.preventDefault();
         Swal.fire({
-        icon: 'success',
-        title: 'Perfil actualizado',
-        text: 'Los cambios se guardaron correctamente (modo prueba).',
-        timer: 1800,
-        showConfirmButton: false,
-        confirmButtonColor: '#0d9488'
+            icon: 'success',
+            title: 'Perfil actualizado',
+            text: 'Los cambios se guardaron correctamente (modo prueba).',
+            timer: 1800,
+            showConfirmButton: false,
+            confirmButtonColor: '#0d9488'
         });
     };
 
@@ -66,11 +113,11 @@ export default function Perfil() {
             subtitulo={esAdmin ? "Gestión de cuenta y edición de datos de administrador" : "Información personal de la cuenta"}
         >
             <button 
-            onClick={() => navigate(-1)} 
-            aria-label="Volver" 
-            className="boton-volver-movil"
+                onClick={() => navigate(-1)} 
+                aria-label="Volver" 
+                className="boton-volver-movil"
             >
-            <IconArrowLeft size={32} />
+                <IconArrowLeft size={32} />
             </button>
         </Encabezado>
 
@@ -91,7 +138,7 @@ export default function Perfil() {
                 </div>
             </div>
 
-            {/* Indicador de Estado (BOOLEAN de la BD) */}
+            {/* Indicador de Estado */}
             <div className="estado-perfil-contenedor">
                 <span className="label-estado">Estado:</span>
                 <span className={`badge-estado-perfil ${activo ? 'activo' : 'inactivo'}`}>
@@ -101,7 +148,7 @@ export default function Perfil() {
             </div>
             </div>
 
-            {/* Formulario de Perfil: Editable para Admin / Lectura para Empleados */}
+            {/* Formulario de Perfil */}
             <form onSubmit={handleGuardarCambios} className="formulario-perfil">
             <div className="grid-datos-perfil">
                 
@@ -127,7 +174,7 @@ export default function Perfil() {
                 </div>
                 </div>
 
-                {/* Campo: Fecha de Asociación (Fijo de BD) */}
+                {/* Campo: Fecha de Asociación */}
                 <div className="campo-perfil-item lectura-solamente">
                 <div className="icono-campo-perfil">
                     <IconCalendarEvent size={20} />
@@ -182,7 +229,7 @@ export default function Perfil() {
                 </div>
                 </div>
 
-                {/* Campo: Legajo (Fijo de BD - No editable ni por Admin) */}
+                {/* Campo: Legajo */}
                 <div className="campo-perfil-item lectura-solamente">
                 <div className="icono-campo-perfil">
                     <IconHash size={20} />
@@ -217,7 +264,7 @@ export default function Perfil() {
 
             </div>
 
-            {/* Botón Guardar (Solo visible para Administrador) o Mensaje de lectura */}
+            {/* Botón Guardar */}
             {esAdmin ? (
                 <div className="contenedor-boton-guardar-perfil">
                 <button type="submit" className="boton-guardar-perfil">

@@ -15,8 +15,9 @@ export default function Encabezado({ titulo, subtitulo, children }) {
         </div>
       </div>
       <div className="tarjeta-usuario-encabezado">
-        <p>{user.nombre}</p>
-        <p>{user.legajo}</p>
+        {/* OPTIMIZACIÓN: Usamos ?. por si el user llega a ser null */}
+        <p>{user?.nombre || 'Cargando...'}</p>
+        <p>{user?.legajo || '...'}</p>
       </div>
     </header>
   );

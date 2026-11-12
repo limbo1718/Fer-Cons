@@ -48,7 +48,8 @@ function CampoPassword({ id, label, placeholder, value, onChange }) {
     );
 }
 
-export default function ChangePasswordModal({ isOpen, onClose, email = '', nombre = '' }) {
+// ADAPTACIÓN: Recibimos la prop id_usuario (aunque usemos email para el guardado)
+export default function ChangePasswordModal({ isOpen, onClose, email = '', nombre = '', id_usuario = null }) {
     const { actualizarContrasena } = useAuth();
     const [nuevaContra, setNuevaContra] = useState('');
     const [confirContra, setConfirContra] = useState('');
@@ -85,6 +86,7 @@ export default function ChangePasswordModal({ isOpen, onClose, email = '', nombr
         }
 
         // 4. Guardar en el contexto (y en localStorage)
+        // NOTA: Seguimos usando el email como clave porque así está armado el AuthContext actualmente.
         actualizarContrasena(email, nuevaContra);
         onClose();
 

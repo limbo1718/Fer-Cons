@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconUser, IconLock, IconSettings } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -8,10 +8,9 @@ import InputField from '../components/common/InputField';
 import InputPassword from '../components/common/InputPassword';
 import ButtonSubmit from '../components/common/ButtonSubmit';
 import '../styles/Login.css';
-  //login.jsx
+
 export default function Login() {
   const { user, login, passwordOverrides } = useAuth();
-  const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
   if (user) return <Navigate to="/" replace />;
@@ -26,9 +25,6 @@ export default function Login() {
   };
 
   const onSubmit = (data) => {
-    // 🚨 RADAR: Si ves esto en la consola, el formulario funciona perfecto
-    console.log("Datos recibidos del formulario:", data);
-
     if (!data.usuario || !data.password) return;
     const valor = data.usuario.trim().toLowerCase();
 
@@ -56,9 +52,9 @@ export default function Login() {
         icon: 'success',
         title: '¡Bienvenido!',
         text: `Ingreso exitoso, bienvenido ${usuarioDemo.Nombre}`,
-        timer: 1800,
+        timer: 1500,
         showConfirmButton: false,
-      }).then(() => navigate('/'));
+      });
     }
 
     // 2. Buscamos en las tablas reales
@@ -77,29 +73,41 @@ export default function Login() {
       usrEncontrado = usuarios.find((u) => u.ID_Usuarios === empEncontrado.ID_Usuarios);
     }
 
+    // SEGURIDAD: Si no existe o si está inactivo, mismo mensaje genérico
     if (!empEncontrado || !usrEncontrado) {
       return mostrarErrorGenerico(); 
     }
 
-    // 4. Verificamos si está Activo
     if (!empEncontrado.Estado) {
       return mostrarErrorGenerico(); 
     }
 
-    // 5. Validamos la contraseña
+    // 4. Validamos la contraseña
     const passRealActual = passwordOverrides[String(usrEncontrado.Email).toLowerCase()] || usrEncontrado.Password;
     if (data.password !== passRealActual) {
       return mostrarErrorGenerico();
     }
 
-    // 6. Buscamos su Rol
+    // 5. Buscamos su Rol
     const rolRelacion = empleados_x_roles.find(
       (er) => er.ID_Empleados === empEncontrado.ID_Empleados && er.Estado === true
     );
-    const rolObj = rolRelacion ? roles.find((r) => r.ID_Roles === rolRelacion.ID_Roles) : null;
+    
+    // NOTA: Este error sí lo dejamos específico porque no es culpa del usuario,
+    // es un problema de configuración interna que el administrador debe solucionar.
+    if (!rolRelacion) {
+      return Swal.fire({ 
+        icon: 'error', 
+        title: 'Error de configuración', 
+        text: 'El usuario no tiene un rol activo asignado. Contactá al soporte técnico.', 
+        confirmButtonColor: '#326f7a' 
+      });
+    }
+
+    const rolObj = roles.find((r) => r.ID_Roles === rolRelacion.ID_Roles);
     const nombreRol = rolObj ? rolObj.Ocupacion : 'Sin Rol';
 
-    // 7. Iniciamos sesión
+    // 6. Iniciamos sesión
     login({
       nombre: `${empEncontrado.Nombre} ${empEncontrado.Apellido}`,
       legajo: empEncontrado.Legajo,
@@ -111,9 +119,9 @@ export default function Login() {
       icon: 'success',
       title: '¡Bienvenido!',
       text: `Ingreso exitoso, bienvenido ${empEncontrado.Nombre}`,
-      timer: 1800,
+      timer: 1500,
       showConfirmButton: false,
-    }).then(() => navigate('/'));
+    });
   };
 
   return (
@@ -150,7 +158,12 @@ export default function Login() {
         />
 
         <div className="contenedor-boton">
-          <ButtonSubmit type="submit" text="Ingresar" disabled={isSubmitting} />
+          {/* Botón limpio con type="submit" nativo */}
+          <ButtonSubmit 
+            type="submit" 
+            text="Ingresar" 
+            disabled={isSubmitting} 
+          />
         </div>
 
         <p className="texto-demo">
