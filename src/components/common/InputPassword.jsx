@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, forwardRef } from 'react';
 import { IconLock, IconEye, IconEyeOff } from '@tabler/icons-react';
 
-export default function InputPassword({
+const InputPassword = forwardRef(({
     placeholder = 'Contraseña',
     registro,
     error,
@@ -10,7 +10,7 @@ export default function InputPassword({
     value,
     onChange,
     ...props
-}) {
+}, ref) => {
     const [verPassword, setVerPassword] = useState(false);
 
     const toggleVisibilidad = () => {
@@ -19,31 +19,33 @@ export default function InputPassword({
 
     return (
         <div className="grupo-input">
-        <div className="contenedor-input-interno">
-            {Icon && <Icon className="icono-campo" size={20} />}
+            <div className="contenedor-input-interno">
+                {Icon && <Icon className="icono-campo" size={20} />}
 
-            <input
-            type={verPassword ? 'text' : 'password'}
-            placeholder={placeholder}
-            className="input-personalizado input-password-ojo"
-            {...(registro || { name, value, onChange })}
-            {...props}
-            />
+                <input
+                    type={verPassword ? 'text' : 'password'}
+                    placeholder={placeholder}
+                    className="input-personalizado input-password-ojo"
+                    {...(registro || { name, value, onChange })}
+                    {...props}
+                    // CORRECCIÓN: Priorizamos la ref del registro (React Hook Form)
+                    ref={registro?.ref || ref} 
+                />
 
-            <button
-            type="button"
-            onClick={toggleVisibilidad}
-            className="boton-toggle-password"
-            aria-label={verPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
-            tabIndex={-1}
-            >
-            {/* Si verPassword es TRUE (se ve el texto), mostramos el ojo normal para indicar que se puede ocultar. */}
-            {/* Si verPassword es FALSE (está oculto con puntos), mostramos el ojo tachado para indicar que está oculto. */}
-            {verPassword ? <IconEye size={20} /> : <IconEyeOff size={20} />}
-            </button>
-        </div>
+                <button
+                    type="button"
+                    onClick={toggleVisibilidad}
+                    className="boton-toggle-password"
+                    aria-label={verPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                    tabIndex={-1}
+                >
+                    {verPassword ? <IconEye size={20} /> : <IconEyeOff size={20} />}
+                </button>
+            </div>
 
-        {error && <p className="mensaje-error-input">{error.message}</p>}
+            {error && <p className="mensaje-error-input">{error.message}</p>}
         </div>
     );
-}
+});
+
+export default InputPassword;

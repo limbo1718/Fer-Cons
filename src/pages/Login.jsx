@@ -3,14 +3,13 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { IconUser, IconLock, IconSettings } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
-import { usuarioDemo, usuarios, roles, usuarios_x_roles } from '../data/mock.js';
+import { usuarioDemo, usuarios, empleados, roles, empleados_x_roles } from '../data/mock.js';
 import InputField from '../components/common/InputField';
 import InputPassword from '../components/common/InputPassword';
 import ButtonSubmit from '../components/common/ButtonSubmit';
 import '../styles/Login.css';
 
 export default function Login() {
-  // NUEVO: Extraemos passwordOverrides del contexto
   const { user, login, passwordOverrides } = useAuth();
   const navigate = useNavigate();
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
@@ -21,79 +20,97 @@ export default function Login() {
     return Swal.fire({
       icon: 'error',
       title: 'Datos incorrectos',
-      text: 'El legajo, correo o contraseña son incorrectos.',
+      text: 'El legajo, usuario, correo o contraseña son incorrectos.',
       confirmButtonColor: '#326f7a',
     });
   };
 
-  const onSubmit = ({ usuario, password }) => {
-    const valor = usuario.trim();
+  const onSubmit = (data) => {
+    // 🚨 RADAR: Si ves esto en la consola, el formulario funciona perfecto
+    console.log("Datos recibidos del formulario:", data);
+
+    if (!data.usuario || !data.password) return;
+    const valor = data.usuario.trim().toLowerCase();
 
     // 1. Verificamos si es el Admin Demo
     const esAdminDemo =
-      valor === usuarioDemo.legajo ||
-      valor.toLowerCase() === usuarioDemo.correo.toLowerCase();
+      valor === String(usuarioDemo.Legajo).toLowerCase() ||
+      valor === String(usuarioDemo.Email).toLowerCase() ||
+      valor === String(usuarioDemo.Username || '').toLowerCase();
 
     if (esAdminDemo) {
-      // NUEVO: Buscamos si el admin demo tiene una contraseña actualizada
-      const passDemoActual = passwordOverrides[usuarioDemo.correo.toLowerCase()] || usuarioDemo.password;
+      const passDemoActual = passwordOverrides[String(usuarioDemo.Email).toLowerCase()] || usuarioDemo.Password;
       
-      if (password !== passDemoActual) {
+      if (data.password !== passDemoActual) {
         return mostrarErrorGenerico();
       }
 
       login({
-        nombre: usuarioDemo.nombre,
-        legajo: usuarioDemo.legajo,
-        correo: usuarioDemo.correo,
-        rol: usuarioDemo.rol,
+        nombre: usuarioDemo.Nombre,
+        legajo: usuarioDemo.Legajo,
+        correo: usuarioDemo.Email,
+        rol: usuarioDemo.Ocupacion,
       });
 
       return Swal.fire({
         icon: 'success',
         title: '¡Bienvenido!',
-        text: `Ingreso exitoso, bienvenido ${usuarioDemo.nombre}`,
+        text: `Ingreso exitoso, bienvenido ${usuarioDemo.Nombre}`,
         timer: 1800,
         showConfirmButton: false,
       }).then(() => navigate('/'));
     }
 
-    // 2. Si no es el Demo, buscamos en la tabla de usuarios reales
-    const usuarioEncontrado = usuarios.find(
-      (u) =>
-        String(u.Legajo) === valor ||
-        (u.Email && u.Email.toLowerCase() === valor.toLowerCase())
+    // 2. Buscamos en las tablas reales
+    let empEncontrado = empleados.find(
+      (e) => String(e.Legajo).trim() === valor || String(Number(e.Legajo)) === valor
     );
 
-    if (!usuarioEncontrado || !usuarioEncontrado.Estado) {
+    let usrEncontrado = usuarios.find(
+      (u) => String(u.Email).toLowerCase() === valor || String(u.Username).toLowerCase() === valor
+    );
+
+    // 3. Cruzamos los datos
+    if (usrEncontrado && !empEncontrado) {
+      empEncontrado = empleados.find((e) => e.ID_Usuarios === usrEncontrado.ID_Usuarios);
+    } else if (empEncontrado && !usrEncontrado) {
+      usrEncontrado = usuarios.find((u) => u.ID_Usuarios === empEncontrado.ID_Usuarios);
+    }
+
+    if (!empEncontrado || !usrEncontrado) {
       return mostrarErrorGenerico(); 
     }
 
-    // NUEVO: Buscamos si el usuario tiene una contraseña actualizada en el contexto
-    const passRealActual = passwordOverrides[usuarioEncontrado.Email.toLowerCase()] || usuarioEncontrado.Contrasena;
-    
-    if (password !== passRealActual) {
+    // 4. Verificamos si está Activo
+    if (!empEncontrado.Estado) {
+      return mostrarErrorGenerico(); 
+    }
+
+    // 5. Validamos la contraseña
+    const passRealActual = passwordOverrides[String(usrEncontrado.Email).toLowerCase()] || usrEncontrado.Password;
+    if (data.password !== passRealActual) {
       return mostrarErrorGenerico();
     }
 
-    // Si pasó todo, buscamos su Rol Activo para guardarlo en la sesión
-    const rolRelacion = usuarios_x_roles.find(
-      (ur) => ur.ID_Usuarios === usuarioEncontrado.ID_Usuarios && ur.Estado === true
+    // 6. Buscamos su Rol
+    const rolRelacion = empleados_x_roles.find(
+      (er) => er.ID_Empleados === empEncontrado.ID_Empleados && er.Estado === true
     );
     const rolObj = rolRelacion ? roles.find((r) => r.ID_Roles === rolRelacion.ID_Roles) : null;
     const nombreRol = rolObj ? rolObj.Ocupacion : 'Sin Rol';
 
+    // 7. Iniciamos sesión
     login({
-      nombre: `${usuarioEncontrado.Nombre} ${usuarioEncontrado.Apellido}`,
-      legajo: usuarioEncontrado.Legajo,
-      correo: usuarioEncontrado.Email,
+      nombre: `${empEncontrado.Nombre} ${empEncontrado.Apellido}`,
+      legajo: empEncontrado.Legajo,
+      correo: usrEncontrado.Email,
       rol: nombreRol,
     });
 
     Swal.fire({
       icon: 'success',
       title: '¡Bienvenido!',
-      text: `Ingreso exitoso, bienvenido ${usuarioEncontrado.Nombre}`,
+      text: `Ingreso exitoso, bienvenido ${empEncontrado.Nombre}`,
       timer: 1800,
       showConfirmButton: false,
     }).then(() => navigate('/'));
@@ -116,8 +133,8 @@ export default function Login() {
 
         <InputField
           type="text"
-          placeholder="Legajo o correo electrónico"
-          registro={register('usuario', { required: 'Ingresá tu legajo o correo' })}
+          placeholder="Legajo, usuario o correo"
+          registro={register('usuario', { required: 'Ingresá tu legajo, usuario o correo' })}
           error={errors.usuario}
           icon={IconUser}
         />
@@ -133,11 +150,11 @@ export default function Login() {
         />
 
         <div className="contenedor-boton">
-          <ButtonSubmit text="Ingresar" disabled={isSubmitting} />
+          <ButtonSubmit type="submit" text="Ingresar" disabled={isSubmitting} />
         </div>
 
         <p className="texto-demo">
-          Demo: legajo {usuarioDemo.legajo} · correo {usuarioDemo.correo} · contraseña {usuarioDemo.password}
+          Demo: usuario {usuarioDemo.Username} · legajo {usuarioDemo.Legajo} · correo {usuarioDemo.Email} · contraseña {usuarioDemo.Password}
         </p>
       </form>
     </main>

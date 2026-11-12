@@ -214,18 +214,9 @@ export const sucursales = [
   }
 ];
 
-export const usuarioDemo = { 
-  legajo: '45974444', 
-  correo: 'alejandro@fercons.com', 
-  password: '1234', 
-  nombre: 'Alejandro Carrizo', 
-  rol: 'Administrador',
-  dni: '45.974.444',
-  telefono: '+54 387 412-9988',
-  fechaAsociacion: '14/02/2025',
-  activo: true
-};
-
+// ==========================================
+// 1. ROLES (Sin cambios)
+// ==========================================
 export const roles = [
   { ID_Roles: 1, Ocupacion: 'Administrador', Descripcion: 'Gestión total del sistema y sucursales' },
   { ID_Roles: 2, Ocupacion: 'Supervisor', Descripcion: 'Supervisión de personal y operaciones' },
@@ -237,100 +228,154 @@ export const roles = [
 ];
 
 // ==========================================
-// 2. USUARIOS (Empleados - Solo datos personales)
+// 2. USUARIOS (Solo Autenticación)
 // ==========================================
 export const usuarios = [
-  { ID_Usuarios: 1, DNI_Usuarios: '38412345', Legajo: '0214', Nombre: 'Daniel', Apellido: 'Pérez Ruiz', Email: 'daniel.perez@ferreteria.com', Telefono: '+54 387 320-3022', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 2, DNI_Usuarios: '40123987', Legajo: '0215', Nombre: 'Santiago', Apellido: 'Alvarez', Email: 'santiago.alvarez@ferreteria.com', Telefono: '+54 387 570-3132', Contrasena: '1234', Estado: false },
-  { ID_Usuarios: 3, DNI_Usuarios: '39222333', Legajo: '0216', Nombre: 'Alan', Apellido: 'Maita', Email: 'alan.maita@ferreteria.com', Telefono: '+54 387 320-3451', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 4, DNI_Usuarios: '37888999', Legajo: '0217', Nombre: 'Valeria', Apellido: 'Giménez', Email: 'valeria.gimenez@ferreteria.com', Telefono: '+54 387 412-9988', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 5, DNI_Usuarios: '41555666', Legajo: '0218', Nombre: 'Lucas', Apellido: 'Rojas Carrizo', Email: 'lucas.rojas@ferreteria.com', Telefono: '+54 387 655-4433', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 6, DNI_Usuarios: '39444111', Legajo: '0219', Nombre: 'Sofía', Apellido: 'Benítez', Email: 'sofia.benitez@ferreteria.com', Telefono: '+54 387 221-1199', Contrasena: '1234', Estado: false },
-  { ID_Usuarios: 7, DNI_Usuarios: '35111222', Legajo: '0220', Nombre: 'Martín', Apellido: 'Gómez', Email: 'martin.gomez@ferreteria.com', Telefono: '+54 387 499-1234', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 8, DNI_Usuarios: '36777888', Legajo: '0221', Nombre: 'Lucía', Apellido: 'Torres', Email: 'lucia.torres@ferreteria.com', Telefono: '+54 387 611-5678', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 9, DNI_Usuarios: '42333000', Legajo: '0222', Nombre: 'Carlos', Apellido: 'Navarro', Email: 'carlos.navarro@ferreteria.com', Telefono: '+54 387 733-9876', Contrasena: '1234', Estado: false },
-  { ID_Usuarios: 10, DNI_Usuarios: '40999111', Legajo: '0223', Nombre: 'Yamila', Apellido: 'Morales', Email: 'yamila.morales@ferreteria.com', Telefono: '+54 387 522-4321', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 11, DNI_Usuarios: '38888222', Legajo: '0224', Nombre: 'Rodrigo', Apellido: 'Paz', Email: 'rodrigo.paz@ferreteria.com', Telefono: '+54 387 411-8877', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 12, DNI_Usuarios: '41222444', Legajo: '0225', Nombre: 'Florencia', Apellido: 'Soria', Email: 'florencia.soria@ferreteria.com', Telefono: '+54 387 399-2233', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 13, DNI_Usuarios: '39555333', Legajo: '0226', Nombre: 'Esteban', Apellido: 'Vargas', Email: 'esteban.vargas@ferreteria.com', Telefono: '+54 387 688-4455', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 14, DNI_Usuarios: '37666444', Legajo: '0227', Nombre: 'Camila', Apellido: 'Medina', Email: 'camila.medina@ferreteria.com', Telefono: '+54 387 500-1122', Contrasena: '1234', Estado: false },
-  { ID_Usuarios: 15, DNI_Usuarios: '40333555', Legajo: '0228', Nombre: 'Gonzalo', Apellido: 'Rios', Email: 'gonzalo.rios@ferreteria.com', Telefono: '+54 387 311-6677', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 16, DNI_Usuarios: '36444777', Legajo: '0229', Nombre: 'Natalia', Apellido: 'Flores', Email: 'natalia.flores@ferreteria.com', Telefono: '+54 387 455-9900', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 17, DNI_Usuarios: '38999000', Legajo: '0230', Nombre: 'Hernán', Apellido: 'Acosta', Email: 'hernan.acosta@ferreteria.com', Telefono: '+54 387 622-3344', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 18, DNI_Usuarios: '39111888', Legajo: '0231', Nombre: 'Romina', Apellido: 'Díaz', Email: 'romina.diaz@ferreteria.com', Telefono: '+54 387 377-5566', Contrasena: '1234', Estado: false },
-  { ID_Usuarios: 19, DNI_Usuarios: '41777222', Legajo: '0232', Nombre: 'Facundo', Apellido: 'Juárez', Email: 'facundo.juarez@ferreteria.com', Telefono: '+54 387 488-7788', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 20, DNI_Usuarios: '42888333', Legajo: '0233', Nombre: 'Antonella', Apellido: 'Herrera', Email: 'antonella.herrera@ferreteria.com', Telefono: '+54 387 533-2211', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 21, DNI_Usuarios: '40666999', Legajo: '0234', Nombre: 'Maximiliano', Apellido: 'Luna', Email: 'maximiliano.luna@ferreteria.com', Telefono: '+54 387 699-0011', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 22, DNI_Usuarios: '38222777', Legajo: '0235', Nombre: 'Julieta', Apellido: 'Castro', Email: 'julieta.castro@ferreteria.com', Telefono: '+54 387 344-8899', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 23, DNI_Usuarios: '36111555', Legajo: '0236', Nombre: 'Marcos', Apellido: 'Villalba', Email: 'marcos.villalba@ferreteria.com', Telefono: '+54 387 422-5544', Contrasena: '1234', Estado: false },
-  { ID_Usuarios: 24, DNI_Usuarios: '41999444', Legajo: '0237', Nombre: 'Daiana', Apellido: 'Ponce', Email: 'daiana.ponce@ferreteria.com', Telefono: '+54 387 566-7788', Contrasena: '1234', Estado: true },
-  { ID_Usuarios: 25, DNI_Usuarios: '42000111', Legajo: '0238', Nombre: 'Cristian', Apellido: 'Silva', Email: 'cristian.silva@ferreteria.com', Telefono: '+54 387 677-1122', Contrasena: '1234', Estado: true }
+  { ID_Usuarios: 1, Username: 'daniel.perez', Password: '1234', Email: 'daniel.perez@ferreteria.com' },
+  { ID_Usuarios: 2, Username: 'santiago.alvarez', Password: '1234', Email: 'santiago.alvarez@ferreteria.com' },
+  { ID_Usuarios: 3, Username: 'alan.maita', Password: '1234', Email: 'alan.maita@ferreteria.com' },
+  { ID_Usuarios: 4, Username: 'valeria.gimenez', Password: '1234', Email: 'valeria.gimenez@ferreteria.com' },
+  { ID_Usuarios: 5, Username: 'lucas.rojas', Password: '1234', Email: 'lucas.rojas@ferreteria.com' },
+  { ID_Usuarios: 6, Username: 'sofia.benitez', Password: '1234', Email: 'sofia.benitez@ferreteria.com' },
+  { ID_Usuarios: 7, Username: 'martin.gomez', Password: '1234', Email: 'martin.gomez@ferreteria.com' },
+  { ID_Usuarios: 8, Username: 'lucia.torres', Password: '1234', Email: 'lucia.torres@ferreteria.com' },
+  { ID_Usuarios: 9, Username: 'carlos.navarro', Password: '1234', Email: 'carlos.navarro@ferreteria.com' },
+  { ID_Usuarios: 10, Username: 'yamila.morales', Password: '1234', Email: 'yamila.morales@ferreteria.com' },
+  { ID_Usuarios: 11, Username: 'rodrigo.paz', Password: '1234', Email: 'rodrigo.paz@ferreteria.com' },
+  { ID_Usuarios: 12, Username: 'florencia.soria', Password: '1234', Email: 'florencia.soria@ferreteria.com' },
+  { ID_Usuarios: 13, Username: 'esteban.vargas', Password: '1234', Email: 'esteban.vargas@ferreteria.com' },
+  { ID_Usuarios: 14, Username: 'camila.medina', Password: '1234', Email: 'camila.medina@ferreteria.com' },
+  { ID_Usuarios: 15, Username: 'gonzalo.rios', Password: '1234', Email: 'gonzalo.rios@ferreteria.com' },
+  { ID_Usuarios: 16, Username: 'natalia.flores', Password: '1234', Email: 'natalia.flores@ferreteria.com' },
+  { ID_Usuarios: 17, Username: 'hernan.acosta', Password: '1234', Email: 'hernan.acosta@ferreteria.com' },
+  { ID_Usuarios: 18, Username: 'romina.diaz', Password: '1234', Email: 'romina.diaz@ferreteria.com' },
+  { ID_Usuarios: 19, Username: 'facundo.juarez', Password: '1234', Email: 'facundo.juarez@ferreteria.com' },
+  { ID_Usuarios: 20, Username: 'antonella.herrera', Password: '1234', Email: 'antonella.herrera@ferreteria.com' },
+  { ID_Usuarios: 21, Username: 'maximiliano.luna', Password: '1234', Email: 'maximiliano.luna@ferreteria.com' },
+  { ID_Usuarios: 22, Username: 'julieta.castro', Password: '1234', Email: 'julieta.castro@ferreteria.com' },
+  { ID_Usuarios: 23, Username: 'marcos.villalba', Password: '1234', Email: 'marcos.villalba@ferreteria.com' },
+  { ID_Usuarios: 24, Username: 'daiana.ponce', Password: '1234', Email: 'daiana.ponce@ferreteria.com' },
+  { ID_Usuarios: 25, Username: 'cristian.silva', Password: '1234', Email: 'cristian.silva@ferreteria.com' }
 ];
 
 // ==========================================
-// 3. USUARIOS_X_ROLES
-// (Aquí se guarda el rol, los horarios y el estado del rol en la empresa)
+// 3. EMPLEADOS (Datos Personales)
 // ==========================================
-export const usuarios_x_roles = [
-  { ID_Usuarios_x_Roles: 1, ID_Usuarios: 1, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
-  { ID_Usuarios_x_Roles: 2, ID_Usuarios: 2, ID_Roles: 4, Hora_Entrada: '08:00', Hora_Salida: '16:00', Estado: false, detalleBaja: 'Renuncia voluntaria presentada por motivos personales.' },
-  { ID_Usuarios_x_Roles: 3, ID_Usuarios: 3, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
-  { ID_Usuarios_x_Roles: 4, ID_Usuarios: 4, ID_Roles: 3, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
-  { ID_Usuarios_x_Roles: 5, ID_Usuarios: 5, ID_Roles: 6, Hora_Entrada: '08:30', Hora_Salida: '17:30', Estado: true },
-  { ID_Usuarios_x_Roles: 6, ID_Usuarios: 6, ID_Roles: 4, Hora_Entrada: '12:00', Hora_Salida: '20:00', Estado: false, detalleBaja: 'Baja temporal por reestructuración de turnos en sucursal.' },
-  { ID_Usuarios_x_Roles: 7, ID_Usuarios: 7, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Ascenso a Administrador.' }, // Simulamos que antes era vendedor
-  { ID_Usuarios_x_Roles: 8, ID_Usuarios: 7, ID_Roles: 1, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
-  { ID_Usuarios_x_Roles: 9, ID_Usuarios: 8, ID_Roles: 2, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
-  { ID_Usuarios_x_Roles: 10, ID_Usuarios: 9, ID_Roles: 6, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: false, detalleBaja: 'Inasistencias injustificadas reiteradas.' },
-  { ID_Usuarios_x_Roles: 11, ID_Usuarios: 10, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
-  { ID_Usuarios_x_Roles: 12, ID_Usuarios: 11, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
-  { ID_Usuarios_x_Roles: 13, ID_Usuarios: 12, ID_Roles: 4, Hora_Entrada: '08:00', Hora_Salida: '16:00', Estado: true },
-  { ID_Usuarios_x_Roles: 14, ID_Usuarios: 13, ID_Roles: 6, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
-  { ID_Usuarios_x_Roles: 15, ID_Usuarios: 14, ID_Roles: 7, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Licencia sin goce de sueldo prolongada.' },
-  { ID_Usuarios_x_Roles: 16, ID_Usuarios: 15, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
-  { ID_Usuarios_x_Roles: 17, ID_Usuarios: 16, ID_Roles: 2, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
-  { ID_Usuarios_x_Roles: 18, ID_Usuarios: 17, ID_Roles: 4, Hora_Entrada: '08:00', Hora_Salida: '16:00', Estado: true },
-  { ID_Usuarios_x_Roles: 19, ID_Usuarios: 18, ID_Roles: 3, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Finalización de contrato temporal.' },
-  { ID_Usuarios_x_Roles: 20, ID_Usuarios: 19, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
-  { ID_Usuarios_x_Roles: 21, ID_Usuarios: 20, ID_Roles: 6, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
-  { ID_Usuarios_x_Roles: 22, ID_Usuarios: 21, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
-  { ID_Usuarios_x_Roles: 23, ID_Usuarios: 22, ID_Roles: 4, Hora_Entrada: '12:00', Hora_Salida: '20:00', Estado: true },
-  { ID_Usuarios_x_Roles: 24, ID_Usuarios: 23, ID_Roles: 2, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Desvinculación por motivos disciplinarios.' },
-  { ID_Usuarios_x_Roles: 25, ID_Usuarios: 24, ID_Roles: 5, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
-  { ID_Usuarios_x_Roles: 26, ID_Usuarios: 25, ID_Roles: 6, Hora_Entrada: '08:30', Hora_Salida: '17:30', Estado: true }
+// NOTA: El campo Estado en el DER es CHAR(2), pero para el frontend usamos true/false. 
+// Al conectar al backend, se hará la conversión a 'AC'/'IN'.
+export const empleados = [
+  { ID_Empleados: 1, ID_Usuarios: 1, DNI_Empleados: '38412345', Legajo: '0214', Nombre: 'Daniel', Apellido: 'Pérez Ruiz', Telefono: '+54 387 320-3022', Estado: true },
+  { ID_Empleados: 2, ID_Usuarios: 2, DNI_Empleados: '40123987', Legajo: '0215', Nombre: 'Santiago', Apellido: 'Alvarez', Telefono: '+54 387 570-3132', Estado: false },
+  { ID_Empleados: 3, ID_Usuarios: 3, DNI_Empleados: '39222333', Legajo: '0216', Nombre: 'Alan', Apellido: 'Maita', Telefono: '+54 387 320-3451', Estado: true },
+  { ID_Empleados: 4, ID_Usuarios: 4, DNI_Empleados: '37888999', Legajo: '0217', Nombre: 'Valeria', Apellido: 'Giménez', Telefono: '+54 387 412-9988', Estado: true },
+  { ID_Empleados: 5, ID_Usuarios: 5, DNI_Empleados: '41555666', Legajo: '0218', Nombre: 'Lucas', Apellido: 'Rojas Carrizo', Telefono: '+54 387 655-4433', Estado: true },
+  { ID_Empleados: 6, ID_Usuarios: 6, DNI_Empleados: '39444111', Legajo: '0219', Nombre: 'Sofía', Apellido: 'Benítez', Telefono: '+54 387 221-1199', Estado: false },
+  { ID_Empleados: 7, ID_Usuarios: 7, DNI_Empleados: '35111222', Legajo: '0220', Nombre: 'Martín', Apellido: 'Gómez', Telefono: '+54 387 499-1234', Estado: true },
+  { ID_Empleados: 8, ID_Usuarios: 8, DNI_Empleados: '36777888', Legajo: '0221', Nombre: 'Lucía', Apellido: 'Torres', Telefono: '+54 387 611-5678', Estado: true },
+  { ID_Empleados: 9, ID_Usuarios: 9, DNI_Empleados: '42333000', Legajo: '0222', Nombre: 'Carlos', Apellido: 'Navarro', Telefono: '+54 387 733-9876', Estado: false },
+  { ID_Empleados: 10, ID_Usuarios: 10, DNI_Empleados: '40999111', Legajo: '0223', Nombre: 'Yamila', Apellido: 'Morales', Telefono: '+54 387 522-4321', Estado: true },
+  { ID_Empleados: 11, ID_Usuarios: 11, DNI_Empleados: '38888222', Legajo: '0224', Nombre: 'Rodrigo', Apellido: 'Paz', Telefono: '+54 387 411-8877', Estado: true },
+  { ID_Empleados: 12, ID_Usuarios: 12, DNI_Empleados: '41222444', Legajo: '0225', Nombre: 'Florencia', Apellido: 'Soria', Telefono: '+54 387 399-2233', Estado: true },
+  { ID_Empleados: 13, ID_Usuarios: 13, DNI_Empleados: '39555333', Legajo: '0226', Nombre: 'Esteban', Apellido: 'Vargas', Telefono: '+54 387 688-4455', Estado: true },
+  { ID_Empleados: 14, ID_Usuarios: 14, DNI_Empleados: '37666444', Legajo: '0227', Nombre: 'Camila', Apellido: 'Medina', Telefono: '+54 387 500-1122', Estado: false },
+  { ID_Empleados: 15, ID_Usuarios: 15, DNI_Empleados: '40333555', Legajo: '0228', Nombre: 'Gonzalo', Apellido: 'Rios', Telefono: '+54 387 311-6677', Estado: true },
+  { ID_Empleados: 16, ID_Usuarios: 16, DNI_Empleados: '36444777', Legajo: '0229', Nombre: 'Natalia', Apellido: 'Flores', Telefono: '+54 387 455-9900', Estado: true },
+  { ID_Empleados: 17, ID_Usuarios: 17, DNI_Empleados: '38999000', Legajo: '0230', Nombre: 'Hernán', Apellido: 'Acosta', Telefono: '+54 387 622-3344', Estado: true },
+  { ID_Empleados: 18, ID_Usuarios: 18, DNI_Empleados: '39111888', Legajo: '0231', Nombre: 'Romina', Apellido: 'Díaz', Telefono: '+54 387 377-5566', Estado: false },
+  { ID_Empleados: 19, ID_Usuarios: 19, DNI_Empleados: '41777222', Legajo: '0232', Nombre: 'Facundo', Apellido: 'Juárez', Telefono: '+54 387 488-7788', Estado: true },
+  { ID_Empleados: 20, ID_Usuarios: 20, DNI_Empleados: '42888333', Legajo: '0233', Nombre: 'Antonella', Apellido: 'Herrera', Telefono: '+54 387 533-2211', Estado: true },
+  { ID_Empleados: 21, ID_Usuarios: 21, DNI_Empleados: '40666999', Legajo: '0234', Nombre: 'Maximiliano', Apellido: 'Luna', Telefono: '+54 387 699-0011', Estado: true },
+  { ID_Empleados: 22, ID_Usuarios: 22, DNI_Empleados: '38222777', Legajo: '0235', Nombre: 'Julieta', Apellido: 'Castro', Telefono: '+54 387 344-8899', Estado: true },
+  { ID_Empleados: 23, ID_Usuarios: 23, DNI_Empleados: '36111555', Legajo: '0236', Nombre: 'Marcos', Apellido: 'Villalba', Telefono: '+54 387 422-5544', Estado: false },
+  { ID_Empleados: 24, ID_Usuarios: 24, DNI_Empleados: '41999444', Legajo: '0237', Nombre: 'Daiana', Apellido: 'Ponce', Telefono: '+54 387 566-7788', Estado: true },
+  { ID_Empleados: 25, ID_Usuarios: 25, DNI_Empleados: '42000111', Legajo: '0238', Nombre: 'Cristian', Apellido: 'Silva', Telefono: '+54 387 677-1122', Estado: true }
 ];
 
 // ==========================================
-// 4. SUCURSALES_X_USUARIOS
-// (Aquí se guarda la sucursal, la fecha de asociación y el estado de esa relación)
+// 4. EMPLEADOS_X_ROLES
 // ==========================================
-export const sucursales_x_usuarios = [
-  { ID_Sucursales_x_Usuarios: 1, ID_Sucursales: 1, ID_Usuarios: 1, Fecha_Asociacion: '10/05/2021', Estado: true },
-  { ID_Sucursales_x_Usuarios: 2, ID_Sucursales: 1, ID_Usuarios: 2, Fecha_Asociacion: '15/08/2020', Estado: false },
-  { ID_Sucursales_x_Usuarios: 3, ID_Sucursales: 1, ID_Usuarios: 3, Fecha_Asociacion: '01/03/2022', Estado: true },
-  { ID_Sucursales_x_Usuarios: 4, ID_Sucursales: 3, ID_Usuarios: 4, Fecha_Asociacion: '20/11/2019', Estado: true },
-  { ID_Sucursales_x_Usuarios: 5, ID_Sucursales: 2, ID_Usuarios: 5, Fecha_Asociacion: '12/07/2023', Estado: true },
-  { ID_Sucursales_x_Usuarios: 6, ID_Sucursales: 2, ID_Usuarios: 6, Fecha_Asociacion: '05/02/2021', Estado: false },
-  { ID_Sucursales_x_Usuarios: 7, ID_Sucursales: 1, ID_Usuarios: 7, Fecha_Asociacion: '01/01/2020', Estado: true },
-  { ID_Sucursales_x_Usuarios: 8, ID_Sucursales: 2, ID_Usuarios: 8, Fecha_Asociacion: '18/09/2018', Estado: true },
-  { ID_Sucursales_x_Usuarios: 9, ID_Sucursales: 3, ID_Usuarios: 9, Fecha_Asociacion: '30/04/2022', Estado: false },
-  { ID_Sucursales_x_Usuarios: 10, ID_Sucursales: 2, ID_Usuarios: 10, Fecha_Asociacion: '14/10/2021', Estado: true },
-  { ID_Sucursales_x_Usuarios: 11, ID_Sucursales: 1, ID_Usuarios: 11, Fecha_Asociacion: '22/02/2023', Estado: true },
-  { ID_Sucursales_x_Usuarios: 12, ID_Sucursales: 2, ID_Usuarios: 12, Fecha_Asociacion: '11/06/2021', Estado: true },
-  { ID_Sucursales_x_Usuarios: 13, ID_Sucursales: 3, ID_Usuarios: 13, Fecha_Asociacion: '09/09/2019', Estado: true },
-  { ID_Sucursales_x_Usuarios: 14, ID_Sucursales: 1, ID_Usuarios: 14, Fecha_Asociacion: '17/12/2020', Estado: false },
-  { ID_Sucursales_x_Usuarios: 15, ID_Sucursales: 2, ID_Usuarios: 15, Fecha_Asociacion: '03/08/2022', Estado: true },
-  { ID_Sucursales_x_Usuarios: 16, ID_Sucursales: 3, ID_Usuarios: 16, Fecha_Asociacion: '25/05/2017', Estado: true },
-  { ID_Sucursales_x_Usuarios: 17, ID_Sucursales: 1, ID_Usuarios: 17, Fecha_Asociacion: '19/01/2024', Estado: true },
-  { ID_Sucursales_x_Usuarios: 18, ID_Sucursales: 2, ID_Usuarios: 18, Fecha_Asociacion: '08/03/2021', Estado: false },
-  { ID_Sucursales_x_Usuarios: 19, ID_Sucursales: 1, ID_Usuarios: 19, Fecha_Asociacion: '14/11/2022', Estado: true },
-  { ID_Sucursales_x_Usuarios: 20, ID_Sucursales: 3, ID_Usuarios: 20, Fecha_Asociacion: '27/10/2023', Estado: true },
-  { ID_Sucursales_x_Usuarios: 21, ID_Sucursales: 2, ID_Usuarios: 21, Fecha_Asociacion: '12/04/2021', Estado: true },
-  { ID_Sucursales_x_Usuarios: 22, ID_Sucursales: 1, ID_Usuarios: 22, Fecha_Asociacion: '05/12/2019', Estado: true },
-  { ID_Sucursales_x_Usuarios: 23, ID_Sucursales: 1, ID_Usuarios: 23, Fecha_Asociacion: '21/07/2020', Estado: false },
-  { ID_Sucursales_x_Usuarios: 24, ID_Sucursales: 3, ID_Usuarios: 24, Fecha_Asociacion: '16/09/2022', Estado: true },
-  { ID_Sucursales_x_Usuarios: 25, ID_Sucursales: 2, ID_Usuarios: 25, Fecha_Asociacion: '29/03/2024', Estado: true }
+export const empleados_x_roles = [
+  { ID_Empleados_x_Roles: 1, ID_Empleados: 1, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
+  { ID_Empleados_x_Roles: 2, ID_Empleados: 2, ID_Roles: 4, Hora_Entrada: '08:00', Hora_Salida: '16:00', Estado: false, detalleBaja: 'Renuncia voluntaria presentada por motivos personales.' },
+  { ID_Empleados_x_Roles: 3, ID_Empleados: 3, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
+  { ID_Empleados_x_Roles: 4, ID_Empleados: 4, ID_Roles: 3, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
+  { ID_Empleados_x_Roles: 5, ID_Empleados: 5, ID_Roles: 6, Hora_Entrada: '08:30', Hora_Salida: '17:30', Estado: true },
+  { ID_Empleados_x_Roles: 6, ID_Empleados: 6, ID_Roles: 4, Hora_Entrada: '12:00', Hora_Salida: '20:00', Estado: false, detalleBaja: 'Baja temporal por reestructuración de turnos en sucursal.' },
+  { ID_Empleados_x_Roles: 7, ID_Empleados: 7, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Ascenso a Administrador.' },
+  { ID_Empleados_x_Roles: 8, ID_Empleados: 7, ID_Roles: 1, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
+  { ID_Empleados_x_Roles: 9, ID_Empleados: 8, ID_Roles: 2, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
+  { ID_Empleados_x_Roles: 10, ID_Empleados: 9, ID_Roles: 6, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: false, detalleBaja: 'Inasistencias injustificadas reiteradas.' },
+  { ID_Empleados_x_Roles: 11, ID_Empleados: 10, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
+  { ID_Empleados_x_Roles: 12, ID_Empleados: 11, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
+  { ID_Empleados_x_Roles: 13, ID_Empleados: 12, ID_Roles: 4, Hora_Entrada: '08:00', Hora_Salida: '16:00', Estado: true },
+  { ID_Empleados_x_Roles: 14, ID_Empleados: 13, ID_Roles: 6, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
+  { ID_Empleados_x_Roles: 15, ID_Empleados: 14, ID_Roles: 7, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Licencia sin goce de sueldo prolongada.' },
+  { ID_Empleados_x_Roles: 16, ID_Empleados: 15, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
+  { ID_Empleados_x_Roles: 17, ID_Empleados: 16, ID_Roles: 2, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
+  { ID_Empleados_x_Roles: 18, ID_Empleados: 17, ID_Roles: 4, Hora_Entrada: '08:00', Hora_Salida: '16:00', Estado: true },
+  { ID_Empleados_x_Roles: 19, ID_Empleados: 18, ID_Roles: 3, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Finalización de contrato temporal.' },
+  { ID_Empleados_x_Roles: 20, ID_Empleados: 19, ID_Roles: 5, Hora_Entrada: '09:00', Hora_Salida: '18:00', Estado: true },
+  { ID_Empleados_x_Roles: 21, ID_Empleados: 20, ID_Roles: 6, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
+  { ID_Empleados_x_Roles: 22, ID_Empleados: 21, ID_Roles: 5, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: true },
+  { ID_Empleados_x_Roles: 23, ID_Empleados: 22, ID_Roles: 4, Hora_Entrada: '12:00', Hora_Salida: '20:00', Estado: true },
+  { ID_Empleados_x_Roles: 24, ID_Empleados: 23, ID_Roles: 2, Hora_Entrada: '08:00', Hora_Salida: '17:00', Estado: false, detalleBaja: 'Desvinculación por motivos disciplinarios.' },
+  { ID_Empleados_x_Roles: 25, ID_Empleados: 24, ID_Roles: 5, Hora_Entrada: '07:00', Hora_Salida: '16:00', Estado: true },
+  { ID_Empleados_x_Roles: 26, ID_Empleados: 25, ID_Roles: 6, Hora_Entrada: '08:30', Hora_Salida: '17:30', Estado: true }
 ];
+
+// ==========================================
+// 5. SUCURSALES_X_EMPLEADOS
+// ==========================================
+export const sucursales_x_empleados = [
+  { ID_Sucursales_x_Empleados: 1, ID_Sucursales: 1, ID_Empleados: 1, Fecha_Asociacion: '10/05/2021', Estado: true },
+  { ID_Sucursales_x_Empleados: 2, ID_Sucursales: 1, ID_Empleados: 2, Fecha_Asociacion: '15/08/2020', Estado: false },
+  { ID_Sucursales_x_Empleados: 3, ID_Sucursales: 1, ID_Empleados: 3, Fecha_Asociacion: '01/03/2022', Estado: true },
+  { ID_Sucursales_x_Empleados: 4, ID_Sucursales: 3, ID_Empleados: 4, Fecha_Asociacion: '20/11/2019', Estado: true },
+  { ID_Sucursales_x_Empleados: 5, ID_Sucursales: 2, ID_Empleados: 5, Fecha_Asociacion: '12/07/2023', Estado: true },
+  { ID_Sucursales_x_Empleados: 6, ID_Sucursales: 2, ID_Empleados: 6, Fecha_Asociacion: '05/02/2021', Estado: false },
+  { ID_Sucursales_x_Empleados: 7, ID_Sucursales: 1, ID_Empleados: 7, Fecha_Asociacion: '01/01/2020', Estado: true },
+  { ID_Sucursales_x_Empleados: 8, ID_Sucursales: 2, ID_Empleados: 8, Fecha_Asociacion: '18/09/2018', Estado: true },
+  { ID_Sucursales_x_Empleados: 9, ID_Sucursales: 3, ID_Empleados: 9, Fecha_Asociacion: '30/04/2022', Estado: false },
+  { ID_Sucursales_x_Empleados: 10, ID_Sucursales: 2, ID_Empleados: 10, Fecha_Asociacion: '14/10/2021', Estado: true },
+  { ID_Sucursales_x_Empleados: 11, ID_Sucursales: 1, ID_Empleados: 11, Fecha_Asociacion: '22/02/2023', Estado: true },
+  { ID_Sucursales_x_Empleados: 12, ID_Sucursales: 2, ID_Empleados: 12, Fecha_Asociacion: '11/06/2021', Estado: true },
+  { ID_Sucursales_x_Empleados: 13, ID_Sucursales: 3, ID_Empleados: 13, Fecha_Asociacion: '09/09/2019', Estado: true },
+  { ID_Sucursales_x_Empleados: 14, ID_Sucursales: 1, ID_Empleados: 14, Fecha_Asociacion: '17/12/2020', Estado: false },
+  { ID_Sucursales_x_Empleados: 15, ID_Sucursales: 2, ID_Empleados: 15, Fecha_Asociacion: '03/08/2022', Estado: true },
+  { ID_Sucursales_x_Empleados: 16, ID_Sucursales: 3, ID_Empleados: 16, Fecha_Asociacion: '25/05/2017', Estado: true },
+  { ID_Sucursales_x_Empleados: 17, ID_Sucursales: 1, ID_Empleados: 17, Fecha_Asociacion: '19/01/2024', Estado: true },
+  { ID_Sucursales_x_Empleados: 18, ID_Sucursales: 2, ID_Empleados: 18, Fecha_Asociacion: '08/03/2021', Estado: false },
+  { ID_Sucursales_x_Empleados: 19, ID_Sucursales: 1, ID_Empleados: 19, Fecha_Asociacion: '14/11/2022', Estado: true },
+  { ID_Sucursales_x_Empleados: 20, ID_Sucursales: 3, ID_Empleados: 20, Fecha_Asociacion: '27/10/2023', Estado: true },
+  { ID_Sucursales_x_Empleados: 21, ID_Sucursales: 2, ID_Empleados: 21, Fecha_Asociacion: '12/04/2021', Estado: true },
+  { ID_Sucursales_x_Empleados: 22, ID_Sucursales: 1, ID_Empleados: 22, Fecha_Asociacion: '05/12/2019', Estado: true },
+  { ID_Sucursales_x_Empleados: 23, ID_Sucursales: 1, ID_Empleados: 23, Fecha_Asociacion: '21/07/2020', Estado: false },
+  { ID_Sucursales_x_Empleados: 24, ID_Sucursales: 3, ID_Empleados: 24, Fecha_Asociacion: '16/09/2022', Estado: true },
+  { ID_Sucursales_x_Empleados: 25, ID_Sucursales: 2, ID_Empleados: 25, Fecha_Asociacion: '29/03/2024', Estado: true }
+];
+
+// ==========================================
+// 6. USUARIO DEMO (Adaptado a la nueva estructura)
+// ==========================================
+export const usuarioDemo = { 
+  // Datos de Autenticación (USUARIOS)
+  ID_Usuarios: 99,
+  Username: 'alejandro',
+  Email: 'alejandro@fercons.com', 
+  Password: '1234', 
+  
+  // Datos Personales (EMPLEADOS)
+  ID_Empleados: 99,
+  Nombre: 'Alejandro Carrizo', 
+  Legajo: '45974444', 
+  DNI_Empleados: '45.974.444',
+  Telefono: '+54 387 412-9988',
+  Fecha_Asociacion: '14/02/2025',
+  Estado: true,
+  
+  // Rol
+  Ocupacion: 'Administrador'
+};
 
 export const proveedores = [
   { id: 1, codigo: '001', nombreFantasia: 'Ceramica Norte', razonSocial: 'Ceramica Norte S.A', cuit: '30-7623345-7', telefono: '+54 387 435-3422', email: 'contacto@ceramicanorte.com', id_sucursal: 1, activo: true },

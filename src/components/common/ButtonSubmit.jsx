@@ -1,6 +1,10 @@
-export default function ButtonSubmit({ text, disabled }) {
+export default function ButtonSubmit({ text, disabled, className = '', ...props }) {
   return (
-    <button type="submit" disabled={disabled} className="boton-enviar">
+    <button 
+      disabled={disabled} 
+      className={`boton-enviar ${className}`.trim()} 
+      {...props} 
+    >
       {text}
     </button>
   );

@@ -4,8 +4,6 @@ import Swal from 'sweetalert2';
 
 const AuthContext = createContext(null);
 
-// Tiempo de expiración para la prueba (1 minuto)
-// Para pasar a producción, usar: 30 * 60 * 1000
 const EXPIRATION_TIME = 30 * 60 * 1000;
 
 export function AuthProvider({ children }) {
@@ -13,15 +11,11 @@ export function AuthProvider({ children }) {
     try {
       const storedData = localStorage.getItem('user_session');
       if (!storedData) return null;
-
       const { user: savedUser, expiresAt } = JSON.parse(storedData);
-
-      // Si el tiempo actual superó la expiración al arrancar la app
       if (Date.now() > expiresAt) {
         localStorage.removeItem('user_session');
         return null;
       }
-
       return savedUser;
     } catch (error) {
       console.error('Error al analizar la sesión:', error);
@@ -30,7 +24,6 @@ export function AuthProvider({ children }) {
     }
   });
 
-  // NUEVO: Estado para guardar las contraseñas modificadas
   const [passwordOverrides, setPasswordOverrides] = useState(() => {
     try {
       const overrides = localStorage.getItem('passwords_override');
@@ -40,7 +33,6 @@ export function AuthProvider({ children }) {
     }
   });
 
-  // Referencia para mantener temporalmente al usuario al forzar el Login de fondo
   const ultimoUsuarioRef = useRef(null);
 
   const logout = useCallback(() => {
@@ -49,6 +41,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const login = useCallback((datos) => {
+    console.log("¡Login exitoso! Guardando sesión para:", datos);
     setUser(datos);
     ultimoUsuarioRef.current = datos;
     const sessionData = {
@@ -58,10 +51,9 @@ export function AuthProvider({ children }) {
     localStorage.setItem('user_session', JSON.stringify(sessionData));
   }, []);
 
-  // NUEVO: Función para actualizar la contraseña de un usuario
   const actualizarContrasena = useCallback((email, nuevaContrasena) => {
     if (!email) return;
-    const emailLower = email.toLowerCase();
+    const emailLower = String(email).toLowerCase();
 
     setPasswordOverrides((prev) => {
       const updated = { ...prev, [emailLower]: nuevaContrasena };
@@ -70,7 +62,6 @@ export function AuthProvider({ children }) {
     });
   }, []);
 
-  // Manejo de la expiración: manda al login de fondo inmediatamente y muestra el cartel
   const manejarExpiracion = useCallback(() => {
     const storedData = localStorage.getItem('user_session');
     let usuarioActual = user;
@@ -87,7 +78,6 @@ export function AuthProvider({ children }) {
     if (!usuarioARecuperar) return;
 
     ultimoUsuarioRef.current = usuarioARecuperar;
-
     logout();
 
     Swal.fire({
@@ -116,10 +106,8 @@ export function AuthProvider({ children }) {
     });
   }, [user, logout, login]);
 
-  // Renueva la marca de tiempo si el usuario realiza alguna interacción
   const resetTimer = useCallback(() => {
     if (!user) return;
-
     const storedData = localStorage.getItem('user_session');
     if (storedData) {
       try {
@@ -134,7 +122,6 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!user) return;
-
     ultimoUsuarioRef.current = user;
 
     const interval = setInterval(() => {
