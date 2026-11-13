@@ -11,17 +11,20 @@ import {
     IconCalendarEvent,
     IconShieldCheck,
     IconDeviceFloppy,
-    IconLock
+    IconLock,
+    IconKey
 } from '@tabler/icons-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import Encabezado from '../components/Encabezado.jsx';
-// ADAPTACIÓN: Importamos las tablas necesarias para el JOIN
+import ChangePasswordModal from '../components/common/ChangePasswordModal.jsx';
 import { usuarioDemo, empleados, usuarios, sucursales_x_empleados } from '../data/mock.js';
 import '../styles/Perfil.css';
 
 export default function Perfil() {
     const { user } = useAuth();
     const navigate = useNavigate();
+
+    const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
 
     // 1. Cruzamos los datos reales usando el legajo de la sesión
     const perfilData = useMemo(() => {
@@ -69,15 +72,20 @@ export default function Perfil() {
         email: ''
     });
 
-    // Sincronizamos el formulario cuando los datos del perfil estén listos
+    // Estado para guardar la copia de los datos al momento de guardar
+    const [datosGuardados, setDatosGuardados] = useState(null);
+
+    // Sincronizamos el formulario y la copia de datos cuando el perfil carga
     useEffect(() => {
         if (perfilData) {
-            setFormData({
+            const datosIniciales = {
                 nombre: perfilData.nombre,
                 dni: perfilData.dni,
                 telefono: perfilData.telefono,
                 email: perfilData.email
-            });
+            };
+            setFormData(datosIniciales);
+            setDatosGuardados(datosIniciales); // Guardamos la copia inicial
         }
     }, [perfilData]);
 
@@ -89,6 +97,14 @@ export default function Perfil() {
     // 3. Control de permisos
     const esAdmin = rol.toLowerCase() === 'administrador';
 
+    // Comparamos el formulario actual con la copia guardada
+    const hayCambios = datosGuardados && (
+        formData.nombre !== datosGuardados.nombre ||
+        formData.dni !== datosGuardados.dni ||
+        formData.telefono !== datosGuardados.telefono ||
+        formData.email !== datosGuardados.email
+    );
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
@@ -96,10 +112,14 @@ export default function Perfil() {
 
     const handleGuardarCambios = (e) => {
         e.preventDefault();
+        
+        // Actualizamos la copia guardada con los datos actuales del formulario
+        setDatosGuardados(formData); 
+
         Swal.fire({
             icon: 'success',
             title: 'Perfil actualizado',
-            text: 'Los cambios se guardaron correctamente (modo prueba).',
+            text: 'Los cambios se guardaron correctamente.',
             timer: 1800,
             showConfirmButton: false,
             confirmButtonColor: '#0d9488'
@@ -264,13 +284,26 @@ export default function Perfil() {
 
             </div>
 
-            {/* Botón Guardar */}
+            {/* Botones de Acción (Solo Admin) */}
             {esAdmin ? (
                 <div className="contenedor-boton-guardar-perfil">
-                <button type="submit" className="boton-guardar-perfil">
-                    <IconDeviceFloppy size={20} />
-                    <span>Guardar cambios</span>
-                </button>
+                    <button 
+                        type="submit" 
+                        className={`boton-guardar-perfil ${!hayCambios ? 'boton-deshabilitado' : ''}`}
+                        disabled={!hayCambios}
+                    >
+                        <IconDeviceFloppy size={20} />
+                        <span>Guardar cambios</span>
+                    </button>
+                    
+                    <button 
+                        type="button" 
+                        className="boton-guardar-perfil boton-cambiar-pass" 
+                        onClick={() => setIsPasswordModalOpen(true)}
+                    >
+                        <IconKey size={20} />
+                        <span>Cambiar contraseña</span>
+                    </button>
                 </div>
             ) : (
                 <div className="aviso-lectura-perfil">
@@ -280,6 +313,15 @@ export default function Perfil() {
             )}
             </form>
         </section>
+
+        <ChangePasswordModal
+            isOpen={isPasswordModalOpen}
+            onClose={() => setIsPasswordModalOpen(false)}
+            email={perfilData.email}
+            nombre={perfilData.nombre}
+            id_usuario={user?.ID_Usuarios || null}
+            requireCurrentPassword={true} // <--- NUEVO: Propiedad agregada
+        />
         </>
     );
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { IconX, IconEye, IconEyeOff } from '@tabler/icons-react';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { usuarioDemo, usuarios } from '../../data/mock.js';
 import '../../styles/GenericModalForm.css';
 import '../../styles/ChangePasswordModal.css';
 
@@ -48,17 +49,19 @@ function CampoPassword({ id, label, placeholder, value, onChange }) {
     );
 }
 
-// ADAPTACIÓN: Recibimos la prop id_usuario (aunque usemos email para el guardado)
-export default function ChangePasswordModal({ isOpen, onClose, email = '', nombre = '', id_usuario = null }) {
-    const { actualizarContrasena } = useAuth();
+// ADAPTACIÓN: Recibimos requireCurrentPassword para exigir la clave actual
+export default function ChangePasswordModal({ isOpen, onClose, email = '', nombre = '', id_usuario = null, requireCurrentPassword = false }) {
+    const { actualizarContrasena, passwordOverrides } = useAuth();
     const [nuevaContra, setNuevaContra] = useState('');
     const [confirContra, setConfirContra] = useState('');
+    const [contraActual, setContraActual] = useState(''); // NUEVO
 
     // Limpia los campos cada vez que se abre el modal
     useEffect(() => {
         if (isOpen) {
             setNuevaContra('');
             setConfirContra('');
+            setContraActual(''); // NUEVO
         }
     }, [isOpen, email]);
 
@@ -67,8 +70,8 @@ export default function ChangePasswordModal({ isOpen, onClose, email = '', nombr
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // 1. Campos vacíos
-        if (!nuevaContra.trim() || !confirContra.trim()) {
+        // 1. Campos vacíos (incluyendo la contraseña actual si se requiere)
+        if (!nuevaContra.trim() || !confirContra.trim() || (requireCurrentPassword && !contraActual.trim())) {
             mostrarAlerta('warning', 'Campos incompletos', 'Por favor, complete todos los campos.');
             return;
         }
@@ -85,8 +88,32 @@ export default function ChangePasswordModal({ isOpen, onClose, email = '', nombr
             return;
         }
 
-        // 4. Guardar en el contexto (y en localStorage)
-        // NOTA: Seguimos usando el email como clave porque así está armado el AuthContext actualmente.
+        // 4. Obtener la contraseña actual real (del override o del mock)
+        let contrasenaReal = passwordOverrides[email.toLowerCase()];
+        if (!contrasenaReal) {
+            if (email.toLowerCase() === usuarioDemo.Email.toLowerCase()) {
+                contrasenaReal = usuarioDemo.Password;
+            } else {
+                const userObj = usuarios.find(u => u.Email.toLowerCase() === email.toLowerCase());
+                contrasenaReal = userObj ? userObj.Password : null;
+            }
+        }
+
+        // 5. NUEVO: Validar contraseña actual si el componente lo requiere
+        if (requireCurrentPassword) {
+            if (contraActual !== contrasenaReal) {
+                mostrarAlerta('error', 'Contraseña incorrecta', 'La contraseña actual que ingresó no es correcta.');
+                return;
+            }
+        }
+
+        // 6. Validar que la nueva no sea igual a la actual
+        if (nuevaContra === contrasenaReal) {
+            mostrarAlerta('warning', 'Contraseña sin cambios', 'La nueva contraseña no puede ser igual a la anterior. Por favor, ingrese una diferente.');
+            return;
+        }
+
+        // 7. Guardar en el contexto (y en localStorage)
         actualizarContrasena(email, nuevaContra);
         onClose();
 
@@ -127,6 +154,17 @@ export default function ChangePasswordModal({ isOpen, onClose, email = '', nombr
                             readOnly
                         />
                     </div>
+
+                    {/* NUEVO: Campo de contraseña actual (solo se muestra si requireCurrentPassword es true) */}
+                    {requireCurrentPassword && (
+                        <CampoPassword
+                            id="cp-actual"
+                            label="Contraseña Actual"
+                            placeholder="Ingrese su contraseña actual por seguridad"
+                            value={contraActual}
+                            onChange={(e) => setContraActual(e.target.value)}
+                        />
+                    )}
 
                     <CampoPassword
                         id="cp-nueva"

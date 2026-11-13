@@ -15,7 +15,6 @@ import { showConfirmInputAlert } from '../components/common/showConfirmInputAler
 import { showReactivateAlert } from '../components/common/showReactivateAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
 import { useAuth } from '../context/AuthContext.jsx';
-// ADAPTACIÓN: Importamos las nuevas tablas normalizadas
 import { 
   empleados as datosEmpleados, 
   usuarios as datosUsuarios,
@@ -54,24 +53,25 @@ const obtenerNombreSucursal = (idSucursal) =>
 // ADAPTACIÓN: Función que hace el JOIN con las nuevas tablas
 const mapearEmpleadosRelacionales = () => {
   return datosEmpleados.map(emp => {
-    // 1. Buscamos los datos de autenticación (Email, Password)
+    // 1. Buscamos los datos de autenticación (Email, Username, Password)
     const usuarioData = datosUsuarios.find(u => u.ID_Usuarios === emp.ID_Usuarios);
 
     // 2. Buscamos el rol activo (o el último que tuvo)
     const rolData = empleados_x_roles.find(er => er.ID_Empleados === emp.ID_Empleados && er.Estado) 
-                 || empleados_x_roles.find(er => er.ID_Empleados === emp.ID_Empleados);
+                  || empleados_x_roles.find(er => er.ID_Empleados === emp.ID_Empleados);
 
     // 3. Buscamos la sucursal activa (o la última)
     const sucursalData = sucursales_x_empleados.find(se => se.ID_Empleados === emp.ID_Empleados && se.Estado)
                       || sucursales_x_empleados.find(se => se.ID_Empleados === emp.ID_Empleados);
 
     return {
-      id: emp.ID_Empleados, // Usamos el ID de la tabla empleados
-      id_usuario: emp.ID_Usuarios, // Guardamos el ID de usuario por si lo necesitamos
+      id: emp.ID_Empleados, 
+      id_usuario: emp.ID_Usuarios, 
       dni: emp.DNI_Empleados,
       legajo: emp.Legajo,
       nombre: emp.Nombre,
       apellido: emp.Apellido,
+      username: usuarioData?.Username || '', 
       email: usuarioData?.Email || '',
       telefono: emp.Telefono,
       contrasena: usuarioData?.Password || '',
@@ -90,6 +90,7 @@ const COLUMNAS_TABLA = [
   'Legajo', 
   'DNI',
   'Empleado', 
+  'Usuario',
   'Email',
   <span key="tel" className="columna-con-icono"><IconPhone size={16} />Teléfono</span>, 
   'Rol', 
@@ -109,7 +110,6 @@ export default function Empleados() {
   
   const esAdmin = user?.rol === 'Administrador';
 
-  // ADAPTACIÓN: Renombramos el estado a 'empleados' para mayor claridad
   const [empleados, setEmpleados] = useState(mapearEmpleadosRelacionales);
   const [busqueda, setBusqueda] = useState('');
   const [tabActiva, setTabActiva] = useState('todos');
@@ -163,6 +163,7 @@ export default function Empleados() {
         String(empleado.legajo).toLowerCase().includes(query) ||
         nombreCompleto.includes(query) ||
         nombreSucursal.includes(query) ||
+        (empleado.username && empleado.username.toLowerCase().includes(query)) ||
         (empleado.email && empleado.email.toLowerCase().includes(query)) ||
         (empleado.dni && String(empleado.dni).toLowerCase().includes(query));
 
@@ -193,6 +194,7 @@ export default function Empleados() {
       { name: 'nombre', label: 'Nombre', placeholder: 'Nombre del Empleado', required: true },
       { name: 'apellido', label: 'Apellido', placeholder: 'Apellido del Empleado', required: true },
       { name: 'telefono', label: 'Teléfono', placeholder: '+54 387 000-0000', required: true },
+      { name: 'username', label: 'Usuario (Username)', placeholder: 'ej: juan.perez', required: true },
       { name: 'email', label: 'Email', type: 'email', placeholder: 'nombre@gmail.com', required: true },
       { name: 'rol', label: 'Rol', type: 'select', options: rolesDisponibles, required: true },
       { name: 'sucursal', label: 'Sucursal', type: 'select', options: sucursalesDisponibles, required: true },
@@ -201,7 +203,7 @@ export default function Empleados() {
     ];
 
     if (!empleadoEditando) {
-      camposBase.splice(7, 0, { 
+      camposBase.splice(8, 0, { 
         name: 'contrasena', 
         label: 'Contraseña Inicial', 
         type: 'password', 
@@ -218,6 +220,7 @@ export default function Empleados() {
     if (!empleadoEditando) {
       return { 
         legajo: siguienteLegajo,
+        username: '',
         hora_entrada: '',
         hora_salida: '',
         sucursal: sucursales[0]?.Nombre || '',
@@ -238,6 +241,7 @@ export default function Empleados() {
       nombre,
       apellido,
       telefono: empleadoEditando.telefono || '',
+      username: empleadoEditando.username || '',
       email: empleadoEditando.email || '',
       rol: obtenerNombreRol(empleadoEditando.id_rol),
       sucursal: sucObj ? sucObj.Nombre : sucursales[0]?.Nombre || '',
@@ -277,6 +281,7 @@ export default function Empleados() {
       details: [
         { label: 'Legajo', value: `N.° ${empleado.legajo}` },
         { label: 'DNI', value: empleado.dni }, 
+        { label: 'Usuario', value: empleado.username },
         { label: 'Rol', value: obtenerNombreRol(empleado.id_rol) },
         { label: 'Sucursal', value: obtenerNombreSucursal(empleado.id_sucursal) },
         { label: 'Asociación', value: empleado.fechaAsociacion }
@@ -324,15 +329,15 @@ export default function Empleados() {
     const sucursalObj = sucursales.find(s => s.Nombre === data.sucursal);
     const nombreCompleto = `${data.nombre} ${data.apellido}`;
 
-    // ADAPTACIÓN: Simulamos la creación de ambas entidades
     const nuevoId = Date.now();
     const nuevoEmpleado = {
-      id: nuevoId, // Simula ID_Empleados
-      id_usuario: nuevoId + 1, // Simula ID_Usuarios
+      id: nuevoId, 
+      id_usuario: nuevoId + 1, 
       legajo: data.legajo,
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
+      username: data.username, 
       email: data.email,
       dni: data.dni,
       contrasena: data.contrasena,
@@ -365,6 +370,7 @@ export default function Empleados() {
       nombre: data.nombre,
       apellido: data.apellido,
       telefono: data.telefono,
+      username: data.username, 
       email: data.email,
       dni: data.dni,
       id_rol: rolObj ? rolObj.ID_Roles : 1,
@@ -385,6 +391,52 @@ export default function Empleados() {
   };
 
   const handleGuardarEmpleado = (data) => {
+    const dniLimpio = String(data.dni).trim();
+    const usernameLimpio = data.username.trim().toLowerCase();
+
+    // NUEVO: Validar que el DNI no esté duplicado
+    const dniExiste = empleados.some(
+      (e) => String(e.dni) === dniLimpio && 
+      (!empleadoEditando || e.id !== empleadoEditando.id)
+    );
+
+    if (dniExiste) {
+      bloquearCierreRef.current = true; // Bloqueamos el cierre del modal
+      
+      Swal.fire({
+        icon: 'warning',
+        title: 'DNI duplicado',
+        text: 'El número de documento (DNI) ya está registrado por otro empleado.',
+        confirmButtonColor: '#326f7a',
+        customClass: {
+          container: 'swal-alto-z-index' 
+        }
+      });
+      return; 
+    }
+
+    // Validar que el Username no esté duplicado
+    const usernameExiste = datosUsuarios.some(
+      (u) => u.Username.toLowerCase() === usernameLimpio && 
+      (!empleadoEditando || u.ID_Usuarios !== empleadoEditando.id_usuario)
+    );
+
+    if (usernameExiste) {
+      bloquearCierreRef.current = true; 
+      
+      Swal.fire({
+        icon: 'warning',
+        title: 'Usuario duplicado',
+        text: 'El nombre de usuario (Username) ya está en uso por otro empleado. Por favor, elegí uno diferente.',
+        confirmButtonColor: '#326f7a',
+        customClass: {
+          container: 'swal-alto-z-index' 
+        }
+      });
+      return; 
+    }
+
+    // Validación de contraseña corta
     if (!empleadoEditando && data.contrasena && data.contrasena.length < 4) {
       bloquearCierreRef.current = true; 
       
@@ -417,7 +469,7 @@ export default function Empleados() {
       <SearchBar 
         value={busqueda} 
         onChange={setBusqueda} 
-        placeholder="Buscar por legajo, DNI, nombre, correo o sucursal..." 
+        placeholder="Buscar por legajo, DNI, nombre, usuario, correo o sucursal..." 
       />
 
       <FilterTabs 
@@ -480,6 +532,7 @@ export default function Empleados() {
                   {nombreCompleto}
                 </span>
               </td>
+              <td className="celda-tabla-texto">{empleado.username}</td>
               <td className="celda-tabla-texto">{empleado.email}</td>
               <td className="celda-tabla-texto">{empleado.telefono}</td>
               <td className="celda-tabla-gris">{obtenerNombreRol(empleado.id_rol)}</td>
@@ -564,7 +617,7 @@ export default function Empleados() {
         isOpen={!!empleadoClave}
         onClose={() => setEmpleadoClave(null)}
         email={empleadoClave?.email || ''}
-        id_usuario={empleadoClave?.id_usuario || null} // NUEVO: Pasamos el ID de Usuario
+        id_usuario={empleadoClave?.id_usuario || null}
         nombre={empleadoClave ? `${empleadoClave.nombre} ${empleadoClave.apellido}` : ''}
       />
     </>

@@ -63,8 +63,8 @@ ESTILOS DE EMPLEADOS - FER-CONS
 
 .tabla-empleados {
     width: 100%;
-    /* MODIFICADO: Aumentado de 950px a 1200px para dar espacio a la nueva columna de Email */
-    min-width: 1200px; 
+    /* MODIFICADO: Aumentado de 1200px a 1350px para acomodar la nueva columna 'Usuario' */
+    min-width: 1350px; 
     text-align: center;
     border-collapse: collapse;
 }
@@ -97,7 +97,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
 .celda-tabla-legajo {
     padding: 1rem;
     color: rgba(15, 42, 48, 0.7);
-    /* NUEVO: Evita que el "N.° 0214" se corte en dos líneas */
+    /* Evita que el "N.° 0214" se corte en dos líneas */
     white-space: nowrap; 
 }
 
@@ -109,7 +109,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    /* NUEVO: Evita que el nombre del empleado se corte en dos líneas */
+    /* Evita que el nombre del empleado se corte en dos líneas */
     white-space: nowrap; 
 }
 
@@ -128,7 +128,7 @@ ESTILOS DE EMPLEADOS - FER-CONS
 .celda-tabla-texto {
     padding: 1rem;
     color: var(--color-oscuro);
-    white-space: nowrap;
+    white-space: nowrap; /* Evita que los textos largos (username, email) se corten */
 }
 
 .celda-tabla-gris {

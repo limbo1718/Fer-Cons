@@ -173,13 +173,17 @@
     box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
 }
 
-/* Botón Guardar Cambios */
+/* --- CONTENEDOR DE BOTONES --- */
 .contenedor-boton-guardar-perfil {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-end; 
+    align-items: center;
+    gap: 1rem; 
+    flex-wrap: wrap; 
     margin-top: 1.5rem;
 }
 
+/* Estilo base del botón (compartido) */
 .boton-guardar-perfil {
     display: inline-flex;
     align-items: center;
@@ -199,6 +203,38 @@
 .boton-guardar-perfil:hover {
     background-color: #115e59;
     transform: translateY(-1px);
+}
+
+/* --- Color secundario para el botón de contraseña --- */
+.boton-cambiar-pass {
+    background-color: #326f7a; 
+    box-shadow: 0 4px 10px rgba(50, 111, 122, 0.25);
+}
+
+.boton-cambiar-pass:hover {
+    background-color: #265661;
+}
+
+/* --- MODIFICADO: Estilo para cuando el botón está deshabilitado (sin cambios) --- */
+.boton-deshabilitado {
+    background-color: #f1f5f9 !important; /* Fondo gris muy claro */
+    color: #94a3b8 !important; /* Texto gris apagado */
+    border: 1px solid #cbd5e1 !important; /* Borde sutil */
+    box-shadow: none !important;
+    cursor: not-allowed !important;
+    opacity: 1 !important;
+}
+
+.boton-deshabilitado:hover {
+    background-color: #f1f5f9 !important;
+    color: #94a3b8 !important;
+    transform: none !important;
+}
+
+/* El icono también toma el color apagado */
+.boton-deshabilitado svg {
+    color: #94a3b8 !important;
+    opacity: 0.8;
 }
 
 /* Banner de aviso para Empleados (sin permisos de edición) */
@@ -233,5 +269,9 @@
 
     .estado-perfil-contenedor {
         margin-top: 0.5rem;
+    }
+    
+    .contenedor-boton-guardar-perfil {
+        justify-content: center; 
     }
 }
