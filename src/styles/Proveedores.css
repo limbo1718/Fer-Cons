@@ -22,7 +22,8 @@ ESTILOS DE PROVEEDORES - FER-CONS
 
 .tabla-proveedores {
     width: 100%;
-    min-width: 800px;
+    /* MODIFICADO: Reducido a 950px porque ahora tiene menos columnas */
+    min-width: 950px; 
     text-align: center;
     border-collapse: collapse;
 }
@@ -38,42 +39,33 @@ ESTILOS DE PROVEEDORES - FER-CONS
     color: var(--color-oscuro);
 }
 
-.contenido-telefono-th {
+.columna-con-icono {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
 }
 
-.fila-proveedor {
+.fila-empleado {
     border-bottom: 1px solid rgba(15, 42, 48, 0.1);
 }
 
-.fila-proveedor:last-child {
+.fila-empleado:last-child {
     border-bottom: none;
-}
-
-.celda-tabla-codigo {
-    padding: 1rem;
-    color: rgba(15, 42, 48, 0.7);
 }
 
 .celda-tabla-info {
     padding: 1rem;
 }
 
-.info-proveedor-flex {
+.info-empleado-flex {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    white-space: nowrap; /* Evita que el nombre se corte */
 }
 
 .proveedor-info-detalles {
-    text-align: left;
-}
-
-.proveedor-razon-social {
-    font-size: 0.8rem;
-    color: rgba(15, 42, 48, 0.6);
+    text-align: left; /* Mantiene el nombre pegado al avatar */
 }
 
 .avatar-iniciales {
@@ -85,16 +77,20 @@ ESTILOS DE PROVEEDORES - FER-CONS
     background-color: var(--color-sidebar);
     font-size: 0.875rem;
     color: #ffffff;
+    flex-shrink: 0;
 }
 
 .celda-tabla-texto {
     padding: 1rem;
     color: var(--color-oscuro);
+    white-space: nowrap;
 }
 
 .celda-tabla-gris {
     padding: 1rem;
     color: rgba(15, 42, 48, 0.7);
+    white-space: nowrap;
+    text-align: left; /* Alinea la razón social a la izquierda para que no quede tan separada */
 }
 
 .etiqueta-estado {
@@ -102,6 +98,7 @@ ESTILOS DE PROVEEDORES - FER-CONS
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
     font-weight: 600;
+    white-space: nowrap; 
 }
 
 .estado-activo {
@@ -114,29 +111,7 @@ ESTILOS DE PROVEEDORES - FER-CONS
     color: #991b1b;
 }
 
-.boton-justificacion {
-    width: 100%;
-    border-radius: 0.5rem;
-    background-color: var(--color-tarjeta);
-    padding: 0.5rem 1rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-.boton-justificacion:hover {
-    background-color: var(--color-circulo);
-}
-
-.contenido-boton-justificacion {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    color: var(--color-oscuro);
-}
-
-/* Botones de acciones por fila (editar / activar-desactivar) */
+/* Botones de acciones por fila (info / editar / activar-desactivar) */
 .acciones-fila {
     display: inline-flex;
     align-items: center;
@@ -178,4 +153,9 @@ ESTILOS DE PROVEEDORES - FER-CONS
 }
 .accion-activar:hover {
     background-color: #a7f3d0 !important;
+}
+
+/* --- CLASES UTILITARIAS DE SWEETALERT --- */
+.swal-alto-z-index {
+    z-index: 99999 !important;
 }

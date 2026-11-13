@@ -38,7 +38,7 @@ export const ubicaciones = [
   { ID_Ubicaciones: 13, ID_Localidades: 1, Latitud: -24.830000, Longitud: -65.410000, Calle: 'Av. Banchik', Nro_Calle: 500 }
 ];
 
-// 5. EMPRESAS
+// 5. EMPRESAS (Datos fiscales aquí)
 export const empresas = [
   {
     ID_Empresas: 1,
@@ -54,164 +54,21 @@ export const empresas = [
   }
 ];
 
-// 6. SUCURSALES (13 sucursales, incluyendo inactividades)
+// 6. SUCURSALES (Solo datos de la sucursal y FK de empresa/ubicación)
 export const sucursales = [
-  {
-    ID_Sucursales: 1,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 1,
-    Nombre: 'Casa Central',
-    Hora_Ap: '08:00:00',
-    Hora_C: '18:00:00',
-    Contacto: '3874000001',
-    Email_Suc: 'casacentral@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 2,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 2,
-    Nombre: 'Sucursal Sur',
-    Hora_Ap: '08:30:00',
-    Hora_C: '18:30:00',
-    Contacto: '3874000002',
-    Email_Suc: 'sucursalsur@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 3,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 3,
-    Nombre: 'Depósito Norte',
-    Hora_Ap: '07:00:00',
-    Hora_C: '17:00:00',
-    Contacto: '3874000003',
-    Email_Suc: 'depositonorte@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 4,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 4,
-    Nombre: 'Sucursal Chile',
-    Hora_Ap: '08:00:00',
-    Hora_C: '18:00:00',
-    Contacto: '3874000004',
-    Email_Suc: 'chile@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 5,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 5,
-    Nombre: 'Sucursal Intersatambres',
-    Hora_Ap: '08:00:00',
-    Hora_C: '17:30:00',
-    Contacto: '3874000005',
-    Email_Suc: 'intersatambres@fercons.com',
-    activo: false,
-    detalleBaja: 'Cerrada temporalmente por remodelación de depósito e instalaciones eléctricas.'
-  },
-  {
-    ID_Sucursales: 6,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 6,
-    Nombre: 'Sucursal Tres Cerritos',
-    Hora_Ap: '08:30:00',
-    Hora_C: '19:00:00',
-    Contacto: '3874000006',
-    Email_Suc: 'trescerritos@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 7,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 7,
-    Nombre: 'Sucursal Macrocentro',
-    Hora_Ap: '08:00:00',
-    Hora_C: '18:00:00',
-    Contacto: '3874000007',
-    Email_Suc: 'macrocentro@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 8,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 8,
-    Nombre: 'Sucursal San Lorenzo',
-    Hora_Ap: '09:00:00',
-    Hora_C: '17:00:00',
-    Contacto: '3874000008',
-    Email_Suc: 'sanlorenzo@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 9,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 9,
-    Nombre: 'Depósito San Antonio',
-    Hora_Ap: '07:30:00',
-    Hora_C: '16:30:00',
-    Contacto: '3874000009',
-    Email_Suc: 'sanantonio@fercons.com',
-    activo: false,
-    detalleBaja: 'Unificación de stock en el Depósito Norte.'
-  },
-  {
-    ID_Sucursales: 10,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 10,
-    Nombre: 'Sucursal Grand Bourg',
-    Hora_Ap: '08:00:00',
-    Hora_C: '18:00:00',
-    Contacto: '3874000010',
-    Email_Suc: 'grandbourg@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 11,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 11,
-    Nombre: 'Sucursal Centro Peatonal',
-    Hora_Ap: '08:30:00',
-    Hora_C: '19:30:00',
-    Contacto: '3874000011',
-    Email_Suc: 'peatonal@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 12,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 12,
-    Nombre: 'Sucursal Vaqueros',
-    Hora_Ap: '08:00:00',
-    Hora_C: '17:00:00',
-    Contacto: '3874000012',
-    Email_Suc: 'vaqueros@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  },
-  {
-    ID_Sucursales: 13,
-    ID_Empresas: 1,
-    ID_Ubicaciones: 13,
-    Nombre: 'Depósito Aeropuerto',
-    Hora_Ap: '07:00:00',
-    Hora_C: '16:00:00',
-    Contacto: '3874000013',
-    Email_Suc: 'aeropuerto@fercons.com',
-    activo: true,
-    detalleBaja: ''
-  }
+  { ID_Sucursales: 1, ID_Empresas: 1, ID_Ubicaciones: 1, Nombre: 'Casa Central', Hora_Ap: '08:00:00', Hora_C: '18:00:00', Contacto: '3874000001', Email_Suc: 'casacentral@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 2, ID_Empresas: 1, ID_Ubicaciones: 2, Nombre: 'Sucursal Sur', Hora_Ap: '08:30:00', Hora_C: '18:30:00', Contacto: '3874000002', Email_Suc: 'sucursalsur@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 3, ID_Empresas: 1, ID_Ubicaciones: 3, Nombre: 'Depósito Norte', Hora_Ap: '07:00:00', Hora_C: '17:00:00', Contacto: '3874000003', Email_Suc: 'depositonorte@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 4, ID_Empresas: 1, ID_Ubicaciones: 4, Nombre: 'Sucursal Chile', Hora_Ap: '08:00:00', Hora_C: '18:00:00', Contacto: '3874000004', Email_Suc: 'chile@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 5, ID_Empresas: 1, ID_Ubicaciones: 5, Nombre: 'Sucursal Intersatambres', Hora_Ap: '08:00:00', Hora_C: '17:30:00', Contacto: '3874000005', Email_Suc: 'intersatambres@fercons.com', activo: false, detalleBaja: 'Cerrada temporalmente por remodelación de depósito e instalaciones eléctricas.' },
+  { ID_Sucursales: 6, ID_Empresas: 1, ID_Ubicaciones: 6, Nombre: 'Sucursal Tres Cerritos', Hora_Ap: '08:30:00', Hora_C: '19:00:00', Contacto: '3874000006', Email_Suc: 'trescerritos@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 7, ID_Empresas: 1, ID_Ubicaciones: 7, Nombre: 'Sucursal Macrocentro', Hora_Ap: '08:00:00', Hora_C: '18:00:00', Contacto: '3874000007', Email_Suc: 'macrocentro@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 8, ID_Empresas: 1, ID_Ubicaciones: 8, Nombre: 'Sucursal San Lorenzo', Hora_Ap: '09:00:00', Hora_C: '17:00:00', Contacto: '3874000008', Email_Suc: 'sanlorenzo@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 9, ID_Empresas: 1, ID_Ubicaciones: 9, Nombre: 'Depósito San Antonio', Hora_Ap: '07:30:00', Hora_C: '16:30:00', Contacto: '3874000009', Email_Suc: 'sanantonio@fercons.com', activo: false, detalleBaja: 'Unificación de stock en el Depósito Norte.' },
+  { ID_Sucursales: 10, ID_Empresas: 1, ID_Ubicaciones: 10, Nombre: 'Sucursal Grand Bourg', Hora_Ap: '08:00:00', Hora_C: '18:00:00', Contacto: '3874000010', Email_Suc: 'grandbourg@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 11, ID_Empresas: 1, ID_Ubicaciones: 11, Nombre: 'Sucursal Centro Peatonal', Hora_Ap: '08:30:00', Hora_C: '19:30:00', Contacto: '3874000011', Email_Suc: 'peatonal@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 12, ID_Empresas: 1, ID_Ubicaciones: 12, Nombre: 'Sucursal Vaqueros', Hora_Ap: '08:00:00', Hora_C: '17:00:00', Contacto: '3874000012', Email_Suc: 'vaqueros@fercons.com', activo: true, detalleBaja: '' },
+  { ID_Sucursales: 13, ID_Empresas: 1, ID_Ubicaciones: 13, Nombre: 'Depósito Aeropuerto', Hora_Ap: '07:00:00', Hora_C: '16:00:00', Contacto: '3874000013', Email_Suc: 'aeropuerto@fercons.com', activo: true, detalleBaja: '' }
 ];
 
 // ==========================================
@@ -378,627 +235,265 @@ export const usuarioDemo = {
 };
 
 export const proveedores = [
-  { id: 1, codigo: '001', nombreFantasia: 'Ceramica Norte', razonSocial: 'Ceramica Norte S.A', cuit: '30-7623345-7', telefono: '+54 387 435-3422', email: 'contacto@ceramicanorte.com', id_sucursal: 1, activo: true },
-  { id: 2, codigo: '002', nombreFantasia: 'Hierros del NOA', razonSocial: 'Hierros del NOA S.R.L', cuit: '30-7346345-7', telefono: '+54 387 345-3422', email: 'ventas@hierrosdelnoa.com.ar', id_sucursal: 1, activo: false },
-  { id: 3, codigo: '003', nombreFantasia: 'Cementos Salta', razonSocial: 'Cementos Salta S.A', cuit: '30-734575-9', telefono: '+54 388 465-7457', email: 'info@cementossalta.com', id_sucursal: 1, activo: true },
-  { id: 4, codigo: '004', nombreFantasia: 'Distribuidora Cuyo', razonSocial: 'Distribuidora Cuyo S.R.L', cuit: '30-6812345-8', telefono: '+54 387 421-8899', email: 'pedidos@distribuidoracuyo.com', id_sucursal: 2, activo: true },
-  { id: 5, codigo: '005', nombreFantasia: 'Pinturas del Norte', razonSocial: 'Pinturas del Norte S.A', cuit: '30-7112233-4', telefono: '+54 387 498-1122', email: 'administracion@pinturasdelnorte.com', id_sucursal: 3, activo: false },
-  { id: 6, codigo: '006', nombreFantasia: 'Bulonera Salta', razonSocial: 'Bulonera Salta S.R.L', cuit: '30-7145678-9', telefono: '+54 387 423-5566', email: 'ventas@bulonerasalta.com.ar', id_sucursal: 2, activo: true },
-  { id: 7, codigo: '007', nombreFantasia: 'Sanitarios del Valle', razonSocial: 'Sanitarios del Valle S.A', cuit: '30-7234112-3', telefono: '+54 388 471-9988', email: 'info@sanitariosdelvalle.com', id_sucursal: 1, activo: true },
-  { id: 8, codigo: '008', nombreFantasia: 'Electricidad Andina', razonSocial: 'Electricidad Andina S.R.L', cuit: '30-6987412-5', telefono: '+54 387 409-3322', email: 'contacto@electricidadandina.com.ar', id_sucursal: 3, activo: false },
-  { id: 9, codigo: '009', nombreFantasia: 'Maderas del Norte', razonSocial: 'Maderas del Norte S.A', cuit: '30-7055441-2', telefono: '+54 387 455-7890', email: 'pedidos@maderasdelnorte.com', id_sucursal: 2, activo: true },
-  { id: 10, codigo: '010', nombreFantasia: 'Ferretería Industrial Güemes', razonSocial: 'Ferretería Güemes S.R.L', cuit: '30-7412389-1', telefono: '+54 388 488-2233', email: 'administracion@ferreteria-guemes.com.ar', id_sucursal: 1, activo: true },
-  { id: 11, codigo: '011', nombreFantasia: 'Áridos del Sur', razonSocial: 'Áridos del Sur S.A', cuit: '30-7198822-4', telefono: '+54 387 444-1122', email: 'ventas@aridosdelsur.com', id_sucursal: 2, activo: true },
-  { id: 12, codigo: '012', nombreFantasia: 'Yesos y Cielorrasos NOA', razonSocial: 'Yesos NOA S.R.L', cuit: '30-7331199-8', telefono: '+54 387 477-3344', email: 'contacto@yesosnoa.com.ar', id_sucursal: 3, activo: true },
-  { id: 13, codigo: '013', nombreFantasia: 'Herramientas Profesionales Salta', razonSocial: 'Herramientas Salta S.A', cuit: '30-7044556-3', telefono: '+54 388 422-9900', email: 'info@herramientassalta.com', id_sucursal: 1, activo: false },
-  { id: 14, codigo: '014', nombreFantasia: 'Aberturas de Aluminio Norte', razonSocial: 'Aluminio Norte S.R.L', cuit: '30-7266778-1', telefono: '+54 387 466-5533', email: 'pedidos@aluminionorte.com.ar', id_sucursal: 2, activo: true },
-  { id: 15, codigo: '015', nombreFantasia: 'Caños y Conexiones del Valle', razonSocial: 'Caños Valle S.A', cuit: '30-7155443-9', telefono: '+54 387 411-2244', email: 'ventas@canosvalle.com', id_sucursal: 3, activo: true },
-  { id: 16, codigo: '016', nombreFantasia: 'Impermeabilizantes Cuyo', razonSocial: 'Impermeabilizantes S.R.L', cuit: '30-6922334-5', telefono: '+54 388 433-7788', email: 'contacto@impercuyo.com', id_sucursal: 1, activo: true },
-  { id: 17, codigo: '017', nombreFantasia: 'Mallas y Metales Güemes', razonSocial: 'Metales Güemes S.A', cuit: '30-7488991-2', telefono: '+54 387 488-6655', email: 'info@metalesguemes.com.ar', id_sucursal: 2, activo: false },
-  { id: 18, codigo: '018', nombreFantasia: 'Ladrillos Cerámicos San Cayetano', razonSocial: 'Cerámica San Cayetano S.R.L', cuit: '30-7211223-6', telefono: '+54 387 499-4411', email: 'pedidos@sancayetano.com', id_sucursal: 1, activo: true },
-  { id: 19, codigo: '019', nombreFantasia: 'Pinturería Industrial Centro', razonSocial: 'Pinturas Centro S.A', cuit: '30-7399884-7', telefono: '+54 388 455-1199', email: 'ventas@pinturascentro.com.ar', id_sucursal: 3, activo: true },
-  { id: 20, codigo: '020', nombreFantasia: 'Techitos y Chapas del Norte', razonSocial: 'Chapas Norte S.R.L', cuit: '30-7133445-0', telefono: '+54 387 422-7766', email: 'contacto@chapasnorte.com', id_sucursal: 2, activo: true },
-  { id: 21, codigo: '021', nombreFantasia: 'Adhesivos y Pegamentos Salta', razonSocial: 'Pegamentos Salta S.A', cuit: '30-7088776-4', telefono: '+54 387 433-8899', email: 'info@pegamentosalta.com', id_sucursal: 1, activo: true },
-  { id: 22, codigo: '022', nombreFantasia: 'Ferretería Mayorista Andina', razonSocial: 'Andina Mayorista S.R.L', cuit: '30-7455667-8', telefono: '+54 388 411-3322', email: 'ventas@andinamayorista.com.ar', id_sucursal: 3, activo: false },
-  { id: 23, codigo: '023', nombreFantasia: 'Construcciones Secundarias SRL', razonSocial: 'Secundarias S.R.L', cuit: '30-7244332-1', telefono: '+54 387 466-9900', email: 'pedidos@secundarias.com', id_sucursal: 2, activo: true },
-  { id: 24, codigo: '024', nombreFantasia: 'Equipamientos para Obra', razonSocial: 'Equipamientos Obra S.A', cuit: '30-7311225-9', telefono: '+54 387 477-1133', email: 'contacto@equipamientosobra.com', id_sucursal: 1, activo: true },
-  { id: 25, codigo: '025', nombreFantasia: 'Maderas y Derivados del Litoral', razonSocial: 'Derivados Litoral S.R.L', cuit: '30-6899443-2', telefono: '+54 388 499-2244', email: 'info@litoralmaderas.com.ar', id_sucursal: 3, activo: true },
-  { id: 26, codigo: '026', nombreFantasia: 'Cerrajería y Herrajes Salta', razonSocial: 'Herrajes Salta S.A', cuit: '30-7166554-3', telefono: '+54 387 444-5566', email: 'ventas@herrajessalta.com', id_sucursal: 1, activo: true },
-  { id: 27, codigo: '027', nombreFantasia: 'Grifería y Sanitarios del Norte', razonSocial: 'Sanitarios Norte S.R.L', cuit: '30-7299881-6', telefono: '+54 387 411-7788', email: 'contacto@sanitariosnorte.com.ar', id_sucursal: 2, activo: false },
-  { id: 28, codigo: '028', nombreFantasia: 'Cables y Materiales Eléctricos', razonSocial: 'Materiales Eléctricos S.A', cuit: '30-7377665-2', telefono: '+54 388 422-3344', email: 'pedidos@matelectricos.com', id_sucursal: 3, activo: true },
-  { id: 29, codigo: '029', nombreFantasia: 'Placas de Yeso Durlock Salta', razonSocial: 'Durlock Salta S.R.L', cuit: '30-7422119-5', telefono: '+54 387 455-6677', email: 'info@durlocksalta.com.ar', id_sucursal: 1, activo: true },
-  { id: 30, codigo: '030', nombreFantasia: 'Estructuras Metálicas del NOA', razonSocial: 'Estructuras NOA S.A', cuit: '30-7033221-8', telefono: '+54 387 488-9900', email: 'ventas@estructurasnoa.com', id_sucursal: 2, activo: true },
-  { id: 31, codigo: '031', nombreFantasia: 'Áridos y Cementos Güemes', razonSocial: 'Güemes Materiales S.R.L', cuit: '30-7188774-1', telefono: '+54 388 433-2211', email: 'contacto@guemesmateriales.com.ar', id_sucursal: 3, activo: true },
-  { id: 32, codigo: '032', nombreFantasia: 'Pisos y Revestimientos Cerámicos', razonSocial: 'Pisos Cerámicos S.A', cuit: '30-7255446-7', telefono: '+54 387 466-1122', email: 'pedidos@pisosceramicos.com', id_sucursal: 1, activo: false },
-  { id: 33, codigo: '033', nombreFantasia: 'Aislaciones Térmicas y Acústicas', razonSocial: 'Aislaciones Salta S.R.L', cuit: '30-7322114-9', telefono: '+54 387 499-5566', email: 'info@aislacionsalta.com.ar', id_sucursal: 2, activo: true },
-  { id: 34, codigo: '034', nombreFantasia: 'Herramientas Eléctricas del Valle', razonSocial: 'Herramientas Valle S.A', cuit: '30-7411993-2', telefono: '+54 388 477-8899', email: 'ventas@herramientasvalle.com', id_sucursal: 3, activo: true },
-  { id: 35, codigo: '035', nombreFantasia: 'Distribuidora General Ferretera', razonSocial: 'Distri Ferretera S.R.L', cuit: '30-7099221-5', telefono: '+54 387 422-1144', email: 'contacto@distriferretera.com.ar', id_sucursal: 1, activo: true }
+  { ID_Proveedores: 1, CUIT: '30-7623345-7', Nombre: 'Ceramica Norte', Razon_Social: 'Ceramica Norte S.A', Contacto: '+54 387 435-3422', Email_Prov: 'contacto@ceramicanorte.com', Estado_Prov: true },
+  { ID_Proveedores: 2, CUIT: '30-7346345-7', Nombre: 'Hierros del NOA', Razon_Social: 'Hierros del NOA S.R.L', Contacto: '+54 387 345-3422', Email_Prov: 'ventas@hierrosdelnoa.com.ar', Estado_Prov: false },
+  { ID_Proveedores: 3, CUIT: '30-734575-9', Nombre: 'Cementos Salta', Razon_Social: 'Cementos Salta S.A', Contacto: '+54 388 465-7457', Email_Prov: 'info@cementossalta.com', Estado_Prov: true },
+  { ID_Proveedores: 4, CUIT: '30-6812345-8', Nombre: 'Distribuidora Cuyo', Razon_Social: 'Distribuidora Cuyo S.R.L', Contacto: '+54 387 421-8899', Email_Prov: 'pedidos@distribuidoracuyo.com', Estado_Prov: true },
+  { ID_Proveedores: 5, CUIT: '30-7112233-4', Nombre: 'Pinturas del Norte', Razon_Social: 'Pinturas del Norte S.A', Contacto: '+54 387 498-1122', Email_Prov: 'administracion@pinturasdelnorte.com', Estado_Prov: false },
+  { ID_Proveedores: 6, CUIT: '30-7145678-9', Nombre: 'Bulonera Salta', Razon_Social: 'Bulonera Salta S.R.L', Contacto: '+54 387 423-5566', Email_Prov: 'ventas@bulonerasalta.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 7, CUIT: '30-7234112-3', Nombre: 'Sanitarios del Valle', Razon_Social: 'Sanitarios del Valle S.A', Contacto: '+54 388 471-9988', Email_Prov: 'info@sanitariosdelvalle.com', Estado_Prov: true },
+  { ID_Proveedores: 8, CUIT: '30-6987412-5', Nombre: 'Electricidad Andina', Razon_Social: 'Electricidad Andina S.R.L', Contacto: '+54 387 409-3322', Email_Prov: 'contacto@electricidadandina.com.ar', Estado_Prov: false },
+  { ID_Proveedores: 9, CUIT: '30-7055441-2', Nombre: 'Maderas del Norte', Razon_Social: 'Maderas del Norte S.A', Contacto: '+54 387 455-7890', Email_Prov: 'pedidos@maderasdelnorte.com', Estado_Prov: true },
+  { ID_Proveedores: 10, CUIT: '30-7412389-1', Nombre: 'Ferretería Industrial Güemes', Razon_Social: 'Ferretería Güemes S.R.L', Contacto: '+54 388 488-2233', Email_Prov: 'administracion@ferreteria-guemes.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 11, CUIT: '30-7198822-4', Nombre: 'Áridos del Sur', Razon_Social: 'Áridos del Sur S.A', Contacto: '+54 387 444-1122', Email_Prov: 'ventas@aridosdelsur.com', Estado_Prov: true },
+  { ID_Proveedores: 12, CUIT: '30-7331199-8', Nombre: 'Yesos y Cielorrasos NOA', Razon_Social: 'Yesos NOA S.R.L', Contacto: '+54 387 477-3344', Email_Prov: 'contacto@yesosnoa.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 13, CUIT: '30-7044556-3', Nombre: 'Herramientas Profesionales Salta', Razon_Social: 'Herramientas Salta S.A', Contacto: '+54 388 422-9900', Email_Prov: 'info@herramientassalta.com', Estado_Prov: false },
+  { ID_Proveedores: 14, CUIT: '30-7266778-1', Nombre: 'Aberturas de Aluminio Norte', Razon_Social: 'Aluminio Norte S.R.L', Contacto: '+54 387 466-5533', Email_Prov: 'pedidos@aluminionorte.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 15, CUIT: '30-7155443-9', Nombre: 'Caños y Conexiones del Valle', Razon_Social: 'Caños Valle S.A', Contacto: '+54 387 411-2244', Email_Prov: 'ventas@canosvalle.com', Estado_Prov: true },
+  { ID_Proveedores: 16, CUIT: '30-6922334-5', Nombre: 'Impermeabilizantes Cuyo', Razon_Social: 'Impermeabilizantes S.R.L', Contacto: '+54 388 433-7788', Email_Prov: 'contacto@impercuyo.com', Estado_Prov: true },
+  { ID_Proveedores: 17, CUIT: '30-7488991-2', Nombre: 'Mallas y Metales Güemes', Razon_Social: 'Metales Güemes S.A', Contacto: '+54 387 488-6655', Email_Prov: 'info@metalesguemes.com.ar', Estado_Prov: false },
+  { ID_Proveedores: 18, CUIT: '30-7211223-6', Nombre: 'Ladrillos Cerámicos San Cayetano', Razon_Social: 'Cerámica San Cayetano S.R.L', Contacto: '+54 387 499-4411', Email_Prov: 'pedidos@sancayetano.com', Estado_Prov: true },
+  { ID_Proveedores: 19, CUIT: '30-7399884-7', Nombre: 'Pinturería Industrial Centro', Razon_Social: 'Pinturas Centro S.A', Contacto: '+54 388 455-1199', Email_Prov: 'ventas@pinturascentro.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 20, CUIT: '30-7133445-0', Nombre: 'Techitos y Chapas del Norte', Razon_Social: 'Chapas Norte S.R.L', Contacto: '+54 387 422-7766', Email_Prov: 'contacto@chapasnorte.com', Estado_Prov: true },
+  { ID_Proveedores: 21, CUIT: '30-7088776-4', Nombre: 'Adhesivos y Pegamentos Salta', Razon_Social: 'Pegamentos Salta S.A', Contacto: '+54 387 433-8899', Email_Prov: 'info@pegamentosalta.com', Estado_Prov: true },
+  { ID_Proveedores: 22, CUIT: '30-7455667-8', Nombre: 'Ferretería Mayorista Andina', Razon_Social: 'Andina Mayorista S.R.L', Contacto: '+54 388 411-3322', Email_Prov: 'ventas@andinamayorista.com.ar', Estado_Prov: false },
+  { ID_Proveedores: 23, CUIT: '30-7244332-1', Nombre: 'Construcciones Secundarias SRL', Razon_Social: 'Secundarias S.R.L', Contacto: '+54 387 466-9900', Email_Prov: 'pedidos@secundarias.com', Estado_Prov: true },
+  { ID_Proveedores: 24, CUIT: '30-7311225-9', Nombre: 'Equipamientos para Obra', Razon_Social: 'Equipamientos Obra S.A', Contacto: '+54 387 477-1133', Email_Prov: 'contacto@equipamientosobra.com', Estado_Prov: true },
+  { ID_Proveedores: 25, CUIT: '30-6899443-2', Nombre: 'Maderas y Derivados del Litoral', Razon_Social: 'Derivados Litoral S.R.L', Contacto: '+54 388 499-2244', Email_Prov: 'info@litoralmaderas.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 26, CUIT: '30-7166554-3', Nombre: 'Cerrajería y Herrajes Salta', Razon_Social: 'Herrajes Salta S.A', Contacto: '+54 387 444-5566', Email_Prov: 'ventas@herrajessalta.com', Estado_Prov: true },
+  { ID_Proveedores: 27, CUIT: '30-7299881-6', Nombre: 'Grifería y Sanitarios del Norte', Razon_Social: 'Sanitarios Norte S.R.L', Contacto: '+54 387 411-7788', Email_Prov: 'contacto@sanitariosnorte.com.ar', Estado_Prov: false },
+  { ID_Proveedores: 28, CUIT: '30-7377665-2', Nombre: 'Cables y Materiales Eléctricos', Razon_Social: 'Materiales Eléctricos S.A', Contacto: '+54 388 422-3344', Email_Prov: 'pedidos@matelectricos.com', Estado_Prov: true },
+  { ID_Proveedores: 29, CUIT: '30-7422119-5', Nombre: 'Placas de Yeso Durlock Salta', Razon_Social: 'Durlock Salta S.R.L', Contacto: '+54 387 455-6677', Email_Prov: 'info@durlocksalta.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 30, CUIT: '30-7033221-8', Nombre: 'Estructuras Metálicas del NOA', Razon_Social: 'Estructuras NOA S.A', Contacto: '+54 387 488-9900', Email_Prov: 'ventas@estructurasnoa.com', Estado_Prov: true },
+  { ID_Proveedores: 31, CUIT: '30-7188774-1', Nombre: 'Áridos y Cementos Güemes', Razon_Social: 'Güemes Materiales S.R.L', Contacto: '+54 388 433-2211', Email_Prov: 'contacto@guemesmateriales.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 32, CUIT: '30-7255446-7', Nombre: 'Pisos y Revestimientos Cerámicos', Razon_Social: 'Pisos Cerámicos S.A', Contacto: '+54 387 466-1122', Email_Prov: 'pedidos@pisosceramicos.com', Estado_Prov: false },
+  { ID_Proveedores: 33, CUIT: '30-7322114-9', Nombre: 'Aislaciones Térmicas y Acústicas', Razon_Social: 'Aislaciones Salta S.R.L', Contacto: '+54 387 499-5566', Email_Prov: 'info@aislacionsalta.com.ar', Estado_Prov: true },
+  { ID_Proveedores: 34, CUIT: '30-7411993-2', Nombre: 'Herramientas Eléctricas del Valle', Razon_Social: 'Herramientas Valle S.A', Contacto: '+54 388 477-8899', Email_Prov: 'ventas@herramientasvalle.com', Estado_Prov: true },
+  { ID_Proveedores: 35, CUIT: '30-7099221-5', Nombre: 'Distribuidora General Ferretera', Razon_Social: 'Distri Ferretera S.R.L', Contacto: '+54 387 422-1144', Email_Prov: 'contacto@distriferretera.com.ar', Estado_Prov: true }
 ];
 
-export const metodosPago = [
-    { id: 1, nombre: 'Efectivo' },
-    { id: 2, nombre: 'Transferencia Bancaria' },
-    { id: 3, nombre: 'Tarjeta de Crédito' },
-    { id: 4, nombre: 'Cuenta Corriente' }
+export const proveedores_x_sucursales = [
+  { ID_Proveedores_x_Sucursales: 1, ID_Proveedores: 1, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 2, ID_Proveedores: 2, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 3, ID_Proveedores: 3, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 4, ID_Proveedores: 4, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 5, ID_Proveedores: 5, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 6, ID_Proveedores: 6, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 7, ID_Proveedores: 7, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 8, ID_Proveedores: 8, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 9, ID_Proveedores: 9, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 10, ID_Proveedores: 10, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 11, ID_Proveedores: 11, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 12, ID_Proveedores: 12, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 13, ID_Proveedores: 13, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 14, ID_Proveedores: 14, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 15, ID_Proveedores: 15, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 16, ID_Proveedores: 16, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 17, ID_Proveedores: 17, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 18, ID_Proveedores: 18, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 19, ID_Proveedores: 19, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 20, ID_Proveedores: 20, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 21, ID_Proveedores: 21, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 22, ID_Proveedores: 22, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 23, ID_Proveedores: 23, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 24, ID_Proveedores: 24, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 25, ID_Proveedores: 25, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 26, ID_Proveedores: 26, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 27, ID_Proveedores: 27, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 28, ID_Proveedores: 28, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 29, ID_Proveedores: 29, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 30, ID_Proveedores: 30, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 31, ID_Proveedores: 31, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 32, ID_Proveedores: 32, ID_Sucursales: 1, Estado: true },
+  { ID_Proveedores_x_Sucursales: 33, ID_Proveedores: 33, ID_Sucursales: 2, Estado: true },
+  { ID_Proveedores_x_Sucursales: 34, ID_Proveedores: 34, ID_Sucursales: 3, Estado: true },
+  { ID_Proveedores_x_Sucursales: 35, ID_Proveedores: 35, ID_Sucursales: 1, Estado: true }
 ];
 
-export const marcasOpciones = [
-    'Genérica',    // 1
-    'Cortines',    // 2
-    'Weber',       // 3
-    'Holcim',      // 4
-    'Andina',      // 5
-    'Cacique',     // 6
-    'Sika',        // 7
-    'Ferrum',      // 8
-    'FV',          // 9
-    'Eternit'      // 10
-];
-
-export const unidadesOpciones = [
-    { id: 1, label: 'Unidad' },
-    { id: 2, label: 'Bolsa' },
-    { id: 3, label: 'Metro / Barra' },
-    { id: 4, label: 'm²' },
-    { id: 5, label: 'Bolsón / m³' }
-];
-
-export const getMarcaNombre = (idMarca) => {
-    return marcasOpciones[idMarca - 1] || 'Genérica';
-};
-
-export const getUnidadLabel = (idUnidad) => {
-    const unidad = unidadesOpciones.find(u => u.id === idUnidad);
-    return unidad ? unidad.label : 'Unidad';
-};
-
+// ==========================================
+// 1. CATEGORÍAS
+// ==========================================
 export const categorias = [
-    { id: 1, nombre: 'Cerámicos y Revestimientos' },
-    { id: 2, nombre: 'Hierros y Aceros' },
-    { id: 3, nombre: 'Cementos, Cales y Áridos' },
-    { id: 4, nombre: 'Sanitarios y Plomería' }
+    { ID_Categoria: 1, Categorias: 'Cerámicos y Revestimientos' },
+    { ID_Categoria: 2, Categorias: 'Hierros y Aceros' },
+    { ID_Categoria: 3, Categorias: 'Cementos, Cales y Áridos' },
+    { ID_Categoria: 4, Categorias: 'Sanitarios y Plomería' }
 ];
 
-// Tabla intermedia simulada: PRODUCTOS_X_PROVEEDORES
-// Relaciona cada producto con su(s) proveedor(es), código de proveedor y precio de lista correspondiente[cite: 7].
-export const productosXProveedores = [
-  // --- Cerámicos y Revestimientos (Cat 1) ---
-  { id: 1, id_Productos: 101, id_Proveedores: 1, codigo_Producto_Proveedor: '001-CER-6060-MB', precio_Lista: 35000, estado: true },
-  { id: 2, id_Productos: 102, id_Proveedores: 1, codigo_Producto_Proveedor: '001-CER-4545-COR', precio_Lista: 17500, estado: true },
-  { id: 3, id_Productos: 103, id_Proveedores: 1, codigo_Producto_Proveedor: '001-REV-3060-GRIS', precio_Lista: 23000, estado: true },
-  { id: 4, id_Productos: 104, id_Proveedores: 1, codigo_Producto_Proveedor: '001-POR-20120-MAD', precio_Lista: 40000, estado: true },
-  { id: 5, id_Productos: 105, id_Proveedores: 1, codigo_Producto_Proveedor: '001-ZOC-1045', precio_Lista: 3800, estado: false },
-  { id: 6, id_Productos: 106, id_Proveedores: 10, codigo_Producto_Proveedor: '010-PEG-WEB-25', precio_Lista: 15500, estado: true },
-  { id: 7, id_Productos: 107, id_Proveedores: 21, codigo_Producto_Proveedor: '021-PAS-IMP-1KG', precio_Lista: 3400, estado: true },
-  { id: 8, id_Productos: 108, id_Proveedores: 14, codigo_Producto_Proveedor: '014-LIS-ALU-25', precio_Lista: 11000, estado: true },
-  { id: 9, id_Productos: 109, id_Proveedores: 7, codigo_Producto_Proveedor: '007-MOS-VEN-3030', precio_Lista: 11800, estado: true },
-  { id: 10, id_Productos: 110, id_Proveedores: 14, codigo_Producto_Proveedor: '014-GUA-CUR-10', precio_Lista: 9200, estado: true },
+// ==========================================
+// 2. MARCAS
+// ==========================================
+export const marcas = [
+    { ID_Marca: 1, Marcas: 'Genérica' },
+    { ID_Marca: 2, Marcas: 'Cortines' },
+    { ID_Marca: 3, Marcas: 'Weber' },
+    { ID_Marca: 4, Marcas: 'Holcim' },
+    { ID_Marca: 5, Marcas: 'Andina' },
+    { ID_Marca: 6, Marcas: 'Cacique' },
+    { ID_Marca: 7, Marcas: 'Sika' },
+    { ID_Marca: 8, Marcas: 'Ferrum' },
+    { ID_Marca: 9, Marcas: 'FV' },
+    { ID_Marca: 10, Marcas: 'Eternit' }
+];
 
-  // --- Hierros y Aceros (Cat 2) ---
-  { id: 11, id_Productos: 201, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-6', precio_Lista: 6700, estado: true },
-  { id: 12, id_Productos: 202, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-8', precio_Lista: 10500, estado: true },
-  { id: 13, id_Productos: 203, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-10', precio_Lista: 16500, estado: true },
-  { id: 14, id_Productos: 204, id_Proveedores: 2, codigo_Producto_Proveedor: '002-HIE-RET-12', precio_Lista: 23500, estado: true },
-  { id: 15, id_Productos: 205, id_Proveedores: 17, codigo_Producto_Proveedor: '017-MAL-CIM-42', precio_Lista: 30000, estado: true },
-  { id: 16, id_Productos: 206, id_Proveedores: 17, codigo_Producto_Proveedor: '017-MAL-CIM-55', precio_Lista: 45000, estado: true },
-  { id: 17, id_Productos: 207, id_Proveedores: 6, codigo_Producto_Proveedor: '006-ALA-REC-16', precio_Lista: 4700, estado: false },
-  { id: 18, id_Productos: 208, id_Proveedores: 30, codigo_Producto_Proveedor: '030-PER-C-100', precio_Lista: 52000, estado: true },
-  { id: 19, id_Productos: 209, id_Proveedores: 30, codigo_Producto_Proveedor: '030-PER-C-120', precio_Lista: 61000, estado: true },
-  { id: 20, id_Productos: 210, id_Proveedores: 20, codigo_Producto_Proveedor: '020-CHA-NEG-18', precio_Lista: 38500, estado: true },
-
-  // --- Cementos, Cales y Áridos (Cat 3) ---
-  { id: 21, id_Productos: 301, id_Proveedores: 3, codigo_Producto_Proveedor: '003-CEM-HOL-25', precio_Lista: 18500, estado: true },
-  { id: 22, id_Productos: 302, id_Proveedores: 31, codigo_Producto_Proveedor: '031-CAL-VIV-25', precio_Lista: 14800, estado: true },
-  { id: 23, id_Productos: 303, id_Proveedores: 3, codigo_Producto_Proveedor: '003-CAL-APA-30', precio_Lista: 14800, estado: true },
-  { id: 24, id_Productos: 304, id_Proveedores: 11, codigo_Producto_Proveedor: '011-ARE-FIN-25', precio_Lista: 7400, estado: false },
-  { id: 25, id_Productos: 305, id_Proveedores: 11, codigo_Producto_Proveedor: '011-CAN-ROD-25', precio_Lista: 8000, estado: true },
-  { id: 26, id_Productos: 306, id_Proveedores: 3, codigo_Producto_Proveedor: '003-CEM-PLA-40', precio_Lista: 17000, estado: true },
-  { id: 27, id_Productos: 307, id_Proveedores: 11, codigo_Producto_Proveedor: '011-CAS-MOL-1M3', precio_Lista: 35000, estado: true },
-  { id: 28, id_Productos: 308, id_Proveedores: 11, codigo_Producto_Proveedor: '011-ARE-GRU-1M3', precio_Lista: 42000, estado: true },
-  { id: 29, id_Productos: 309, id_Proveedores: 16, codigo_Producto_Proveedor: '016-ACE-SIK-5L', precio_Lista: 23000, estado: true },
-  { id: 30, id_Productos: 310, id_Proveedores: 16, codigo_Producto_Proveedor: '016-HID-SIK-4K', precio_Lista: 11400, estado: true },
-
-  // --- Sanitarios y Plomería (Cat 4) ---
-  { id: 31, id_Productos: 701, id_Proveedores: 15, codigo_Producto_Proveedor: '015-CAN-PVC-110', precio_Lista: 20500, estado: true },
-  { id: 32, id_Productos: 702, id_Proveedores: 15, codigo_Producto_Proveedor: '015-CAN-TER-20', precio_Lista: 7700, estado: true },
-  { id: 33, id_Productos: 703, id_Proveedores: 15, codigo_Producto_Proveedor: '015-CAN-TER-25', precio_Lista: 11100, estado: true },
-  { id: 34, id_Productos: 704, id_Proveedores: 15, codigo_Producto_Proveedor: '015-COD-PVC-110', precio_Lista: 4200, estado: true },
-  { id: 35, id_Productos: 705, id_Proveedores: 7, codigo_Producto_Proveedor: '007-INO-FER-BAR', precio_Lista: 230000, estado: true },
-  { id: 36, id_Productos: 706, id_Proveedores: 7, codigo_Producto_Proveedor: '007-BID-FER-BAR', precio_Lista: 114000, estado: true },
-  { id: 37, id_Productos: 707, id_Proveedores: 27, codigo_Producto_Proveedor: '027-GRI-MON-FV', precio_Lista: 80000, estado: true },
-  { id: 38, id_Productos: 708, id_Proveedores: 27, codigo_Producto_Proveedor: '027-SIF-DOB-COC', precio_Lista: 10800, estado: false },
-  { id: 39, id_Productos: 709, id_Proveedores: 27, codigo_Producto_Proveedor: '027-VAL-DES-INO', precio_Lista: 51000, estado: true },
-  { id: 40, id_Productos: 710, id_Proveedores: 28, codigo_Producto_Proveedor: '028-TAN-AGU-1000', precio_Lista: 245000, estado: true }
+// ==========================================
+// 3. UNIDADES
+// ==========================================
+export const unidades = [
+    { ID_Unidad: 1, Unidades: 'Unidad' },
+    { ID_Unidad: 2, Unidades: 'Bolsa' },
+    { ID_Unidad: 3, Unidades: 'Metro / Barra' },
+    { ID_Unidad: 4, Unidades: 'm²' },
+    { ID_Unidad: 5, Unidades: 'Bolsón / m³' }
 ];
 
 export const productos = [
   // --- Categoría 1: Cerámicos y Revestimientos ---
-  {
-    id: 101,
-    codigo: 'CER-6060-MB',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 4, // m²
-    idSucursal: 1, // Casa Central
-    nombre: 'Porcellanato 60x60 Mármol Blanco',
-    precioUnidad: 37050,
-    descripcion: 'Porcellanato brillante de alto tránsito',
-    activo: true
-  },
-  {
-    id: 102,
-    codigo: 'CER-4545-COR',
-    idCategoria: 1,
-    idMarca: 2, // Cortines
-    idUnidad: 4,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Cerámica 45x45 Cortines Hueso',
-    precioUnidad: 18460,
-    descripcion: 'Cerámica esmaltada para pisos interiores',
-    activo: true
-  },
-  {
-    id: 103,
-    codigo: 'REV-3060-GRIS',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 4,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Revestimiento Pared 30x60 Gris',
-    precioUnidad: 24570,
-    descripcion: 'Cerámica texturada para paredes',
-    activo: true
-  },
-  {
-    id: 104,
-    codigo: 'POR-20120-MAD',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 4,
-    idSucursal: 1, // Casa Central
-    nombre: 'Porcellanato 20x120 Símil Madera',
-    precioUnidad: 41600,
-    descripcion: 'Placa símil madera rectificada',
-    activo: true
-  },
-  {
-    id: 105,
-    codigo: 'ZOC-1045',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Zócalo Cerámico 10x45',
-    precioUnidad: 4030,
-    descripcion: 'Zócalo coordinado',
-    activo: false // Inactivo de prueba
-  },
-  {
-    id: 106,
-    codigo: 'PEG-WEB-25',
-    idCategoria: 1,
-    idMarca: 3, // Weber
-    idUnidad: 2, // Bolsa
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Pegamento Weber Porcellanato 25kg',
-    precioUnidad: 16250,
-    descripcion: 'Adhesivo impermeable flexible',
-    activo: true
-  },
-  {
-    id: 107,
-    codigo: 'PAS-IMP-1KG',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 2,
-    idSucursal: 1, // Casa Central
-    nombre: 'Pastina Impermeable 1kg Blanco',
-    precioUnidad: 3640,
-    descripcion: 'Pastina antihongo',
-    activo: true
-  },
-  {
-    id: 108,
-    codigo: 'LIS-ALU-25',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Listón Decorativo Aluminio 2.5m',
-    precioUnidad: 11570,
-    descripcion: 'Perfil terminación canto',
-    activo: true
-  },
-  {
-    id: 109,
-    codigo: 'MOS-VEN-3030',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 4,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Mosaico Veneciano Malla 30x30',
-    precioUnidad: 12350,
-    descripcion: 'Venecitas para piscinas y baños',
-    activo: true
-  },
-  {
-    id: 110,
-    codigo: 'GUA-CUR-10',
-    idCategoria: 1,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 1, // Casa Central
-    nombre: 'Guardacanto Curvo Aluminio 10mm',
-    precioUnidad: 9620,
-    descripcion: 'Protector de esquinas',
-    activo: true
-  },
+  { ID_Productos: 101, Codigo: 'CER-6060-MB', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 4, Nombre: 'Porcellanato 60x60 Mármol Blanco', Precio_Unidad: 37050, Descripcion: 'Porcellanato brillante de alto tránsito' },
+  { ID_Productos: 102, Codigo: 'CER-4545-COR', ID_Categoria: 1, ID_Marca: 2, ID_Unidad: 4, Nombre: 'Cerámica 45x45 Cortines Hueso', Precio_Unidad: 18460, Descripcion: 'Cerámica esmaltada para pisos interiores' },
+  { ID_Productos: 103, Codigo: 'REV-3060-GRIS', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 4, Nombre: 'Revestimiento Pared 30x60 Gris', Precio_Unidad: 24570, Descripcion: 'Cerámica texturada para paredes' },
+  { ID_Productos: 104, Codigo: 'POR-20120-MAD', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 4, Nombre: 'Porcellanato 20x120 Símil Madera', Precio_Unidad: 41600, Descripcion: 'Placa símil madera rectificada' },
+  { ID_Productos: 105, Codigo: 'ZOC-1045', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Zócalo Cerámico 10x45', Precio_Unidad: 4030, Descripcion: 'Zócalo coordinado' },
+  { ID_Productos: 106, Codigo: 'PEG-WEB-25', ID_Categoria: 1, ID_Marca: 3, ID_Unidad: 2, Nombre: 'Pegamento Weber Porcellanato 25kg', Precio_Unidad: 16250, Descripcion: 'Adhesivo impermeable flexible' },
+  { ID_Productos: 107, Codigo: 'PAS-IMP-1KG', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 2, Nombre: 'Pastina Impermeable 1kg Blanco', Precio_Unidad: 3640, Descripcion: 'Pastina antihongo' },
+  { ID_Productos: 108, Codigo: 'LIS-ALU-25', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Listón Decorativo Aluminio 2.5m', Precio_Unidad: 11570, Descripcion: 'Perfil terminación canto' },
+  { ID_Productos: 109, Codigo: 'MOS-VEN-3030', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 4, Nombre: 'Mosaico Veneciano Malla 30x30', Precio_Unidad: 12350, Descripcion: 'Venecitas para piscinas y baños' },
+  { ID_Productos: 110, Codigo: 'GUA-CUR-10', ID_Categoria: 1, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Guardacanto Curvo Aluminio 10mm', Precio_Unidad: 9620, Descripcion: 'Protector de esquinas' },
 
   // --- Categoría 2: Hierros y Aceros ---
-  {
-    id: 201,
-    codigo: 'HIE-RET-6',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Hierro Retorcido 6mm x 12m',
-    precioUnidad: 7020,
-    descripcion: 'Hierro ADN retorcido para construcción',
-    activo: true
-  },
-  {
-    id: 202,
-    codigo: 'HIE-RET-8',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Hierro Retorcido 8mm x 12m',
-    precioUnidad: 11050,
-    descripcion: 'Hierro ADN retorcido para construcción',
-    activo: true
-  },
-  {
-    id: 203,
-    codigo: 'HIE-RET-10',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Hierro Retorcido 10mm x 12m',
-    precioUnidad: 17160,
-    descripcion: 'Hierro ADN retorcido para construcción',
-    activo: true
-  },
-  {
-    id: 204,
-    codigo: 'HIE-RET-12',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Hierro Retorcido 12mm x 12m',
-    precioUnidad: 24570,
-    descripcion: 'Hierro ADN retorcido para construcción',
-    activo: true
-  },
-  {
-    id: 205,
-    codigo: 'MAL-CIM-42',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Malla Cima 15x15 4.2mm (2x3m)',
-    precioUnidad: 31850,
-    descripcion: 'Malla acanalada electrosoldada',
-    activo: true
-  },
-  {
-    id: 206,
-    codigo: 'MAL-CIM-55',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Malla Cima 15x15 5.5mm (2x3m)',
-    precioUnidad: 46800,
-    descripcion: 'Malla acanalada electrosoldada',
-    activo: true
-  },
-  {
-    id: 207,
-    codigo: 'ALA-REC-16',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 2,
-    idSucursal: 1, // Casa Central
-    nombre: 'Alambre Recocido N° 16 x 1kg',
-    precioUnidad: 4940,
-    descripcion: 'Alambre para atar hierro',
-    activo: false // Inactivo de prueba
-  },
-  {
-    id: 208,
-    codigo: 'PER-C-100',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Perfil C 100x50x2mm x 6m',
-    precioUnidad: 54600,
-    descripcion: 'Perfil estructural abierto',
-    activo: true
-  },
-  {
-    id: 209,
-    codigo: 'PER-C-120',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Perfil C 120x50x2mm x 6m',
-    precioUnidad: 64350,
-    descripcion: 'Perfil estructural abierto',
-    activo: true
-  },
-  {
-    id: 210,
-    codigo: 'CHA-NEG-18',
-    idCategoria: 2,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Chapa Negra 18 (1x2m)',
-    precioUnidad: 40300,
-    descripcion: 'Chapa laminada en caliente',
-    activo: true
-  },
+  { ID_Productos: 201, Codigo: 'HIE-RET-6', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Hierro Retorcido 6mm x 12m', Precio_Unidad: 7020, Descripcion: 'Hierro ADN retorcido para construcción' },
+  { ID_Productos: 202, Codigo: 'HIE-RET-8', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Hierro Retorcido 8mm x 12m', Precio_Unidad: 11050, Descripcion: 'Hierro ADN retorcido para construcción' },
+  { ID_Productos: 203, Codigo: 'HIE-RET-10', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Hierro Retorcido 10mm x 12m', Precio_Unidad: 17160, Descripcion: 'Hierro ADN retorcido para construcción' },
+  { ID_Productos: 204, Codigo: 'HIE-RET-12', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Hierro Retorcido 12mm x 12m', Precio_Unidad: 24570, Descripcion: 'Hierro ADN retorcido para construcción' },
+  { ID_Productos: 205, Codigo: 'MAL-CIM-42', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Malla Cima 15x15 4.2mm (2x3m)', Precio_Unidad: 31850, Descripcion: 'Malla acanalada electrosoldada' },
+  { ID_Productos: 206, Codigo: 'MAL-CIM-55', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Malla Cima 15x15 5.5mm (2x3m)', Precio_Unidad: 46800, Descripcion: 'Malla acanalada electrosoldada' },
+  { ID_Productos: 207, Codigo: 'ALA-REC-16', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 2, Nombre: 'Alambre Recocido N° 16 x 1kg', Precio_Unidad: 4940, Descripcion: 'Alambre para atar hierro' },
+  { ID_Productos: 208, Codigo: 'PER-C-100', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Perfil C 100x50x2mm x 6m', Precio_Unidad: 54600, Descripcion: 'Perfil estructural abierto' },
+  { ID_Productos: 209, Codigo: 'PER-C-120', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Perfil C 120x50x2mm x 6m', Precio_Unidad: 64350, Descripcion: 'Perfil estructural abierto' },
+  { ID_Productos: 210, Codigo: 'CHA-NEG-18', ID_Categoria: 2, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Chapa Negra 18 (1x2m)', Precio_Unidad: 40300, Descripcion: 'Chapa laminada en caliente' },
 
   // --- Categoría 3: Cementos, Cales y Áridos ---
-  {
-    id: 301,
-    codigo: 'CEM-HOL-25',
-    idCategoria: 3,
-    idMarca: 4, // Holcim
-    idUnidad: 2,
-    idSucursal: 1, // Casa Central
-    nombre: 'Cemento en bolsa x 25kg Holcim',
-    precioUnidad: 19500,
-    descripcion: 'Cemento Portland normal',
-    activo: true
-  },
-  {
-    id: 302,
-    codigo: 'CAL-VIV-25',
-    idCategoria: 3,
-    idMarca: 5, // Andina
-    idUnidad: 2,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Cal viva en bolsa x 25kg Andina',
-    precioUnidad: 15600,
-    descripcion: 'Cal para construcción',
-    activo: true
-  },
-  {
-    id: 303,
-    codigo: 'CAL-APA-30',
-    idCategoria: 3,
-    idMarca: 6, // Cacique
-    idUnidad: 2,
-    idSucursal: 1, // Casa Central
-    nombre: 'Cal apagada en bolsa x 30kg Cacique',
-    precioUnidad: 15600,
-    descripcion: 'Cal hidratada en bolsa',
-    activo: true
-  },
-  {
-    id: 304,
-    codigo: 'ARE-FIN-25',
-    idCategoria: 3,
-    idMarca: 1, // Genérica
-    idUnidad: 2,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Arena fina en bolsa x 25kg Fara',
-    precioUnidad: 7800,
-    descripcion: 'Arena zarandeada embolsada',
-    activo: false // Inactivo de prueba
-  },
-  {
-    id: 305,
-    codigo: 'CAN-ROD-25',
-    idCategoria: 3,
-    idMarca: 1, // Genérica
-    idUnidad: 2,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Canto rodado en bolsa x 25kg',
-    precioUnidad: 8450,
-    descripcion: 'Árido decorativo',
-    activo: true
-  },
-  {
-    id: 306,
-    codigo: 'CEM-PLA-40',
-    idCategoria: 3,
-    idMarca: 4, // Holcim
-    idUnidad: 2,
-    idSucursal: 1, // Casa Central
-    nombre: 'Cemento de albañilería Plasticor 40kg',
-    precioUnidad: 17940,
-    descripcion: 'Mortero premezclado',
-    activo: true
-  },
-  {
-    id: 307,
-    codigo: 'CAS-MOL-1M3',
-    idCategoria: 3,
-    idMarca: 1, // Genérica
-    idUnidad: 5, // Bolsón / m³
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Cascote molido x bolson 1m³',
-    precioUnidad: 36400,
-    descripcion: 'Material para relleno y contrapisos',
-    activo: true
-  },
-  {
-    id: 308,
-    codigo: 'ARE-GRU-1M3',
-    idCategoria: 3,
-    idMarca: 1, // Genérica
-    idUnidad: 5,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Arena gruesa x bolsón 1m³',
-    precioUnidad: 44200,
-    descripcion: 'Árido grueso a granel en bolsón',
-    activo: true
-  },
-  {
-    id: 309,
-    codigo: 'ACE-SIK-5L',
-    idCategoria: 3,
-    idMarca: 7, // Sika
-    idUnidad: 1,
-    idSucursal: 1, // Casa Central
-    nombre: 'Acelerante de fragüe Sika 5L',
-    precioUnidad: 24050,
-    descripcion: 'Aditivo para hormigón y morteros',
-    activo: true
-  },
-  {
-    id: 310,
-    codigo: 'HID-SIK-4K',
-    idCategoria: 3,
-    idMarca: 7, // Sika
-    idUnidad: 1,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Hidrófugo Pasta Sika 1 x 4kg',
-    precioUnidad: 11960,
-    descripcion: 'Aditivo impermeabilizante',
-    activo: true
-  },
+  { ID_Productos: 301, Codigo: 'CEM-HOL-25', ID_Categoria: 3, ID_Marca: 4, ID_Unidad: 2, Nombre: 'Cemento en bolsa x 25kg Holcim', Precio_Unidad: 19500, Descripcion: 'Cemento Portland normal' },
+  { ID_Productos: 302, Codigo: 'CAL-VIV-25', ID_Categoria: 3, ID_Marca: 5, ID_Unidad: 2, Nombre: 'Cal viva en bolsa x 25kg Andina', Precio_Unidad: 15600, Descripcion: 'Cal para construcción' },
+  { ID_Productos: 303, Codigo: 'CAL-APA-30', ID_Categoria: 3, ID_Marca: 6, ID_Unidad: 2, Nombre: 'Cal apagada en bolsa x 30kg Cacique', Precio_Unidad: 15600, Descripcion: 'Cal hidratada en bolsa' },
+  { ID_Productos: 304, Codigo: 'ARE-FIN-25', ID_Categoria: 3, ID_Marca: 1, ID_Unidad: 2, Nombre: 'Arena fina en bolsa x 25kg Fara', Precio_Unidad: 7800, Descripcion: 'Arena zarandeada embolsada' },
+  { ID_Productos: 305, Codigo: 'CAN-ROD-25', ID_Categoria: 3, ID_Marca: 1, ID_Unidad: 2, Nombre: 'Canto rodado en bolsa x 25kg', Precio_Unidad: 8450, Descripcion: 'Árido decorativo' },
+  { ID_Productos: 306, Codigo: 'CEM-PLA-40', ID_Categoria: 3, ID_Marca: 4, ID_Unidad: 2, Nombre: 'Cemento de albañilería Plasticor 40kg', Precio_Unidad: 17940, Descripcion: 'Mortero premezclado' },
+  { ID_Productos: 307, Codigo: 'CAS-MOL-1M3', ID_Categoria: 3, ID_Marca: 1, ID_Unidad: 5, Nombre: 'Cascote molido x bolson 1m³', Precio_Unidad: 36400, Descripcion: 'Material para relleno y contrapisos' },
+  { ID_Productos: 308, Codigo: 'ARE-GRU-1M3', ID_Categoria: 3, ID_Marca: 1, ID_Unidad: 5, Nombre: 'Arena gruesa x bolsón 1m³', Precio_Unidad: 44200, Descripcion: 'Árido grueso a granel en bolsón' },
+  { ID_Productos: 309, Codigo: 'ACE-SIK-5L', ID_Categoria: 3, ID_Marca: 7, ID_Unidad: 1, Nombre: 'Acelerante de fragüe Sika 5L', Precio_Unidad: 24050, Descripcion: 'Aditivo para hormigón y morteros' },
+  { ID_Productos: 310, Codigo: 'HID-SIK-4K', ID_Categoria: 3, ID_Marca: 7, ID_Unidad: 1, Nombre: 'Hidrófugo Pasta Sika 1 x 4kg', Precio_Unidad: 11960, Descripcion: 'Aditivo impermeabilizante' },
 
   // --- Categoría 4: Sanitarios y Plomería ---
-  {
-    id: 701,
-    codigo: 'CAN-PVC-110',
-    idCategoria: 4,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Caño PVC 110mm x 4m para Desagüe',
-    precioUnidad: 21450,
-    descripcion: 'Cañería cloacal y pluvial',
-    activo: true
-  },
-  {
-    id: 702,
-    codigo: 'CAN-TER-20',
-    idCategoria: 4,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 1, // Casa Central
-    nombre: 'Caño Termofusión 20mm x 4m Agua',
-    precioUnidad: 8060,
-    descripcion: 'Conducción de agua fría y caliente',
-    activo: true
-  },
-  {
-    id: 703,
-    codigo: 'CAN-TER-25',
-    idCategoria: 4,
-    idMarca: 1, // Genérica
-    idUnidad: 3,
-    idSucursal: 1, // Casa Central
-    nombre: 'Caño Termofusión 25mm x 4m Agua',
-    precioUnidad: 11570,
-    descripcion: 'Conducción de agua fría y caliente',
-    activo: true
-  },
-  {
-    id: 704,
-    codigo: 'COD-PVC-110',
-    idCategoria: 4,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Codo PVC 110mm x 90° con Acometida',
-    precioUnidad: 4420,
-    descripcion: 'Accesorio desagüe cloacal',
-    activo: true
-  },
-  {
-    id: 705,
-    codigo: 'INO-FER-BAR',
-    idCategoria: 4,
-    idMarca: 8, // Ferrum
-    idUnidad: 1,
-    idSucursal: 1, // Casa Central
-    nombre: 'Juego Inodoro y Depósito Ferrum Bari',
-    precioUnidad: 240500,
-    descripcion: 'Loza sanitaria completa',
-    activo: true
-  },
-  {
-    id: 706,
-    codigo: 'BID-FER-BAR',
-    idCategoria: 4,
-    idMarca: 8, // Ferrum
-    idUnidad: 1,
-    idSucursal: 1, // Casa Central
-    nombre: 'Bidet Ferrum Bari 1 Agujero',
-    precioUnidad: 119600,
-    descripcion: 'Loza sanitaria bidet',
-    activo: true
-  },
-  {
-    id: 707,
-    codigo: 'GRI-MON-FV',
-    idCategoria: 4,
-    idMarca: 9, // FV
-    idUnidad: 1,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Grifería Monocomando Lavatorio FV',
-    precioUnidad: 83200,
-    descripcion: 'Grifería cromada para baño',
-    activo: true
-  },
-  {
-    id: 708,
-    codigo: 'SIF-DOB-COC',
-    idCategoria: 4,
-    idMarca: 1, // Genérica
-    idUnidad: 1,
-    idSucursal: 2, // Sucursal Sur
-    nombre: 'Sifón Doble para Pileta de Cocina',
-    precioUnidad: 11310,
-    descripcion: 'Desagüe flexible para bacha doble',
-    activo: false // Inactivo de prueba
-  },
-  {
-    id: 709,
-    codigo: 'VAL-DES-INO',
-    idCategoria: 4,
-    idMarca: 9, // FV
-    idUnidad: 1,
-    idSucursal: 1, // Casa Central
-    nombre: 'Válvula de Descarga para Inodoro FV',
-    precioUnidad: 53300,
-    descripcion: 'Mecanismo de descarga',
-    activo: true
-  },
-  {
-    id: 710,
-    codigo: 'TAN-AGU-1000',
-    idCategoria: 4,
-    idMarca: 10, // Eternit
-    idUnidad: 1,
-    idSucursal: 3, // Depósito Norte
-    nombre: 'Tanque de Agua 1000L Tricapa Eternit',
-    precioUnidad: 253500,
-    descripcion: 'Tanque reserva domiciliaria',
-    activo: true
-  }
+  { ID_Productos: 701, Codigo: 'CAN-PVC-110', ID_Categoria: 4, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Caño PVC 110mm x 4m para Desagüe', Precio_Unidad: 21450, Descripcion: 'Cañería cloacal y pluvial' },
+  { ID_Productos: 702, Codigo: 'CAN-TER-20', ID_Categoria: 4, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Caño Termofusión 20mm x 4m Agua', Precio_Unidad: 8060, Descripcion: 'Conducción de agua fría y caliente' },
+  { ID_Productos: 703, Codigo: 'CAN-TER-25', ID_Categoria: 4, ID_Marca: 1, ID_Unidad: 3, Nombre: 'Caño Termofusión 25mm x 4m Agua', Precio_Unidad: 11570, Descripcion: 'Conducción de agua fría y caliente' },
+  { ID_Productos: 704, Codigo: 'COD-PVC-110', ID_Categoria: 4, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Codo PVC 110mm x 90° con Acometida', Precio_Unidad: 4420, Descripcion: 'Accesorio desagüe cloacal' },
+  { ID_Productos: 705, Codigo: 'INO-FER-BAR', ID_Categoria: 4, ID_Marca: 8, ID_Unidad: 1, Nombre: 'Juego Inodoro y Depósito Ferrum Bari', Precio_Unidad: 240500, Descripcion: 'Loza sanitaria completa' },
+  { ID_Productos: 706, Codigo: 'BID-FER-BAR', ID_Categoria: 4, ID_Marca: 8, ID_Unidad: 1, Nombre: 'Bidet Ferrum Bari 1 Agujero', Precio_Unidad: 119600, Descripcion: 'Loza sanitaria bidet' },
+  { ID_Productos: 707, Codigo: 'GRI-MON-FV', ID_Categoria: 4, ID_Marca: 9, ID_Unidad: 1, Nombre: 'Grifería Monocomando Lavatorio FV', Precio_Unidad: 83200, Descripcion: 'Grifería cromada para baño' },
+  { ID_Productos: 708, Codigo: 'SIF-DOB-COC', ID_Categoria: 4, ID_Marca: 1, ID_Unidad: 1, Nombre: 'Sifón Doble para Pileta de Cocina', Precio_Unidad: 11310, Descripcion: 'Desagüe flexible para bacha doble' },
+  { ID_Productos: 709, Codigo: 'VAL-DES-INO', ID_Categoria: 4, ID_Marca: 9, ID_Unidad: 1, Nombre: 'Válvula de Descarga para Inodoro FV', Precio_Unidad: 53300, Descripcion: 'Mecanismo de descarga' },
+  { ID_Productos: 710, Codigo: 'TAN-AGU-1000', ID_Categoria: 4, ID_Marca: 10, ID_Unidad: 1, Nombre: 'Tanque de Agua 1000L Tricapa Eternit', Precio_Unidad: 253500, Descripcion: 'Tanque reserva domiciliaria' }
+];
+
+// ==========================================
+// 6. PRODUCTOS_X_SUCURSALES (Nueva tabla del DER)
+// ==========================================
+// Aquí mapeamos el idSucursal y el activo que antes tenía el producto
+export const productos_x_sucursales = [
+    { ID_PRODUCTOSXSUCURS: 1, ID_Sucursales: 1, ID_Productos: 101, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 2, ID_Sucursales: 2, ID_Productos: 102, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 3, ID_Sucursales: 3, ID_Productos: 103, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 4, ID_Sucursales: 1, ID_Productos: 104, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 5, ID_Sucursales: 2, ID_Productos: 105, Estado: false }, // Inactivo
+    { ID_PRODUCTOSXSUCURS: 6, ID_Sucursales: 3, ID_Productos: 106, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 7, ID_Sucursales: 1, ID_Productos: 107, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 8, ID_Sucursales: 2, ID_Productos: 108, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 9, ID_Sucursales: 3, ID_Productos: 109, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 10, ID_Sucursales: 1, ID_Productos: 110, Estado: true },
+    
+    { ID_PRODUCTOSXSUCURS: 11, ID_Sucursales: 3, ID_Productos: 201, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 12, ID_Sucursales: 3, ID_Productos: 202, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 13, ID_Sucursales: 3, ID_Productos: 203, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 14, ID_Sucursales: 3, ID_Productos: 204, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 15, ID_Sucursales: 3, ID_Productos: 205, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 16, ID_Sucursales: 3, ID_Productos: 206, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 17, ID_Sucursales: 1, ID_Productos: 207, Estado: false }, // Inactivo
+    { ID_PRODUCTOSXSUCURS: 18, ID_Sucursales: 3, ID_Productos: 208, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 19, ID_Sucursales: 3, ID_Productos: 209, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 20, ID_Sucursales: 3, ID_Productos: 210, Estado: true },
+
+    { ID_PRODUCTOSXSUCURS: 21, ID_Sucursales: 1, ID_Productos: 301, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 22, ID_Sucursales: 2, ID_Productos: 302, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 23, ID_Sucursales: 1, ID_Productos: 303, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 24, ID_Sucursales: 2, ID_Productos: 304, Estado: false }, // Inactivo
+    { ID_PRODUCTOSXSUCURS: 25, ID_Sucursales: 3, ID_Productos: 305, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 26, ID_Sucursales: 1, ID_Productos: 306, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 27, ID_Sucursales: 3, ID_Productos: 307, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 28, ID_Sucursales: 3, ID_Productos: 308, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 29, ID_Sucursales: 1, ID_Productos: 309, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 30, ID_Sucursales: 2, ID_Productos: 310, Estado: true },
+
+    { ID_PRODUCTOSXSUCURS: 31, ID_Sucursales: 2, ID_Productos: 701, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 32, ID_Sucursales: 1, ID_Productos: 702, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 33, ID_Sucursales: 1, ID_Productos: 703, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 34, ID_Sucursales: 2, ID_Productos: 704, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 35, ID_Sucursales: 1, ID_Productos: 705, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 36, ID_Sucursales: 1, ID_Productos: 706, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 37, ID_Sucursales: 2, ID_Productos: 707, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 38, ID_Sucursales: 2, ID_Productos: 708, Estado: false }, // Inactivo
+    { ID_PRODUCTOSXSUCURS: 39, ID_Sucursales: 1, ID_Productos: 709, Estado: true },
+    { ID_PRODUCTOSXSUCURS: 40, ID_Sucursales: 3, ID_Productos: 710, Estado: true }
+];
+
+// ==========================================
+// 7. PRODUCTOS_X_PROVEEDORES
+// ==========================================
+export const productosXProveedores = [
+  { ID_Productos_X_Proveedores: 1, ID_Productos: 101, ID_Proveedores: 1, Codigo_Producto_Proveedor: '001-CER-6060-MB', Precio_Lista: 35000, Estado: true },
+  { ID_Productos_X_Proveedores: 2, ID_Productos: 102, ID_Proveedores: 1, Codigo_Producto_Proveedor: '001-CER-4545-COR', Precio_Lista: 17500, Estado: true },
+  { ID_Productos_X_Proveedores: 3, ID_Productos: 103, ID_Proveedores: 1, Codigo_Producto_Proveedor: '001-REV-3060-GRIS', Precio_Lista: 23000, Estado: true },
+  { ID_Productos_X_Proveedores: 4, ID_Productos: 104, ID_Proveedores: 1, Codigo_Producto_Proveedor: '001-POR-20120-MAD', Precio_Lista: 40000, Estado: true },
+  { ID_Productos_X_Proveedores: 5, ID_Productos: 105, ID_Proveedores: 1, Codigo_Producto_Proveedor: '001-ZOC-1045', Precio_Lista: 3800, Estado: false },
+  { ID_Productos_X_Proveedores: 6, ID_Productos: 106, ID_Proveedores: 10, Codigo_Producto_Proveedor: '010-PEG-WEB-25', Precio_Lista: 15500, Estado: true },
+  { ID_Productos_X_Proveedores: 7, ID_Productos: 107, ID_Proveedores: 21, Codigo_Producto_Proveedor: '021-PAS-IMP-1KG', Precio_Lista: 3400, Estado: true },
+  { ID_Productos_X_Proveedores: 8, ID_Productos: 108, ID_Proveedores: 14, Codigo_Producto_Proveedor: '014-LIS-ALU-25', Precio_Lista: 11000, Estado: true },
+  { ID_Productos_X_Proveedores: 9, ID_Productos: 109, ID_Proveedores: 7, Codigo_Producto_Proveedor: '007-MOS-VEN-3030', Precio_Lista: 11800, Estado: true },
+  { ID_Productos_X_Proveedores: 10, ID_Productos: 110, ID_Proveedores: 14, Codigo_Producto_Proveedor: '014-GUA-CUR-10', Precio_Lista: 9200, Estado: true },
+
+  { ID_Productos_X_Proveedores: 11, ID_Productos: 201, ID_Proveedores: 2, Codigo_Producto_Proveedor: '002-HIE-RET-6', Precio_Lista: 6700, Estado: true },
+  { ID_Productos_X_Proveedores: 12, ID_Productos: 202, ID_Proveedores: 2, Codigo_Producto_Proveedor: '002-HIE-RET-8', Precio_Lista: 10500, Estado: true },
+  { ID_Productos_X_Proveedores: 13, ID_Productos: 203, ID_Proveedores: 2, Codigo_Producto_Proveedor: '002-HIE-RET-10', Precio_Lista: 16500, Estado: true },
+  { ID_Productos_X_Proveedores: 14, ID_Productos: 204, ID_Proveedores: 2, Codigo_Producto_Proveedor: '002-HIE-RET-12', Precio_Lista: 23500, Estado: true },
+  { ID_Productos_X_Proveedores: 15, ID_Productos: 205, ID_Proveedores: 17, Codigo_Producto_Proveedor: '017-MAL-CIM-42', Precio_Lista: 30000, Estado: true },
+  { ID_Productos_X_Proveedores: 16, ID_Productos: 206, ID_Proveedores: 17, Codigo_Producto_Proveedor: '017-MAL-CIM-55', Precio_Lista: 45000, Estado: true },
+  { ID_Productos_X_Proveedores: 17, ID_Productos: 207, ID_Proveedores: 6, Codigo_Producto_Proveedor: '006-ALA-REC-16', Precio_Lista: 4700, Estado: false },
+  { ID_Productos_X_Proveedores: 18, ID_Productos: 208, ID_Proveedores: 30, Codigo_Producto_Proveedor: '030-PER-C-100', Precio_Lista: 52000, Estado: true },
+  { ID_Productos_X_Proveedores: 19, ID_Productos: 209, ID_Proveedores: 30, Codigo_Producto_Proveedor: '030-PER-C-120', Precio_Lista: 61000, Estado: true },
+  { ID_Productos_X_Proveedores: 20, ID_Productos: 210, ID_Proveedores: 20, Codigo_Producto_Proveedor: '020-CHA-NEG-18', Precio_Lista: 38500, Estado: true },
+
+  { ID_Productos_X_Proveedores: 21, ID_Productos: 301, ID_Proveedores: 3, Codigo_Producto_Proveedor: '003-CEM-HOL-25', Precio_Lista: 18500, Estado: true },
+  { ID_Productos_X_Proveedores: 22, ID_Productos: 302, ID_Proveedores: 31, Codigo_Producto_Proveedor: '031-CAL-VIV-25', Precio_Lista: 14800, Estado: true },
+  { ID_Productos_X_Proveedores: 23, ID_Productos: 303, ID_Proveedores: 3, Codigo_Producto_Proveedor: '003-CAL-APA-30', Precio_Lista: 14800, Estado: true },
+  { ID_Productos_X_Proveedores: 24, ID_Productos: 304, ID_Proveedores: 11, Codigo_Producto_Proveedor: '011-ARE-FIN-25', Precio_Lista: 7400, Estado: false },
+  { ID_Productos_X_Proveedores: 25, ID_Productos: 305, ID_Proveedores: 11, Codigo_Producto_Proveedor: '011-CAN-ROD-25', Precio_Lista: 8000, Estado: true },
+  { ID_Productos_X_Proveedores: 26, ID_Productos: 306, ID_Proveedores: 3, Codigo_Producto_Proveedor: '003-CEM-PLA-40', Precio_Lista: 17000, Estado: true },
+  { ID_Productos_X_Proveedores: 27, ID_Productos: 307, ID_Proveedores: 11, Codigo_Producto_Proveedor: '011-CAS-MOL-1M3', Precio_Lista: 35000, Estado: true },
+  { ID_Productos_X_Proveedores: 28, ID_Productos: 308, ID_Proveedores: 11, Codigo_Producto_Proveedor: '011-ARE-GRU-1M3', Precio_Lista: 42000, Estado: true },
+  { ID_Productos_X_Proveedores: 29, ID_Productos: 309, ID_Proveedores: 16, Codigo_Producto_Proveedor: '016-ACE-SIK-5L', Precio_Lista: 23000, Estado: true },
+  { ID_Productos_X_Proveedores: 30, ID_Productos: 310, ID_Proveedores: 16, Codigo_Producto_Proveedor: '016-HID-SIK-4K', Precio_Lista: 11400, Estado: true },
+
+  { ID_Productos_X_Proveedores: 31, ID_Productos: 701, ID_Proveedores: 15, Codigo_Producto_Proveedor: '015-CAN-PVC-110', Precio_Lista: 20500, Estado: true },
+  { ID_Productos_X_Proveedores: 32, ID_Productos: 702, ID_Proveedores: 15, Codigo_Producto_Proveedor: '015-CAN-TER-20', Precio_Lista: 7700, Estado: true },
+  { ID_Productos_X_Proveedores: 33, ID_Productos: 703, ID_Proveedores: 15, Codigo_Producto_Proveedor: '015-CAN-TER-25', Precio_Lista: 11100, Estado: true },
+  { ID_Productos_X_Proveedores: 34, ID_Productos: 704, ID_Proveedores: 15, Codigo_Producto_Proveedor: '015-COD-PVC-110', Precio_Lista: 4200, Estado: true },
+  { ID_Productos_X_Proveedores: 35, ID_Productos: 705, ID_Proveedores: 7, Codigo_Producto_Proveedor: '007-INO-FER-BAR', Precio_Lista: 230000, Estado: true },
+  { ID_Productos_X_Proveedores: 36, ID_Productos: 706, ID_Proveedores: 7, Codigo_Producto_Proveedor: '007-BID-FER-BAR', Precio_Lista: 114000, Estado: true },
+  { ID_Productos_X_Proveedores: 37, ID_Productos: 707, ID_Proveedores: 27, Codigo_Producto_Proveedor: '027-GRI-MON-FV', Precio_Lista: 80000, Estado: true },
+  { ID_Productos_X_Proveedores: 38, ID_Productos: 708, ID_Proveedores: 27, Codigo_Producto_Proveedor: '027-SIF-DOB-COC', Precio_Lista: 10800, Estado: false },
+  { ID_Productos_X_Proveedores: 39, ID_Productos: 709, ID_Proveedores: 27, Codigo_Producto_Proveedor: '027-VAL-DES-INO', Precio_Lista: 51000, Estado: true },
+  { ID_Productos_X_Proveedores: 40, ID_Productos: 710, ID_Proveedores: 28, Codigo_Producto_Proveedor: '028-TAN-AGU-1000', Precio_Lista: 245000, Estado: true }
 ];
 
 export const cajas = [
@@ -1016,6 +511,13 @@ export const cajas = [
   { id_cajas: 7, id_sucursales: 3, estado: 'Activo' },
   { id_cajas: 8, id_sucursales: 3, estado: 'Inactivo' },
   { id_cajas: 9, id_sucursales: 3, estado: 'Inactivo' }
+];
+
+export const metodosPago = [
+    { id: 1, nombre: 'Efectivo' },
+    { id: 2, nombre: 'Transferencia Bancaria' },
+    { id: 3, nombre: 'Tarjeta de Crédito' },
+    { id: 4, nombre: 'Cuenta Corriente' }
 ];
 
 export const compras = [

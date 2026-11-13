@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef } from 'react';
 import Swal from 'sweetalert2';
 import { IconPhone, IconEdit, IconPower, IconInfoCircle } from '@tabler/icons-react';
 import Encabezado from '../components/Encabezado.jsx';
@@ -13,50 +13,72 @@ import { showDetailAlert } from '../components/common/showDetailAlert.js';
 import { showConfirmInputAlert } from '../components/common/showConfirmInputAlert.js';
 import { showReactivateAlert } from '../components/common/showReactivateAlert.js';
 import { usePagination } from '../hooks/usePagination.js';
-import { proveedores as datos, sucursales } from '../data/mock.js';
+import { 
+    proveedores as datosProveedores, 
+    proveedores_x_sucursales as datosProveedoresXSucursales, 
+    sucursales 
+} from '../data/mock.js';
 import '../styles/Proveedores.css';
 
 const iniciales = (nombre = '') => nombre.split(' ').slice(0, 2).map((p) => p[0] || '').join('').toUpperCase();
 
+// Función para cruzar proveedores con sus sucursales
+const mapearProveedoresRelacionales = () => {
+    return datosProveedores.map(prov => {
+        // Buscamos la sucursal activa en la tabla intermedia
+        const relacionSucursal = datosProveedoresXSucursales.find(r => r.ID_Proveedores === prov.ID_Proveedores && r.Estado);
+
+        return {
+            id: prov.ID_Proveedores,
+            cuit: prov.CUIT,
+            nombre: prov.Nombre,
+            razonSocial: prov.Razon_Social,
+            contacto: prov.Contacto,
+            email: prov.Email_Prov,
+            activo: prov.Estado_Prov,
+            detalleBaja: '', // Mantenemos el estado para la UI
+            id_sucursal: relacionSucursal ? relacionSucursal.ID_Sucursales : null
+        };
+    });
+};
+
 export default function Proveedores() {
-    const [proveedores, setProveedores] = useState(
-        datos.map(p => ({ 
-            ...p, 
-            detalleBaja: p.detalleBaja || '',
-            id_sucursal: p.id_sucursal || sucursales[0]?.ID_Sucursales || 1 
-        }))
-    );
+    // Estado inicial con el JOIN ya hecho
+    const [proveedores, setProveedores] = useState(mapearProveedoresRelacionales);
     const [busqueda, setBusqueda] = useState('');
     const [tabActiva, setTabActiva] = useState('todos');
     const [sucursalSeleccionada, setSucursalSeleccionada] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [proveedorEditando, setProveedorEditando] = useState(null);
+    
+    // Ref para bloquear el cierre del modal si hay error de validación
+    const bloquearCierreRef = useRef(false);
 
     const activos = proveedores.filter((p) => p.activo).length;
     const inactivos = proveedores.filter((p) => !p.activo).length;
 
-    // Obtener nombres de sucursales únicas basadas en su Nombre para el filtro
+    // Obtener nombres de sucursales para el filtro
     const sucursalesDisponibles = useMemo(() => {
         return sucursales.map((s) => s.Nombre);
     }, []);
 
-    const ultimoCodigo = proveedores.length > 0 ? proveedores[proveedores.length - 1].codigo : '003';
-    const siguienteCodigo = String(Number(ultimoCodigo) + 1).padStart(3, '0');
-
     const valoresIniciales = useMemo(() => {
-        if (!proveedorEditando) return { codigo: siguienteCodigo, id_sucursal: sucursales[0]?.Nombre || '' };
-        const { codigo, nombreFantasia, razonSocial, cuit, telefono, email, id_sucursal } = proveedorEditando;
+        if (!proveedorEditando) {
+            return { id_sucursal: sucursales[0]?.Nombre || '' };
+        }
+        
+        const { nombre, razonSocial, cuit, contacto, email, id_sucursal } = proveedorEditando;
         const sucObj = sucursales.find(s => s.ID_Sucursales === id_sucursal);
+        
         return { 
-            codigo, 
-            nombreFantasia, 
-            razonSocial, 
-            cuit, 
-            telefono, 
+            nombre: nombre || '',
+            razonSocial: razonSocial || '', 
+            cuit: cuit || '', 
+            contacto: contacto || '', 
             email: email || '', 
             id_sucursal: sucObj ? sucObj.Nombre : sucursales[0]?.Nombre || '' 
         };
-    }, [proveedorEditando, siguienteCodigo]);
+    }, [proveedorEditando]);
 
     const abrirNuevo = () => {
         setProveedorEditando(null);
@@ -69,13 +91,17 @@ export default function Proveedores() {
     };
 
     const cerrarModal = () => {
+        if (bloquearCierreRef.current) {
+            bloquearCierreRef.current = false;
+            return;
+        }
         setIsModalOpen(false);
         setProveedorEditando(null);
     };
 
     const verDetalleBaja = (p) => {
         showDetailAlert({
-            title: p.nombreFantasia,
+            title: p.nombre,
             details: [
                 { label: 'Razón Social', value: p.razonSocial },
                 { label: 'CUIT', value: p.cuit }
@@ -84,13 +110,12 @@ export default function Proveedores() {
         });
     };
 
-    // Configuración de campos del formulario adaptada a select de opciones con nombres de sucursales
+    // Configuración de campos adaptados al DER (sin código)
     const camposProveedor = [
-        { name: 'codigo', label: 'Código', disabled: true, badge: 'AUTOGENERADO' },
-        { name: 'nombreFantasia', label: 'Nombre de Fantasía', placeholder: 'Ej: Ceramica Norte', required: true },
+        { name: 'nombre', label: 'Nombre', placeholder: 'Ej: Ceramica Norte', required: true },
         { name: 'razonSocial', label: 'Razón Social', placeholder: 'Ej: Ceramica Norte S.A', required: true },
         { name: 'cuit', label: 'CUIT', placeholder: '30-XXXXXXXX-X', required: true },
-        { name: 'telefono', label: 'Teléfono', placeholder: '+54 387 000-0000', required: true },
+        { name: 'contacto', label: 'Contacto', placeholder: '+54 387 000-0000', required: true },
         { name: 'email', label: 'Email', type: 'email', placeholder: 'nombre@gmail.com', required: true },
         { 
             name: 'id_sucursal', 
@@ -107,7 +132,7 @@ export default function Proveedores() {
 
         if (desactivar) {
             const motivo = await showConfirmInputAlert({
-                title: `Motivo de baja - ${p.nombreFantasia}`,
+                title: `Motivo de baja - ${p.nombre}`,
                 subtitle: 'Gestión de Proveedores',
                 inputValue: p.detalleBaja || '',
                 confirmButtonText: 'Dar de baja'
@@ -118,7 +143,7 @@ export default function Proveedores() {
         } else {
             const confirmado = await showReactivateAlert({
                 entity: 'proveedor',
-                name: p.nombreFantasia
+                name: p.nombre
             });
             if (!confirmado) return;
         }
@@ -134,7 +159,7 @@ export default function Proveedores() {
         Swal.fire({
             icon: 'success',
             title: desactivar ? 'Proveedor desactivado' : 'Proveedor activado',
-            text: `El estado de ${p.nombreFantasia} se actualizó correctamente.`,
+            text: `El estado de ${p.nombre} se actualizó correctamente.`,
             timer: 1800,
             showConfirmButton: false
         });
@@ -143,14 +168,32 @@ export default function Proveedores() {
     const handleGuardarProveedor = (data) => {
         const sucEncontrada = sucursales.find(s => s.Nombre === data.id_sucursal);
         const idSucursalNum = sucEncontrada ? sucEncontrada.ID_Sucursales : 1;
+        const cuitLimpio = data.cuit.trim();
+
+        // VALIDACIÓN: CUIT duplicado
+        const cuitExiste = proveedores.some(
+            (p) => p.cuit.trim() === cuitLimpio && (!proveedorEditando || p.id !== proveedorEditando.id)
+        );
+
+        if (cuitExiste) {
+            bloquearCierreRef.current = true;
+            Swal.fire({
+                icon: 'warning',
+                title: 'CUIT duplicado',
+                text: 'El CUIT ingresado ya está registrado por otro proveedor.',
+                confirmButtonColor: '#326f7a',
+                customClass: { container: 'swal-alto-z-index' }
+            });
+            return;
+        }
 
         if (proveedorEditando) {
             const actualizado = {
                 ...proveedorEditando,
-                nombreFantasia: data.nombreFantasia,
+                nombre: data.nombre,
                 razonSocial: data.razonSocial,
                 cuit: data.cuit,
-                telefono: data.telefono,
+                contacto: data.contacto,
                 email: data.email,
                 id_sucursal: idSucursalNum,
             };
@@ -158,7 +201,7 @@ export default function Proveedores() {
             Swal.fire({
                 icon: 'success',
                 title: '¡Proveedor actualizado!',
-                text: `Los datos de ${actualizado.nombreFantasia} se guardaron correctamente.`,
+                text: `Los datos de ${actualizado.nombre} se guardaron correctamente.`,
                 timer: 1800,
                 showConfirmButton: false
             });
@@ -166,12 +209,11 @@ export default function Proveedores() {
         }
 
         const nuevoProveedor = {
-            id: Date.now(),
-            codigo: data.codigo,
-            nombreFantasia: data.nombreFantasia,
+            id: Date.now(), // Simula ID_Proveedores
+            nombre: data.nombre,
             razonSocial: data.razonSocial,
             cuit: data.cuit,
-            telefono: data.telefono,
+            contacto: data.contacto,
             email: data.email,
             id_sucursal: idSucursalNum,
             activo: true,
@@ -182,7 +224,7 @@ export default function Proveedores() {
         Swal.fire({
             icon: 'success',
             title: '¡Proveedor agregado!',
-            text: `${nuevoProveedor.nombreFantasia} se registró correctamente.`,
+            text: `${nuevoProveedor.nombre} se registró correctamente.`,
             timer: 1800,
             showConfirmButton: false
         });
@@ -211,10 +253,10 @@ export default function Proveedores() {
         const query = busqueda.toLowerCase().trim();
         const cumpleBusqueda =
             !query ||
-            String(p.codigo).toLowerCase().includes(query) ||
-            p.nombreFantasia.toLowerCase().includes(query) ||
+            p.nombre.toLowerCase().includes(query) ||
             p.razonSocial.toLowerCase().includes(query) ||
             p.cuit.toLowerCase().includes(query) ||
+            (p.contacto && p.contacto.toLowerCase().includes(query)) ||
             (p.email && p.email.toLowerCase().includes(query)) ||
             nombreSucursal.toLowerCase().includes(query);
 
@@ -227,15 +269,15 @@ export default function Proveedores() {
         [busqueda, tabActiva, sucursalSeleccionada]
     );
 
+    // MODIFICADO: Quitamos la columna 'Justificación'
     const columnas = [
-        'Código', 
         'Proveedor', 
+        'Razón Social',
         'CUIT',
-        <span key="tel" className="inline-flex items-center gap-1"><IconPhone size={16} />Teléfono</span>, 
+        <span key="tel" className="columna-con-icono"><IconPhone size={16} />Contacto</span>, 
         'Email',
         'Sucursal', 
         'Estado', 
-        'Detalle',
         'Acciones'
     ];
 
@@ -249,7 +291,7 @@ export default function Proveedores() {
         <SearchBar 
             value={busqueda} 
             onChange={setBusqueda} 
-            placeholder="Buscar por código, nombre, razón social, cuit o email..." 
+            placeholder="Buscar por nombre, razón social, cuit o email..." 
         />
 
         <FilterTabs 
@@ -279,18 +321,17 @@ export default function Proveedores() {
 
                 return (
                     <tr key={p.id} className="fila-empleado">
-                        <td className="celda-tabla-legajo">N.° {p.codigo}</td>
                         <td className="celda-tabla-info">
                             <span className="info-empleado-flex">
-                                <span className="avatar-iniciales">{iniciales(p.nombreFantasia)}</span>
+                                <span className="avatar-iniciales">{iniciales(p.nombre)}</span>
                                 <div className="proveedor-info-detalles">
-                                    <strong>{p.nombreFantasia}</strong>
-                                    <div className="proveedor-razon-social">{p.razonSocial}</div>
+                                    <strong>{p.nombre}</strong>
                                 </div>
                             </span>
                         </td>
+                        <td className="celda-tabla-gris">{p.razonSocial}</td>
                         <td className="celda-tabla-texto">{p.cuit}</td>
-                        <td className="celda-tabla-texto">{p.telefono}</td>
+                        <td className="celda-tabla-texto">{p.contacto}</td>
                         <td className="celda-tabla-gris">{p.email || '-'}</td>
                         <td className="celda-tabla-gris">{nombreSucursal}</td>
                         <td className="celda-tabla-texto">
@@ -298,30 +339,28 @@ export default function Proveedores() {
                                 {p.activo ? 'Activo' : 'Inactivo'}
                             </span>
                         </td>
-                        <td className="celda-tabla-info">
-                            {!p.activo ? (
-                                <button 
-                                    type="button" 
-                                    onClick={() => verDetalleBaja(p)} 
-                                    className="boton-justificacion"
-                                    title="Ver motivo de baja"
-                                >
-                                    <span className="contenido-boton-justificacion">
-                                        <IconInfoCircle size={16} />Detalle
-                                    </span>
-                                </button>
-                            ) : (
-                                <span className="celda-tabla-gris">-</span>
-                            )}
-                        </td>
+                        
+                        {/* MODIFICADO: Botón de info movido a Acciones, condicionado y sin clase extra */}
                         <td className="celda-tabla-info">
                             <span className="acciones-fila">
+                                {!p.activo && (
+                                    <button 
+                                        type="button" 
+                                        onClick={() => verDetalleBaja(p)} 
+                                        className="boton-accion-icono"
+                                        title="Ver motivo de baja"
+                                        aria-label={`Ver detalle de ${p.nombre}`}
+                                    >
+                                        <IconInfoCircle size={18} />
+                                    </button>
+                                )}
+                                
                                 <button
                                     type="button"
                                     className="boton-accion-icono"
                                     onClick={() => abrirEdicion(p)}
                                     title="Editar proveedor"
-                                    aria-label={`Editar ${p.nombreFantasia}`}
+                                    aria-label={`Editar ${p.nombre}`}
                                 >
                                     <IconEdit size={18} />
                                 </button>
@@ -330,7 +369,7 @@ export default function Proveedores() {
                                     className={`boton-accion-icono ${p.activo ? 'accion-desactivar' : 'accion-activar'}`}
                                     onClick={() => cambiarEstado(p)}
                                     title={p.activo ? 'Desactivar proveedor' : 'Activar proveedor'}
-                                    aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombreFantasia}`}
+                                    aria-label={`${p.activo ? 'Desactivar' : 'Activar'} ${p.nombre}`}
                                 >
                                     <IconPower size={18} />
                                 </button>

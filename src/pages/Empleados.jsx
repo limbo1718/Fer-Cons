@@ -53,14 +53,9 @@ const obtenerNombreSucursal = (idSucursal) =>
 // ADAPTACIÓN: Función que hace el JOIN con las nuevas tablas
 const mapearEmpleadosRelacionales = () => {
   return datosEmpleados.map(emp => {
-    // 1. Buscamos los datos de autenticación (Email, Username, Password)
     const usuarioData = datosUsuarios.find(u => u.ID_Usuarios === emp.ID_Usuarios);
-
-    // 2. Buscamos el rol activo (o el último que tuvo)
     const rolData = empleados_x_roles.find(er => er.ID_Empleados === emp.ID_Empleados && er.Estado) 
                   || empleados_x_roles.find(er => er.ID_Empleados === emp.ID_Empleados);
-
-    // 3. Buscamos la sucursal activa (o la última)
     const sucursalData = sucursales_x_empleados.find(se => se.ID_Empleados === emp.ID_Empleados && se.Estado)
                       || sucursales_x_empleados.find(se => se.ID_Empleados === emp.ID_Empleados);
 
@@ -98,7 +93,6 @@ const COLUMNAS_TABLA = [
   'Asociación',
   <span key="hor" className="columna-con-icono"><IconClock size={16} />Horario</span>,
   'Estado', 
-  'Justificación',
   'Acciones'
 ];
 
@@ -394,28 +388,23 @@ export default function Empleados() {
     const dniLimpio = String(data.dni).trim();
     const usernameLimpio = data.username.trim().toLowerCase();
 
-    // NUEVO: Validar que el DNI no esté duplicado
     const dniExiste = empleados.some(
       (e) => String(e.dni) === dniLimpio && 
       (!empleadoEditando || e.id !== empleadoEditando.id)
     );
 
     if (dniExiste) {
-      bloquearCierreRef.current = true; // Bloqueamos el cierre del modal
-      
+      bloquearCierreRef.current = true; 
       Swal.fire({
         icon: 'warning',
         title: 'DNI duplicado',
         text: 'El número de documento (DNI) ya está registrado por otro empleado.',
         confirmButtonColor: '#326f7a',
-        customClass: {
-          container: 'swal-alto-z-index' 
-        }
+        customClass: { container: 'swal-alto-z-index' }
       });
       return; 
     }
 
-    // Validar que el Username no esté duplicado
     const usernameExiste = datosUsuarios.some(
       (u) => u.Username.toLowerCase() === usernameLimpio && 
       (!empleadoEditando || u.ID_Usuarios !== empleadoEditando.id_usuario)
@@ -423,31 +412,24 @@ export default function Empleados() {
 
     if (usernameExiste) {
       bloquearCierreRef.current = true; 
-      
       Swal.fire({
         icon: 'warning',
         title: 'Usuario duplicado',
         text: 'El nombre de usuario (Username) ya está en uso por otro empleado. Por favor, elegí uno diferente.',
         confirmButtonColor: '#326f7a',
-        customClass: {
-          container: 'swal-alto-z-index' 
-        }
+        customClass: { container: 'swal-alto-z-index' }
       });
       return; 
     }
 
-    // Validación de contraseña corta
     if (!empleadoEditando && data.contrasena && data.contrasena.length < 4) {
       bloquearCierreRef.current = true; 
-      
       Swal.fire({
         icon: 'warning',
         title: 'Contraseña muy corta',
         text: 'La contraseña debe tener al menos 4 caracteres.',
         confirmButtonColor: '#326f7a',
-        customClass: {
-          container: 'swal-alto-z-index' 
-        }
+        customClass: { container: 'swal-alto-z-index' }
       });
       return; 
     }
@@ -544,24 +526,22 @@ export default function Empleados() {
                   {empleado.activo ? 'Activo' : 'Inactivo'}
                 </span>
               </td>
-              <td className="celda-tabla-info">
-                {!empleado.activo ? (
-                  <button 
-                    type="button"
-                    onClick={() => verDetalleBaja(empleado)} 
-                    className="boton-justificacion"
-                    title="Ver motivo de baja"
-                  >
-                    <span className="contenido-boton-justificacion">
-                      <IconInfoCircle size={16} />Detalle
-                    </span>
-                  </button>
-                ) : (
-                  <span className="celda-tabla-gris">-</span>
-                )}
-              </td>
+              
               <td className="celda-tabla-info">
                 <span className="acciones-fila">
+                  {/* CAMBIADO: Botón de info sin 'accion-info' para que se vea gris por defecto */}
+                  {!empleado.activo && (
+                    <button 
+                      type="button"
+                      onClick={() => verDetalleBaja(empleado)} 
+                      className="boton-accion-icono"
+                      title="Ver motivo de baja"
+                      aria-label={`Ver detalle de ${nombreCompleto}`}
+                    >
+                      <IconInfoCircle size={18} />
+                    </button>
+                  )}
+
                   {esAdmin && (
                     <button
                       type="button"

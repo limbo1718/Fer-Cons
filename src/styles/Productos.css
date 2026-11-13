@@ -22,7 +22,8 @@ ESTILOS DE PRODUCTOS - FER-CONS
 
 .tabla-productos {
     width: 100%;
-    min-width: 800px;
+    /* MODIFICADO: Aumentado a 1500px para acomodar las 11 columnas sin aplastar textos */
+    min-width: 1500px; 
     text-align: center;
     border-collapse: collapse;
 }
@@ -36,9 +37,12 @@ ESTILOS DE PRODUCTOS - FER-CONS
     font-size: 1.125rem;
     font-weight: 400;
     color: var(--color-oscuro);
+    /* NUEVO: Evita que los títulos de las columnas se corten en dos líneas */
+    white-space: nowrap; 
 }
 
-.contenido-precio-th {
+/* Alinea los iconos de la cabecera */
+.columna-con-icono {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
@@ -59,6 +63,24 @@ ESTILOS DE PRODUCTOS - FER-CONS
     padding: 1rem;
     color: rgba(15, 42, 48, 0.7);
     font-weight: 500;
+    text-align: left; /* Para que los códigos se lean mejor */
+    white-space: nowrap; /* Evita que los códigos se rompan */
+}
+
+/* Estilos para separar los códigos */
+.codigo-interno {
+    font-weight: 700;
+    color: var(--color-oscuro);
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.codigo-proveedor {
+    font-size: 0.75rem;
+    color: rgba(15, 42, 48, 0.5); 
+    text-transform: uppercase;
+    margin-top: 0.2rem;
+    display: block;
 }
 
 .celda-tabla-info {
@@ -71,6 +93,7 @@ ESTILOS DE PRODUCTOS - FER-CONS
     align-items: center;
     gap: 0.75rem;
     text-align: left;
+    white-space: nowrap; /* Evita que el nombre del producto se rompa */
 }
 
 .avatar-iniciales {
@@ -94,16 +117,26 @@ ESTILOS DE PRODUCTOS - FER-CONS
 .producto-precio-celda {
     font-weight: 600;
     color: #059669;
+    white-space: nowrap; 
+}
+
+/* Estilo para el precio de lista del proveedor */
+.producto-precio-lista {
+    color: #64748b; 
+    font-size: 0.9rem;
+    white-space: nowrap; 
 }
 
 .celda-tabla-texto {
     padding: 1rem;
     color: var(--color-oscuro);
+    white-space: nowrap; /* Evita que la unidad o marca se rompa */
 }
 
 .celda-tabla-gris {
     padding: 1rem;
     color: rgba(15, 42, 48, 0.7);
+    white-space: nowrap; /* Evita que la categoría o proveedor se rompa */
 }
 
 .etiqueta-estado {
@@ -111,6 +144,7 @@ ESTILOS DE PRODUCTOS - FER-CONS
     padding: 0.25rem 0.75rem;
     font-size: 0.875rem;
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .estado-activo {
